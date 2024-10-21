@@ -69,7 +69,7 @@ return [
     */
 
     'defaults' => [
-        'gravity' => 'toastify-bottom',
+        'gravity' => 'toastify-top',
         'position' => 'right',
     ],
 ];

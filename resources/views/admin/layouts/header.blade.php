@@ -24,17 +24,12 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="{{asset('assets/admin/js/config.js')}}"></script>
     @toastifyCss
+    <link rel="stylesheet" href="https://unpkg.com/toastify-js@1.12.0/src/toastify.css">
     @yield('css')
 </head>
-
 <body>
-
 <!-- START Wrapper -->
 <div class="wrapper">
-
-
-
-
     <header class="topbar">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -126,7 +121,7 @@
                                     class="align-middle"> تغير كلمة المرور  </span>
                             </a>
                             <div class="dropdown-divider my-1"></div>
-                            <a class="dropdown-item text-danger" href="{{route('user_logout')}}">
+                            <a class="dropdown-item text-danger" href="{{route('logout')}}">
                                 <i class="bx bx-log-out fs-18 align-middle me-1"></i><span class="align-middle"> تسجيل خروج  </span>
                             </a>
                         </div>

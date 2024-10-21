@@ -33,6 +33,7 @@
 <!-- Dashboard Js -->
 <script src="{{asset('assets/admin/js/pages/dashboard.js')}}"></script>
 @toastifyJs
+<script src="https://unpkg.com/toastify-js@1.12.0/src/toastify.js"></script>
 @yield('js')
 </body>
 </html>

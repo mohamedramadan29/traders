@@ -33,90 +33,22 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('admin/transactions') }}">
+                <a class="nav-link" href="{{ url('admin/plans') }}">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:tuning-2-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> المعاملات </span>
+                    <span class="nav-text">  خطط التداول   </span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('admin/withdraws') }}">
+                <a class="nav-link" href="{{ url('admin/platforms') }}">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:document-text-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text">  طلبات السحب   </span>
+                    <span class="nav-text"> منصات التدوال   </span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url('admin/boots') }}">
-                    <span class="nav-icon">
-                         <iconify-icon icon="solar:ufo-2-bold-duotone"></iconify-icon>
-                    </span>
-                    <span class="nav-text"> بوتات التيلجرام    </span>
-                </a>
-            </li>
-
-
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url('admin/levels') }}">
-                    <span class="nav-icon">
-                         <iconify-icon icon="solar:ufo-2-bold-duotone"></iconify-icon>
-                    </span>
-                    <span class="nav-text"> مستويات الاحالات   </span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url('admin/user-levels') }}">
-                    <span class="nav-icon">
-                         <iconify-icon icon="solar:ufo-2-bold-duotone"></iconify-icon>
-                    </span>
-                    <span class="nav-text"> مستويات العميل نفسة   </span>
-                </a>
-            </li>
-
-
-            <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarSupport" data-bs-toggle="collapse" role="button"
-                   aria-expanded="false" aria-controls="sidebarSupport">
-                    <span class="nav-icon">
-                        <iconify-icon icon="solar:chat-round-bold-duotone"></iconify-icon>
-                    </span>
-                    <span class="nav-text">  الدعم الفني  </span>
-                </a>
-                <div class="collapse" id="sidebarSupport">
-                    <ul class="nav sub-navbar-nav">
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ url('admin/messages') }}"> جميع الرسائل    </a>
-                        </li>
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ url('admin/message/add') }}">  اضف رسالة جديدة   </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarfaq" data-bs-toggle="collapse" role="button"
-                   aria-expanded="false" aria-controls="sidebarfaq">
-                    <span class="nav-icon">
-                        <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
-                    </span>
-                    <span class="nav-text">   الاسئلة الشائعة  </span>
-                </a>
-                <div class="collapse" id="sidebarfaq">
-                    <ul class="nav sub-navbar-nav">
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ url('admin/faqs') }}"> جميع الاسئلة   </a>
-                        </li>
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ url('admin/faq/add') }}">   اضف سؤال جديد    </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="menu-title mt-2"> اعدادات الموقع </li>
-
+             <li class="menu-title mt-2"> اعدادات الموقع </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('admin/public-setting/update') }}">
                     <span class="nav-icon">

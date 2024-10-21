@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title')
-    مستوي المستخدمين
+     منصات التداول المتاحة
 @endsection
 @section('css')
 
@@ -29,13 +29,13 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center gap-1">
-                            <h4 class="card-title flex-grow-1">  مستوي المستخدمين  </h4>
+                            <h4 class="card-title flex-grow-1">  منصات التداول المتاحة   </h4>
                             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#add_attribute">
-                              اضافة مستوي جديد
+                               اضف جديد
                                 <i class="ti ti-plus"></i>
                             </button>
-                            @include('admin.UserLevels.add')
+                            @include('admin.Platforms.add')
                         </div>
 
 
@@ -47,10 +47,8 @@
                                     <tr>
                                         <th style="width: 20px;">
                                         </th>
-                                        <th>  المستوي  </th>
-                                        <th> حجم التداول  </th>
-                                        <th>   نسبة ال vol-share </th>
-                                        <th>   bouns  </th>
+                                        <th>  الاسم   </th>
+                                        <th> اللوجو  </th>
                                         <th> العمليات</th>
                                     </tr>
                                     </thead>
@@ -58,27 +56,25 @@
                                     @php
                                         $i = 1;
                                     @endphp
-                                    @foreach($levels as $level)
+                                    @foreach($platforms as $platform)
                                         <tr>
                                             <td>
                                                 {{$i++}}
                                             </td>
-                                            <td>{{$level['name']}}</td>
-                                            <td> {{$level['turnover']}} $ </td>
-                                            <td> {{$level['percent_volshare']}} % </td>
-                                            <td> {{$level['Bonus']}} $ </td>
+                                            <td>{{$platform['name']}}</td>
+                                            <td><img width="80px" height="80px" src="{{Storage::url('uploads/platforms/'.$platform['logo'])}}" alt="">  </td>
                                             <td>
                                                 <div class="d-flex gap-2">
                                                     <button type="button" class="btn btn-soft-danger btn-sm"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#edit_withdraw_{{$level['id']}}">
+                                                            data-bs-target="#edit_withdraw_{{$platform['id']}}">
                                                         <iconify-icon icon="solar:pen-2-broken"
                                                                       class="align-middle fs-18"></iconify-icon>
                                                     </button>
 
                                                         <button type="button" class="btn btn-soft-danger btn-sm"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#delete_withdraw_{{$level['id']}}">
+                                                                data-bs-target="#delete_withdraw_{{$platform['id']}}">
                                                             <iconify-icon icon="solar:trash-bin-minimalistic-2-broken"
                                                                           class="align-middle fs-18"></iconify-icon>
                                                         </button>
@@ -87,8 +83,8 @@
                                             </td>
                                         </tr>
                                         <!-- Modal -->
-                                        @include('admin.UserLevels.update')
-                                        @include('admin.UserLevels.delete')
+                                        @include('admin.Platforms.update')
+                                        @include('admin.Platforms.delete')
                                     @endforeach
                                     </tbody>
                                 </table>
