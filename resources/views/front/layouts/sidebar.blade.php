@@ -55,67 +55,67 @@
                     <span class="nav-text">  طلبات السحب   </span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url('user/boots') }}">
-                    <span class="nav-icon">
-                         <iconify-icon icon="solar:ufo-2-bold-duotone"></iconify-icon>
-                    </span>
-                    <span class="nav-text"> بوتات التيلجرام    </span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url('user/link') }}">
-                    <span class="nav-icon">
-                        <i class="bx bx-link"></i>
-                    </span>
-                    <span class="nav-text"> رابط الاحاله Quotex  </span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url('user/referrals') }}">
-                    <span class="nav-icon">
-                        <i class="bx bx-link"></i>
-                    </span>
-                    <span class="nav-text">
-مركز وكالات كيوتيكس  </span>
-                </a>
-            </li>
+{{--            <li class="nav-item">--}}
+{{--                <a class="nav-link" href="{{ url('user/boots') }}">--}}
+{{--                    <span class="nav-icon">--}}
+{{--                         <iconify-icon icon="solar:ufo-2-bold-duotone"></iconify-icon>--}}
+{{--                    </span>--}}
+{{--                    <span class="nav-text"> بوتات التيلجرام    </span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
+{{--            <li class="nav-item">--}}
+{{--                <a class="nav-link" href="{{ url('user/link') }}">--}}
+{{--                    <span class="nav-icon">--}}
+{{--                        <i class="bx bx-link"></i>--}}
+{{--                    </span>--}}
+{{--                    <span class="nav-text"> رابط الاحاله Quotex  </span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
+{{--            <li class="nav-item">--}}
+{{--                <a class="nav-link" href="{{ url('user/referrals') }}">--}}
+{{--                    <span class="nav-icon">--}}
+{{--                        <i class="bx bx-link"></i>--}}
+{{--                    </span>--}}
+{{--                    <span class="nav-text">--}}
+{{--مركز وكالات كيوتيكس  </span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
 
-            <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarSupport" data-bs-toggle="collapse" role="button"
-                   aria-expanded="false" aria-controls="sidebarSupport">
-                    <span class="nav-icon">
-                        <iconify-icon icon="solar:chat-round-bold-duotone"></iconify-icon>
-                    </span>
-                    <span class="nav-text">  الدعم الفني  </span>
-                </a>
-                <div class="collapse" id="sidebarSupport">
-                    <ul class="nav sub-navbar-nav">
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ url('user/messages') }}"> جميع الرسائل    </a>
-                        </li>
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ url('user/message/add') }}">  اضف رسالة جديدة   </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarfaq" data-bs-toggle="collapse" role="button"
-                   aria-expanded="false" aria-controls="sidebarfaq">
-                    <span class="nav-icon">
-                        <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
-                    </span>
-                    <span class="nav-text">   الاسئلة الشائعة  </span>
-                </a>
-                <div class="collapse" id="sidebarfaq">
-                    <ul class="nav sub-navbar-nav">
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ url('user/faqs') }}"> جميع الاسئلة   </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
+{{--            <li class="nav-item">--}}
+{{--                <a class="nav-link menu-arrow" href="#sidebarSupport" data-bs-toggle="collapse" role="button"--}}
+{{--                   aria-expanded="false" aria-controls="sidebarSupport">--}}
+{{--                    <span class="nav-icon">--}}
+{{--                        <iconify-icon icon="solar:chat-round-bold-duotone"></iconify-icon>--}}
+{{--                    </span>--}}
+{{--                    <span class="nav-text">  الدعم الفني  </span>--}}
+{{--                </a>--}}
+{{--                <div class="collapse" id="sidebarSupport">--}}
+{{--                    <ul class="nav sub-navbar-nav">--}}
+{{--                        <li class="sub-nav-item">--}}
+{{--                            <a class="sub-nav-link" href="{{ url('user/messages') }}"> جميع الرسائل    </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="sub-nav-item">--}}
+{{--                            <a class="sub-nav-link" href="{{ url('user/message/add') }}">  اضف رسالة جديدة   </a>--}}
+{{--                        </li>--}}
+{{--                    </ul>--}}
+{{--                </div>--}}
+{{--            </li>--}}
+{{--            <li class="nav-item">--}}
+{{--                <a class="nav-link menu-arrow" href="#sidebarfaq" data-bs-toggle="collapse" role="button"--}}
+{{--                   aria-expanded="false" aria-controls="sidebarfaq">--}}
+{{--                    <span class="nav-icon">--}}
+{{--                        <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>--}}
+{{--                    </span>--}}
+{{--                    <span class="nav-text">   الاسئلة الشائعة  </span>--}}
+{{--                </a>--}}
+{{--                <div class="collapse" id="sidebarfaq">--}}
+{{--                    <ul class="nav sub-navbar-nav">--}}
+{{--                        <li class="sub-nav-item">--}}
+{{--                            <a class="sub-nav-link" href="{{ url('user/faqs') }}"> جميع الاسئلة   </a>--}}
+{{--                        </li>--}}
+{{--                    </ul>--}}
+{{--                </div>--}}
+{{--            </li>--}}
 
             <li class="menu-title mt-2"> حسابي  </li>
 

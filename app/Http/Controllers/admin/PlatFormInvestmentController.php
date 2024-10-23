@@ -40,7 +40,7 @@ class PlatFormInvestmentController extends Controller
             if ($validator->fails()) {
                 return Redirect::back()->withInput()->withErrors($validator);
             }
-DB::beginTransaction();
+            DB::beginTransaction();
             PlatformInvestmentReturn::create([
                 'platform_id' => $platform->id,
                 'return_amount' => $request->return_amount,
@@ -49,7 +49,7 @@ DB::beginTransaction();
 
 //       جلب جميع الفواتير المتعلقة بالمنصة
             // جلب جميع الفواتير المتعلقة بالمنصة
-          //  $invoices = Invoice::where('platform_id', $platform->id)->get();
+            //  $invoices = Invoice::where('platform_id', $platform->id)->get();
 
             $invoices = Invoice::where('platform_id', $platform->id)
                 ->with('user') // لجلب بيانات المستخدم
@@ -68,7 +68,7 @@ DB::beginTransaction();
             // توزيع العائد على المستخدمين بناءً على عدد خططهم في المنصة
             foreach ($invoices->groupBy('user_id') as $userInvoices) {
                 $user = $userInvoices->first()->user;
-              //  dd($user);
+                //  dd($user);
                 // جلب سجل عائد الاستثمار للمستخدم في هذه المنصة
                 $userEarning = UserPlatformEarning::firstOrCreate([
                     'user_id' => $user->id,
@@ -81,10 +81,11 @@ DB::beginTransaction();
                 // إضافة العائد بناءً على عدد الاشتراكات الخاصة بالمستخدم
                 $userEarning->increment('investment_return', $returnPerSubscription * $userPlanCount);
 
+                $profitPercentage = 0;
                 // حساب نسبة الربح (على سبيل المثال: الربح نسبةً إلى مجموع اشتراكات المستخدم)
                 $totalUserSubscriptionPrice = $userInvoices->sum('plan_price');
                 $profitPercentage = ($returnPerSubscription * $userInvoices->count()) / $totalUserSubscriptionPrice * 100;
-               // dd($profitPercentage);
+                // dd($profitPercentage);
                 // يمكنك هنا حفظ أو عرض نسبة الربح
                 // على سبيل المثال:
 //                $userEarning->update(['profit_percentage' => number_format($profitPercentage,2)]);
