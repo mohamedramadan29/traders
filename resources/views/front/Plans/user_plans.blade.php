@@ -1,6 +1,6 @@
 @extends('front.layouts.master_dashboard')
 @section('title')
-     خططي
+    خططي
 @endsection
 @section('css')
 
@@ -29,49 +29,84 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center gap-1">
-                            <h4 class="card-title flex-grow-1">  خططي  </h4>
-                        </div>
-
-
-                        <div>
-                            <div class="table-responsive">
-                                <table id="table-search"
-                                       class="table table-bordered gridjs-table align-middle mb-0 table-hover table-centered">
-                                    <thead class="bg-light-subtle">
-                                    <tr>
-                                        <th> رقم الطلب  </th>
-                                        <th> اسم الخدمة  </th>
-                                        <th> سعر الشراء  </th>
-                                        <th> الحالة  </th>
-                                        <th> التوقيت  </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @php
-                                        $i = 1;
-                                    @endphp
-                                    <h2> عدد الخطط الكلي :: {{$totalPlansCount}} </h2>
-                                    @foreach($platforms as $platform)
-                                        <div>
-                                            <h2>{{ $platform->name }} ({{ $platform->invoices_count }} خطط)</h2>
-                                            <a href="{{ route('user.plans.details', ['platform_id' => $platform->id]) }}">
-                                                عرض الخطط
-                                            </a>
-                                        </div>
-{{--                                        <tr>--}}
-{{--                                            <td>{{ $invoice->order_id }}</td>--}}
-{{--                                            <td>{{ $invoice->plan->name }}</td> <!-- اسم الخطة -->--}}
-{{--                                            <td>{{ $invoice->plan_price }}  $ </td> <!-- سعر الخطة -->--}}
-{{--                                            <td>{{ ucfirst($invoice->payment_status) }}</td> <!-- حالة الفاتورة -->--}}
-{{--                                            <td>{{ $invoice->created_at->format('d/m/Y') }}</td> <!-- تاريخ الشراء -->--}}
-{{--                                        </tr>--}}
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- end table-responsive -->
+                            <h4 class="card-title flex-grow-1"> خططي </h4>
                         </div>
                     </div>
+
+                            <div class="table-responsive">
+                                <div class="total_plans">
+                                    <div class="card">
+                                        <div class="plan">
+                                            <div class="plan_price">
+                                                <h2> عدد الخطط  </h2>
+                                                <h3> {{$totalPlansCount}}  </h3>
+                                            </div>
+                                            <div class="plan_price">
+                                                <h2> راس المال  </h2>
+                                                <h6>  {{ number_format($totalbalance,2)}}  $</h6>
+                                            </div>
+                                            <div class="plan_price">
+                                                <h2>عائد الاستثمار</h2>
+                                                <h6>  {{ number_format($investment_earning,2)}}  $</h6>
+                                            </div>
+                                            <div class="plan_price">
+                                                <h2> ربح اليوم  </h2>
+                                                <h6>  {{ number_format($daily_earning,2)}}  $</h6>
+                                            </div>
+                                            <div class="plan_price">
+                                                <h2> نسبة الربح  </h2>
+                                                <h6>  {{ number_format($totalDailyPercentage,2)}}  %</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @foreach($platforms as $platform)
+                                    @php
+                                    $user = \Illuminate\Support\Facades\Auth::user();
+                                        $totalPlansCount = \App\Models\front\Invoice::where('user_id', $user->id)->where('platform_id',$platform['id'])->count();
+                                        $totalbalance = \App\Models\front\Invoice::where('user_id', $user->id)->where('platform_id',$platform['id'])->sum('plan_price');
+                                        $investment_earning = \App\Models\admin\UserPlatformEarning::where('user_id', $user->id)->where('platform_id',$platform['id'])->sum('investment_return');
+                                        $daily_earning = \App\Models\admin\UserPlatformEarning::where('user_id', $user->id)->where('platform_id',$platform['id'])->sum('daily_earning');
+                                        $daily_percentage = \App\Models\admin\UserPlatformEarning::where('user_id',$user->id)->where('platform_id',$platform['id'])->sum('profit_percentage');
+                                        @endphp
+                                    <div class="platform-header">
+                                        <h2 class="platform_name"> خطط الاستثمار في ::  {{  $platform->name }}</h2>
+                                    </div>
+                                    <div class="card">
+                                        <div class="plan">
+                                            <div class="plan_price">
+                                                <h2> مجموع الخطط </h2>
+                                                <h3>{{ $platform->invoices_count  }}</h3>
+                                            </div>
+                                            <div class="plan_price">
+                                                <h2>  راس المال  </h2>
+                                                <h6> {{ $totalbalance  }}  $</h6>
+                                            </div>
+                                            <div class="plan_price">
+                                                <h2>عائد الاستثمار</h2>
+                                                <h6> {{ $investment_earning  }} $</h6>
+                                            </div>
+                                            <div class="plan_price">
+                                                <h2> ربح اليوم </h2>
+                                                <h6> {{ $daily_earning }} $</h6>
+                                            </div>
+                                            <div class="plan_price">
+                                                <h2> نسبة الربح  </h2>
+                                                <h6> {{ $daily_percentage   }} %</h6>
+                                            </div>
+                                            <div class="plan_price">
+                                                <a class="btn main_button btn-sm" href="{{ route('user.plans.details', ['platform_id' => $platform->id]) }}">
+                                                    عرض الخطط
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                            </div>
+                            <!-- end table-responsive -->
+
+
                 </div>
             </div>
 

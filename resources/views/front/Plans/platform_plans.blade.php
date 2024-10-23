@@ -1,6 +1,6 @@
 @extends('front.layouts.master_dashboard')
 @section('title')
-   تفاصيل الخطة
+    تفاصيل الخطة
 @endsection
 @section('css')
 
@@ -29,27 +29,42 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center gap-1">
-                            <h4 class="card-title flex-grow-1">  تفاصيل الخطة   </h4>
-                        </div>
-
-
-                        <div>
-                            <div class="table-responsive">
-                                @foreach ($plans as $invoice)
-                                    <div>
-                                        <h3>{{ $invoice['plan']->name }}</h3>
-                                        <p>سعر الشراء : {{ $invoice->plan_price }}$</p>
-                                        <p>سعر السوق  : {{ $invoice['plan']->current_price }}$</p>
-                                        <p>ربح  : {{ number_format($invoice['plan']->current_price - $invoice->plan_price,2) }}$</p>
-                                        <p>عوائد الاستثمار : {{ $invoice->payment_status }}</p>
-                                        <p>الحالة: {{ $invoice->payment_status }}</p>
-                                        <p>تاريخ الاشتراك: {{ $invoice->created_at }}</p>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <!-- end table-responsive -->
+                            <h4 class="card-title flex-grow-1"> تفاصيل الاشتراكات </h4>
                         </div>
                     </div>
+                    <div class="table-responsive">
+                        @foreach ($plans as $invoice)
+
+                            <div class="card">
+                                <div class="plan">
+                                    <div class="plan_price">
+                                        <h2> اسم الخطة </h2>
+                                        <h6> {{ $invoice['plan']->name }} </h6>
+                                    </div>
+                                    <div class="plan_price">
+                                        <h2> سعر الشراء </h2>
+                                        <h6> {{ $invoice->plan_price }} $</h6>
+                                    </div>
+                                    <div class="plan_price">
+                                        <h2> سعر السوق </h2>
+                                        <h6> {{ $invoice['plan']->current_price }} $</h6>
+                                    </div>
+                                    <div class="plan_price">
+                                        <h2> ربح </h2>
+                                        <h6> {{ number_format($invoice['plan']->current_price - $invoice->plan_price,2) }}
+                                            $</h6>
+                                    </div>
+                                    <div class="plan_price">
+                                        <h2> تاريخ الاشتراك </h2>
+                                        <h6>  {{ $invoice->created_at }} </h6>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        @endforeach
+                    </div>
+                    <!-- end table-responsive -->
                 </div>
             </div>
 

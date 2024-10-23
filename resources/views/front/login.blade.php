@@ -1,7 +1,7 @@
 @extends('front.layouts.login_master')
 @section('title') تسجيل الدخول  @endsection
 @section('content')
-    <div class="d-flex flex-column h-100 p-3">
+    <div class="d-flex flex-column h-100 p-3" style="background-image: url({{asset('assets/front/uploads/trading_background2.jpg')}});background-size: cover;background-position: center;background-repeat: no-repeat;">
         <div class="d-flex flex-column flex-grow-1">
             <div class="row h-100">
 
@@ -22,10 +22,10 @@
                         <div class="col-lg-6 py-lg-5">
                             <div class="d-flex flex-column h-100 justify-content-center">
                                 <div class="auth-logo mb-4">
-                                    <a href="" class="logo-dark">
-                                        <img style="width: 70px;height: 70px" src="{{asset('assets/admin/images/logo-letter.svg')}}" height="24" alt="logo dark">
-                                        <h4 style="margin-top: 10px"> مركز وكالات كيوتيكس </h4>
-                                    </a>
+{{--                                    <a href="" class="logo-dark">--}}
+{{--                                        <img style="width: 70px;height: 70px" src="{{asset('assets/admin/images/logo-letter.svg')}}" height="24" alt="logo dark">--}}
+{{--                                        <h4 style="margin-top: 10px"> مركز وكالات كيوتيكس </h4>--}}
+{{--                                    </a>--}}
                                     <a href="" class="logo-light">
                                         <img style="70px;height: 70px" src="{{asset('assets/admin/images/logo-letter.svg')}}" height="24" alt="logo light">
                                         <h4 style="margin-top: 10px"> مركز وكالات كيوتيكس </h4>
@@ -60,7 +60,7 @@
                                         </div>
 
                                         <div class="mb-1 text-center d-grid">
-                                            <button class="btn btn-soft-primary" type="submit"> تسجيل دخول  </button>
+                                            <button style="background-color:#9F002A; color:#fff" class="btn btn-soft-primary" type="submit"> تسجيل دخول  </button>
                                         </div>
                                     </form>
 
@@ -80,7 +80,7 @@
                 <div class="col-xxl-5 d-none d-xxl-flex">
                     <div class="card h-100 mb-0 overflow-hidden" style="padding:0; border: none;border-radius: 0;box-shadow: none">
                         <div class="d-flex flex-column h-100">
-                            <img src="{{asset('assets/admin/images/forex.jpg')}}" alt="" class="w-100 h-100">
+
                         </div>
                     </div>
                 </div>

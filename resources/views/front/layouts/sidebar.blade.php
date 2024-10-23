@@ -31,22 +31,20 @@
                     <span class="nav-text"> الرئيسية </span>
                 </a>
             </li>
-
-            {{--            <li class="nav-item">--}}
-            {{--                <a class="nav-link" href="{{ url('user/traderIds') }}">--}}
-            {{--                    <span class="nav-icon">--}}
-            {{--                        <iconify-icon icon="solar:tuning-2-bold-duotone"></iconify-icon>--}}
-            {{--                    </span>--}}
-            {{--                    <span class="nav-text"> الارقام التعريفية  </span>--}}
-            {{--                </a>--}}
-            {{--            </li>--}}
-
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('user/transactions') }}">
+                <a class="nav-link" href="{{ url('user/plans') }}">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:tuning-2-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text">  الأحصائيات  </span>
+                    <span class="nav-text"> جميع الخطط   </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('user/user_plans') }}">
+                    <span class="nav-icon">
+                         <iconify-icon icon="solar:document-text-bold-duotone"></iconify-icon>
+                    </span>
+                    <span class="nav-text">  خططي  </span>
                 </a>
             </li>
             <li class="nav-item">
