@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title')
-     منصات التداول المتاحة
+    عوائد الاستثمار
 @endsection
 @section('css')
 
@@ -29,13 +29,13 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center gap-1">
-                            <h4 class="card-title flex-grow-1">  منصات التداول المتاحة   </h4>
+                            <h4 class="card-title flex-grow-1"> عوائد  الاستثمار الخاصة بمنصة :: {{$platform['name']}}   </h4>
                             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#add_attribute">
-                               اضف جديد
+                                    data-bs-target="#add_investment">
+                               اضافة العائد اليومي
                                 <i class="ti ti-plus"></i>
                             </button>
-                            @include('admin.Platforms.add')
+                            @include('admin.Platforms.add_investment')
                         </div>
 
 
@@ -47,45 +47,22 @@
                                     <tr>
                                         <th style="width: 20px;">
                                         </th>
-                                        <th>  الاسم   </th>
-                                        <th> اللوجو  </th>
-                                        <th> العمليات</th>
+                                        <th>  العائد اليومي  </th>
+                                        <th> التاريخ  </th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @php
                                         $i = 1;
                                     @endphp
-                                    @foreach($platforms as $platform)
+                                    @foreach($platform_invests as $invest)
                                         <tr>
                                             <td>
                                                 {{$i++}}
                                             </td>
-                                            <td>{{$platform['name']}}</td>
-                                            <td><img width="80px" height="80px" src="{{Storage::url('uploads/platforms/'.$platform['logo'])}}" alt="">  </td>
-                                            <td>
-                                                <div class="d-flex gap-2">
-                                                    <button type="button" class="btn btn-soft-danger btn-sm"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edit_withdraw_{{$platform['id']}}">
-                                                        <iconify-icon icon="solar:pen-2-broken"
-                                                                      class="align-middle fs-18"></iconify-icon>
-                                                    </button>
-
-                                                        <button type="button" class="btn btn-soft-danger btn-sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#delete_withdraw_{{$platform['id']}}">
-                                                            <iconify-icon icon="solar:trash-bin-minimalistic-2-broken"
-                                                                          class="align-middle fs-18"></iconify-icon>
-                                                        </button>
-                                                    <a href="{{url('admin/investments/'.$platform['id'])}}" class="btn btn-soft-success"> عوائد الاستثمار   </a>
-
-                                                </div>
-                                            </td>
+                                            <td>{{ number_format($invest['return_amount'],2)}} $</td>
+                                            <td> {{$invest['return_date']}} </td>
                                         </tr>
-                                        <!-- Modal -->
-                                        @include('admin.Platforms.update')
-                                        @include('admin.Platforms.delete')
                                     @endforeach
                                     </tbody>
                                 </table>

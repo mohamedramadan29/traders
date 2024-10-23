@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\admin\AdminController;
 use \App\Http\Controllers\admin\PlansController;
 use \App\Http\Controllers\admin\PlatformController;
+use \App\Http\Controllers\admin\PlatFormInvestmentController;
 Route::group(['prefix' => 'admin'], function () {
     // Admin Login
     Route::controller(AdminController::class)->group(function () {
@@ -36,6 +37,11 @@ Route::group(['prefix' => 'admin'], function () {
             Route::match(['post','get'],'plan/store','store');
             Route::match(['post','get'],'plan/update/{id}','update');
             Route::post('plan/delete/{id}','delete');
+        });
+
+        Route::controller(PlatFormInvestmentController::class)->group(function (){
+            Route::get('investments/{id}','index');
+            Route::match(['post','get'],'investment/store/{id}','store');
         });
 
 
