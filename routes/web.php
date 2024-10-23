@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\front\UserController;
 use Illuminate\Support\Facades\Route;
-
+use \App\Http\Controllers\front\PlanController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -46,9 +46,13 @@ Route::group(['prefix' => 'user'], function () {
         });
     });
     Route::group(['middleware' => 'auth'], function () {
-        /////////// Start Transactions
-        Route::controller(TransactionController::class)->group(function () {
-            Route::get('transactions', 'index');
+       ///////// Start Plans
+        Route::controller(PlanController::class)->group(function (){
+            Route::get('plans','index');
+            Route::get('user_plans','user_plans')->name('user_plans');
+           // Route::post('invoice_create','invoice_create');
+            Route::match(['post','get'],'invoice_create','invoice_create');
+            Route::get('plans/{platform_id}', 'platformPlans')->name('user.plans.details');
         });
 
         /////////////// Start WithDraws ///////////////
