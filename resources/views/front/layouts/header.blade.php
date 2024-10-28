@@ -21,6 +21,7 @@
     <!-- App css (Require in all Page) -->
     <link href="{{asset('assets/front/css/app-rtl.min.css')}}" rel="stylesheet" type="text/css"/>
 
+
     <!-- Theme Config js (Require in all Page) -->
     <script src="{{asset('assets/front/js/config.js')}}"></script>
     @toastifyCss

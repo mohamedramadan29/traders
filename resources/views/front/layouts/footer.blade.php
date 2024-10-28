@@ -1,15 +1,15 @@
 
-<!-- ========== Footer Start ========== -->
-<footer class="footer">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 text-center">
-                جميع الحقوق محفوظة
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- ========== Footer End ========== -->
+{{--<!-- ========== Footer Start ========== -->--}}
+{{--<footer class="footer">--}}
+{{--    <div class="container-fluid">--}}
+{{--        <div class="row">--}}
+{{--            <div class="col-12 text-center">--}}
+{{--                جميع الحقوق محفوظة--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</footer>--}}
+{{--<!-- ========== Footer End ========== -->--}}
 
 
 </div>

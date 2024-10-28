@@ -15,7 +15,7 @@
             @endphp
         @endforeach
     @endif
-    <div class="d-flex flex-column h-100 p-3" style="overflow: hidden; background-image: url({{asset('assets/front/uploads/trading_background2.jpg')}});background-size: cover;background-position: center;background-repeat: no-repeat;">
+    <div class="d-flex flex-column h-100 p-3" style="background-image: url({{asset('assets/uploads/background.jpg')}});background-size: cover;background-position: center;background-repeat: no-repeat;">
         <div class="d-flex flex-column flex-grow-1">
             <div class="row h-100">
                 <div class="col-xxl-7">
@@ -23,7 +23,7 @@
                         <div
                             class="alert alert-danger"> {{\Illuminate\Support\Facades\Session::get('Error_Message')}} </div>
                     @endif
-                    <div class="row justify-content-center h-100">
+                    <div class="row justify-content-center h-100 login_form">
                         <div class="col-lg-6 py-lg-5">
                             <div class="d-flex flex-column h-100 justify-content-center">
 {{--                                <div class="auth-logo mb-4">--}}
@@ -40,7 +40,7 @@
 
                                 <h2 class="fw-bold fs-24"> حساب جديد </h2>
 
-                                <p class="text-muted mt-1 mb-4"> من فضلك ادخل البريد الالكتروني وكلمة المرور لانشاء حساب
+                                <p class="mt-1 mb-4"> من فضلك ادخل البريد الالكتروني وكلمة المرور لانشاء حساب
                                     جديد </p>
 
                                 <div class="mb-5">
@@ -83,13 +83,13 @@
                                         <input type="hidden" name="referral_code" value="{{ request('ref') }}">
 
                                         <div class="mb-1 text-center d-grid">
-                                            <button  style="background-color:#9F002A; color:#fff" class="btn btn-soft-primary" type="submit" id="submitButton"> حساب
+                                            <button  class="btn btn-soft-primary" type="submit" id="submitButton"> حساب
                                                 جديد
                                             </button>
                                         </div>
                                     </form>
-                                    <p class="mt-auto text-danger text-center"> لديك حساب بالفعل ! <a
-                                            href="{{route('user_login')}}" class="text-dark fw-bold ms-1"> تسجيل
+                                    <p class="mt-auto text-center"> لديك حساب بالفعل ! <a
+                                            href="{{route('user_login')}}" class="fw-bold ms-1"> تسجيل
                                             دخول </a></p>
                                 </div>
                                 <script>

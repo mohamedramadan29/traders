@@ -1,7 +1,7 @@
 @extends('front.layouts.login_master')
 @section('title') تسجيل الدخول  @endsection
 @section('content')
-    <div class="d-flex flex-column h-100 p-3" style="background-image: url({{asset('assets/front/uploads/trading_background2.jpg')}});background-size: cover;background-position: center;background-repeat: no-repeat;">
+    <div class="d-flex flex-column h-100 p-3" style="background-image: url({{asset('assets/uploads/background.jpg')}});background-size: cover;background-position: center;background-repeat: no-repeat;">
         <div class="d-flex flex-column flex-grow-1">
             <div class="row h-100">
 
@@ -20,21 +20,21 @@
                     @endif
                     <div class="row justify-content-center h-100">
                         <div class="col-lg-6 py-lg-5">
-                            <div class="d-flex flex-column h-100 justify-content-center">
-                                <div class="auth-logo mb-4">
+                            <div class="d-flex flex-column h-100 justify-content-center login_form">
+{{--                                <div class="auth-logo mb-4">--}}
 {{--                                    <a href="" class="logo-dark">--}}
 {{--                                        <img style="width: 70px;height: 70px" src="{{asset('assets/admin/images/logo-letter.svg')}}" height="24" alt="logo dark">--}}
 {{--                                        <h4 style="margin-top: 10px"> مركز وكالات كيوتيكس </h4>--}}
 {{--                                    </a>--}}
-                                    <a href="" class="logo-light">
-                                        <img style="70px;height: 70px" src="{{asset('assets/admin/images/logo-letter.svg')}}" height="24" alt="logo light">
-                                        <h4 style="margin-top: 10px"> مركز وكالات كيوتيكس </h4>
-                                    </a>
-                                </div>
+{{--                                    <a href="" class="logo-light">--}}
+{{--                                        <img style="70px;height: 70px" src="{{asset('assets/admin/images/logo-letter.svg')}}" height="24" alt="logo light">--}}
+{{--                                        <h4 style="margin-top: 10px"> مركز وكالات كيوتيكس </h4>--}}
+{{--                                    </a>--}}
+{{--                                </div>--}}
 
                                 <h2 class="fw-bold fs-24"> تسجيل دخول  </h2>
 
-                                <p class="text-muted mt-1 mb-4"> من فضلك ادخل البريد الالكتروني وكلمة المرور للدخول الي حسابك  </p>
+                                <p class=" mt-1 mb-4"> من فضلك ادخل البريد الالكتروني وكلمة المرور للدخول الي حسابك  </p>
 
                                 <div class="mb-5">
                                     <form method="post" action="{{route('user_login')}}"
@@ -60,7 +60,7 @@
                                         </div>
 
                                         <div class="mb-1 text-center d-grid">
-                                            <button style="background-color:#9F002A; color:#fff" class="btn btn-soft-primary" type="submit"> تسجيل دخول  </button>
+                                            <button  class="btn btn-soft-primary" type="submit"> تسجيل دخول  </button>
                                         </div>
                                     </form>
 
@@ -70,7 +70,7 @@
                                     {{--                                        <a href="javascript:void(0);" class="btn btn-soft-dark"><i class="bx bxl-google fs-20 me-1"></i> Sign in with Google</a>--}}
                                     {{--                                        <a href="javascript:void(0);" class="btn btn-soft-primary"><i class="bx bxl-facebook fs-20 me-1"></i> Sign in with Facebook</a>--}}
                                     {{--                                    </div>--}}
-                                    <p class="text-danger text-center"> ليس لديك حساب ؟   <a href="{{route('user_register')}}" class="text-dark fw-bold ms-1"> حساب جديد  </a></p>
+                                    <p class="text-center"> ليس لديك حساب ؟   <a href="{{route('user_register')}}" class="fw-bold ms-1"> حساب جديد  </a></p>
 
                                 </div>
                             </div>

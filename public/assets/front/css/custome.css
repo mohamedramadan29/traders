@@ -1,0 +1,244 @@
+.main_page{
+
+}
+.main_page .hero_section{
+    background-size: cover;
+    background-position: center;
+    padding: 100px;
+    background-repeat: no-repeat;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+}
+.main_page .hero_section .data{
+    color: #fff;
+
+}
+.main_page .hero_section .data .hero_title1{
+    color: #fff;
+    font-weight: bold;
+    font-size: 55px;
+}
+.main_page .hero_section .data .hero_title2{
+    font-size: 32px;
+    margin-top: 20px;
+}
+.main_page .hero_section .data .hero_desc{
+    font-size: 20px;
+    color: #eeeeee;
+    margin-top: 30px;
+}
+.main_page .hero_section .data .hero_desc span{
+    font-weight: bold;
+    font-size: 25px;
+    color: #36a8bc;
+}
+.main_page .hero_section .data .btn-global_button{
+    background: linear-gradient(135deg, #48ebdd, #3194b2);
+    color: #fff;
+    width: 120px;
+    padding: 11px;
+    font-size: 17px;
+    margin-top: 20px;
+}
+
+/********************* Start How Work **************/
+.how_work{
+    background: linear-gradient(275deg, #26126b, #272674);
+    color: #fff;
+    padding-top: 120px;
+}
+.how_work .data {}
+.how_work .data h2{
+    color: #fff;
+    font-size: 35px;
+    text-align: center;
+    padding-bottom: 40px;
+}
+.how_work .data .info{
+    box-shadow: 0 0 0 3px #252473;
+    padding: 15px;
+    border-radius: 10px;
+    background: #252473;
+    margin-bottom:10px;
+    min-height: 155px;
+}
+.how_work .data .info .icon_head{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.how_work .data .info .icon_head i{
+    font-size: 30px;
+    color: #33a1b8;
+    margin-left: 10px;
+}
+.how_work .data .info .icon_head h6{
+    color: #fff;
+    font-size: 25px;
+}
+.how_work .data .info .desc{
+    margin-top: 15px;
+}
+.how_work .data .info .desc p {
+color: #ccc;
+    font-size: 16px;
+}
+
+/********************** End How work ******************/
+
+
+/**************** Start Certificate *************/
+
+.certificate{
+    background: linear-gradient(275deg, #26126b, #272674);
+    color: #fff;
+    padding-top: 120px;
+}
+.certificate .data{}
+.certificate .data .info{}
+.certificate .data .info .icon_head{
+    display: flex;
+justify-content: flex-start;
+    align-items: center;
+}
+.certificate .data .info .icon_head i{
+    margin-left: 10px;
+    font-size: 33px;
+    color: #359fb7;
+}
+.certificate .data .info .icon_head h2{
+    color:#fff;
+    font-size: 36px;
+}
+.certificate .data .info ul{}
+.certificate .data .info ul li{
+    font-size: 19px;
+    padding: 10px 0;
+}
+.certificate .data .info ul li i{
+    color: #fff;
+    font-size: 22px;
+}
+.certificate .data .info p{
+    font-size: 18px;
+    margin-top: 20px;
+}
+.certificate .data .info2{
+    box-shadow: 0 0 0 3px #252473;
+    padding: 15px;
+    border-radius: 10px;
+    background: #252473;
+}
+
+/******************** End Certificate *****************/
+
+
+/******************* Start Grantee ********/
+.grantee{
+    padding-bottom: 100px;
+}
+.grantee .data .info{
+    min-height: auto;
+    border: 1px solid #26156c;
+    text-align: center;
+}
+.grantee .data .info .desc p {
+    color: #fff;
+    font-size: 18px;
+}
+.grantee .data .info span{
+    margin-left: 10px;
+    font-weight: bold;
+    color: #359fb7;
+    font-size: 17px;
+}
+/**************** End Granteee **************/
+
+
+/****************** Start Footter **************/
+
+.last_footer{
+    background: linear-gradient(275deg, #26126b, #272674);
+    color: #fff;
+    padding-top: 40px;
+    border-top: 2px solid #329db6;
+}
+.last_footer .data{
+
+}
+.last_footer .data .info{
+    color: #fff;
+    text-align: center;
+}
+.last_footer .data .info h4{
+    color: #fff;
+    margin-bottom: 30px;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 22px;
+}
+.last_footer .data .info img{
+    max-width: 100%;
+
+}
+.last_footer .data .info p{
+    margin-top: 15px;
+    line-height: 2;
+    font-size: 16px;
+    text-align: right;
+}
+.last_footer .copy_right{
+    text-align: center;
+    padding-bottom: 20px;
+    padding-top: 30px;
+}
+.last_footer .copy_right p{
+    margin: 0;
+}
+.last_footer .copy_right span{
+    color: #359fb8;
+    font-weight: bold;
+    font-size: 20px;
+    margin-right: 10px;
+}
+/********************* End Footer ******************/
+
+
+/******************** Start Login Form **************/
+
+.login_form{
+    color: #fff;
+}
+.login_form h2{
+    color: #fff;
+}
+
+.login_form p{
+    color: #fff;
+}
+.login_form form {
+
+}
+.login_form form label{
+    color: #fff;
+    font-size: 16px;
+}
+.login_form form input{
+    height: 46px;
+    background-color: #262875;
+    color: #fff;
+    font-size: 16px;
+    border-color: #2b4385;
+}
+.login_form form input[type=checkbox]{
+    height: 20px;
+    width: 20px;
+}
+.login_form form button[type=submit]{
+    background: linear-gradient(135deg, #48ebdd, #3194b2);
+    color: #fff;
+    border-color: #48ebdd;
+    padding: 12px;
+}
+/****************** End Login From **************/
