@@ -27,12 +27,9 @@
                     @endforeach
                 @endif
                 <div class="col-xl-12">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center gap-1">
+                    <div class="card info_card">
                             <h4 class="card-title flex-grow-1"> الخطط المتاحة </h4>
-                        </div>
                     </div>
-
                         <div>
                             <div class="table-responsive">
                                 @foreach ($plans->groupBy('platform_id') as $platformPlans)
@@ -40,8 +37,36 @@
                                     <div class="platform-header">
                                         <h2 class="platform_name"> خطط الاستثمار في ::  {{ $platformPlans->first()->platform->name }}</h2>
                                     </div>
+                                    @foreach($platformPlans as $plan)
+                                        <div class="card info_card">
+                                            <div class="plan">
+                                                <div class="plan_price">
+                                                    <h2> اسم الخطة </h2>
+                                                    <h6> {{ $plan['name']}} </h6>
+                                                </div>
+                                                <div class="plan_price">
+                                                    <h2> سعر الشراء </h2>
+                                                    <h6> {{ $plan['main_price'] }} $</h6>
+                                                </div>
 
+                                                <div class="plan_price">
+                                                    <h2> عائد الاستثمار  </h2>
+                                                    <h6> {{ $plan['return_investment']  }} $</h6>
+                                                </div>
+                                                <div class="plan_price">
+                                                    <form method="post" action="{{url('user/invoice_create')}}">
+                                                        <input type="hidden" name="plan_id" value="{{$plan['id']}}">
+                                                   @csrf
+                                                        <button type="submit" class="btn main_button btn-sm"
+                                                           >
+                                                            اشتراك
+                                                        </button>
+                                                    </form>
 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 @endforeach
                             </div>
 

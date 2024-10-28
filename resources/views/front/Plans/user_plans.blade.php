@@ -3,14 +3,12 @@
     خططي
 @endsection
 @section('css')
-
     {{--    <!-- DataTables CSS -->--}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 @endsection
 @section('content')
     <!-- ==================================================== -->
     <div class="page-content">
-
         <!-- Start Container Fluid -->
         <div class="container-xxl">
             <div class="row">
@@ -27,84 +25,82 @@
                     @endforeach
                 @endif
                 <div class="col-xl-12">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center gap-1">
-                            <h4 class="card-title flex-grow-1"> خططي </h4>
-                        </div>
+                    <div class="card info_card">
+                        <h4 class="card-title flex-grow-1"> خططي </h4>
                     </div>
-
-                            <div class="table-responsive">
-                                <div class="total_plans">
-                                    <div class="card">
-                                        <div class="plan">
-                                            <div class="plan_price">
-                                                <h2> عدد الخطط  </h2>
-                                                <h3> {{$totalPlansCount}}  </h3>
-                                            </div>
-                                            <div class="plan_price">
-                                                <h2> راس المال  </h2>
-                                                <h6>  {{ number_format($totalbalance,2)}}  $</h6>
-                                            </div>
-                                            <div class="plan_price">
-                                                <h2>عائد الاستثمار</h2>
-                                                <h6>  {{ number_format($investment_earning,2)}}  $</h6>
-                                            </div>
-                                            <div class="plan_price">
-                                                <h2> ربح اليوم  </h2>
-                                                <h6>  {{ number_format($daily_earning,2)}}  $</h6>
-                                            </div>
-                                            <div class="plan_price">
-                                                <h2> نسبة الربح  </h2>
-                                                <h6>  {{ number_format($totalDailyPercentage,2)}}  %</h6>
-                                            </div>
-                                        </div>
+                    <div class="table-responsive">
+                        <div class="total_plans">
+                            <div class="card info_card">
+                                <div class="plan">
+                                    <div class="plan_price">
+                                        <h2> عدد الخطط </h2>
+                                        <h3> {{$totalPlansCount}}  </h3>
+                                    </div>
+                                    <div class="plan_price">
+                                        <h2> راس المال </h2>
+                                        <h6>  {{ number_format($totalbalance,2)}} $</h6>
+                                    </div>
+                                    <div class="plan_price">
+                                        <h2>عائد الاستثمار</h2>
+                                        <h6>  {{ number_format($investment_earning,2)}} $</h6>
+                                    </div>
+                                    <div class="plan_price">
+                                        <h2> ربح اليوم </h2>
+                                        <h6>  {{ number_format($daily_earning,2)}} $</h6>
+                                    </div>
+                                    <div class="plan_price">
+                                        <h2> نسبة الربح </h2>
+                                        <h6>  {{ number_format($totalDailyPercentage,2)}} %</h6>
                                     </div>
                                 </div>
-                                @foreach($platforms as $platform)
-                                    @php
-                                    $user = \Illuminate\Support\Facades\Auth::user();
-                                        $totalPlansCount = \App\Models\front\Invoice::where('user_id', $user->id)->where('platform_id',$platform['id'])->count();
-                                        $totalbalance = \App\Models\front\Invoice::where('user_id', $user->id)->where('platform_id',$platform['id'])->sum('plan_price');
-                                        $investment_earning = \App\Models\admin\UserPlatformEarning::where('user_id', $user->id)->where('platform_id',$platform['id'])->sum('investment_return');
-                                        $daily_earning = \App\Models\admin\UserPlatformEarning::where('user_id', $user->id)->where('platform_id',$platform['id'])->sum('daily_earning');
-                                        $daily_percentage = \App\Models\admin\UserPlatformEarning::where('user_id',$user->id)->where('platform_id',$platform['id'])->sum('profit_percentage');
-                                        @endphp
-                                    <div class="platform-header">
-                                        <h2 class="platform_name"> خطط الاستثمار في ::  {{  $platform->name }}</h2>
-                                    </div>
-                                    <div class="card">
-                                        <div class="plan">
-                                            <div class="plan_price">
-                                                <h2> مجموع الخطط </h2>
-                                                <h3>{{ $platform->invoices_count  }}</h3>
-                                            </div>
-                                            <div class="plan_price">
-                                                <h2>  راس المال  </h2>
-                                                <h6> {{ $totalbalance  }}  $</h6>
-                                            </div>
-                                            <div class="plan_price">
-                                                <h2>عائد الاستثمار</h2>
-                                                <h6> {{ $investment_earning  }} $</h6>
-                                            </div>
-                                            <div class="plan_price">
-                                                <h2> ربح اليوم </h2>
-                                                <h6> {{ $daily_earning }} $</h6>
-                                            </div>
-                                            <div class="plan_price">
-                                                <h2> نسبة الربح  </h2>
-                                                <h6> {{ $daily_percentage   }} %</h6>
-                                            </div>
-                                            <div class="plan_price">
-                                                <a class="btn main_button btn-sm" href="{{ route('user.plans.details', ['platform_id' => $platform->id]) }}">
-                                                    عرض الخطط
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-
                             </div>
-                            <!-- end table-responsive -->
+                        </div>
+                        @foreach($platforms as $platform)
+                            @php
+                                $user = \Illuminate\Support\Facades\Auth::user();
+                                    $totalPlansCount = \App\Models\front\Invoice::where('user_id', $user->id)->where('platform_id',$platform['id'])->count();
+                                    $totalbalance = \App\Models\front\Invoice::where('user_id', $user->id)->where('platform_id',$platform['id'])->sum('plan_price');
+                                    $investment_earning = \App\Models\admin\UserPlatformEarning::where('user_id', $user->id)->where('platform_id',$platform['id'])->sum('investment_return');
+                                    $daily_earning = \App\Models\admin\UserPlatformEarning::where('user_id', $user->id)->where('platform_id',$platform['id'])->sum('daily_earning');
+                                    $daily_percentage = \App\Models\admin\UserPlatformEarning::where('user_id',$user->id)->where('platform_id',$platform['id'])->sum('profit_percentage');
+                            @endphp
+                            <div class="platform-header">
+                                <h2 class="platform_name"> خطط الاستثمار في :: {{  $platform->name }}</h2>
+                            </div>
+                            <div class="card info_card">
+                                <div class="plan">
+                                    <div class="plan_price">
+                                        <h2> مجموع الخطط </h2>
+                                        <h3>{{ $platform->invoices_count  }}</h3>
+                                    </div>
+                                    <div class="plan_price">
+                                        <h2> راس المال </h2>
+                                        <h6> {{ $totalbalance  }} $</h6>
+                                    </div>
+                                    <div class="plan_price">
+                                        <h2>عائد الاستثمار</h2>
+                                        <h6> {{ $investment_earning  }} $</h6>
+                                    </div>
+                                    <div class="plan_price">
+                                        <h2> ربح اليوم </h2>
+                                        <h6> {{ $daily_earning }} $</h6>
+                                    </div>
+                                    <div class="plan_price">
+                                        <h2> نسبة الربح </h2>
+                                        <h6> {{ $daily_percentage   }} %</h6>
+                                    </div>
+                                    <div class="plan_price">
+                                        <a class="btn main_button btn-sm"
+                                           href="{{ route('user.plans.details', ['platform_id' => $platform->id]) }}">
+                                            عرض الخطط
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                    </div>
+                    <!-- end table-responsive -->
 
 
                 </div>

@@ -27,15 +27,15 @@
                     @endforeach
                 @endif
                 <div class="col-xl-12">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center gap-1">
+                    <div class="card info_card">
+
                             <h4 class="card-title flex-grow-1"> تفاصيل الاشتراكات </h4>
-                        </div>
+
                     </div>
                     <div class="table-responsive">
                         @foreach ($plans as $invoice)
 
-                            <div class="card">
+                            <div class="card info_card">
                                 <div class="plan">
                                     <div class="plan_price">
                                         <h2> اسم الخطة </h2>
