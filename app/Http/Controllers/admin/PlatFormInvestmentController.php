@@ -80,7 +80,6 @@ class PlatFormInvestmentController extends Controller
                 $dailyEarning = $returnPerSubscription * $userPlanCount;
                 // إضافة العائد بناءً على عدد الاشتراكات الخاصة بالمستخدم
                 $userEarning->increment('investment_return', $returnPerSubscription * $userPlanCount);
-
                 $profitPercentage = 0;
                 // حساب نسبة الربح (على سبيل المثال: الربح نسبةً إلى مجموع اشتراكات المستخدم)
                 $totalUserSubscriptionPrice = $userInvoices->sum('plan_price');
@@ -94,6 +93,11 @@ class PlatFormInvestmentController extends Controller
                 $userEarning->daily_earning = $dailyEarning;
                 $userEarning->save();
                 // يمكنك هنا تسجيل البيانات أو إرسال إشعار للمستخدم إن أردت
+                ///////////// تحديث ربح الكلي للمستخدم
+                $old_user_balance = $user['total_balance'];
+                $new_user_balance = $old_user_balance + $dailyEarning;
+                $user->total_balance = $new_user_balance;
+                $user->update();
             }
             DB::commit();
 

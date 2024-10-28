@@ -42,11 +42,10 @@
                                value="{{$plan['return_investment']}}" step="0.01">
                     </div>
                     <div class="mb-3">
-                        <label for=""> نسبة الربح اليوم </label>
-                        <input type="number" name="daily_percentage" class="form-control" step="0.01" min="0"
-                               value="{{$plan['daily_percentage']}}">
+                        <label for="">  نسبة الخصم عند الانسحاب    </label>
+                        <input type="number" name="withdraw_discount" class="form-control"
+                               value="{{$plan['withdraw_discount']}}">
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> رجوع</button>

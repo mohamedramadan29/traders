@@ -59,6 +59,31 @@
                                         <h6>  {{ $invoice->created_at }} </h6>
                                     </div>
 
+                                    <div class="plan_price">
+                                        <h2> حالة الخطة  </h2>
+                                        <h6>
+                                            @if($invoice->status == 1)
+                                                فعالة
+                                            @elseif($invoice->status == 2)
+                                               تم اغلاق الصفقة
+                                            @elseif($invoice->status == 3)
+                                                انسحاب
+                                            @endif  </h6>
+                                    </div>
+
+                                    <div class="plan_price">
+                                        @if($invoice->status ==1)
+                                            <form method="post" action="{{url('user/invoice_withdraw')}}">
+                                                <input type="hidden" name="invoice_id" value="{{$invoice['id']}}">
+                                                @csrf
+                                                <button type="submit" class="btn main_button btn-sm">
+                                                    انسحاب
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                    </div>
+
                                 </div>
                             </div>
 

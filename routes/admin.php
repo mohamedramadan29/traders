@@ -37,6 +37,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::match(['post','get'],'plan/store','store');
             Route::match(['post','get'],'plan/update/{id}','update');
             Route::post('plan/delete/{id}','delete');
+            Route::post('plan/lock/{id}','lock');
         });
 
         Route::controller(PlatFormInvestmentController::class)->group(function (){

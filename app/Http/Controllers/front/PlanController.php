@@ -8,6 +8,7 @@ use App\Models\admin\Plan;
 use App\Models\admin\Platform;
 use App\Models\admin\UserPlatformEarning;
 use App\Models\front\Invoice;
+use App\Models\front\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -64,7 +65,7 @@ class PlanController extends Controller
         }
 
 
-        return view('front.Plans.user_plans', compact('platforms', 'totalPlansCount', 'totalbalance', 'investment_earning', 'daily_earning','totalDailyPercentage'));
+        return view('front.Plans.user_plans', compact('platforms', 'totalPlansCount', 'totalbalance', 'investment_earning', 'daily_earning', 'totalDailyPercentage'));
     }
 
     public function platformPlans($platform_id)
@@ -110,6 +111,43 @@ class PlanController extends Controller
 
             // return Redirect::route('user/user_plans')->with('success_message', 'تم الاشتراك بنجاح في الخطة');
 
+        } catch (\Exception $e) {
+            return $this->exception_message($e);
+        }
+    }
+
+    //////////////// انسحاب المستخدم من الخظة
+    public function invoice_withdraw(Request $request)
+    {
+        try {
+            $data = $request->all();
+            $invoice_id = $data['invoice_id'];
+            $invoice = Invoice::findOrFail($invoice_id);
+            $invoice_price = $invoice['plan_price'];
+            $plan_id = $invoice['plan_id'];
+            $user_id = $invoice['user_id'];
+            $plan_data = Plan::findOrFail($plan_id);
+            $discount_percentage = $plan_data['withdraw_discount'];
+            $user_data = User::findOrFail($user_id);
+            // dd($user_data);
+            $user_old_balance = $user_data['total_balance'];
+            if ($discount_percentage > 0) {
+                $total_discount = $invoice_price * ($discount_percentage / 100);
+            } else {
+                $total_discount = 0;
+            }
+            $invoice_after_discount = $invoice_price - $total_discount;
+            $user_new_balance = $invoice_after_discount + $user_old_balance;
+            DB::beginTransaction();
+            $user_data->total_balance = $user_new_balance;
+            $user_data->save();
+
+            //////// Update Invoice Status
+            ///
+            $invoice->status = 3;
+            $invoice->save();
+            DB::commit();
+            return $this->success_message('تم الانسحاب من الخطة بنجاح ');
         } catch (\Exception $e) {
             return $this->exception_message($e);
         }

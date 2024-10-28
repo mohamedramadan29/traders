@@ -50,7 +50,7 @@
                                         <th> السعر الاساسي   </th>
                                         <th>  السعر الحالي   </th>
                                         <th>   العائد الاستثماري  </th>
-                                        <th> نسبة الربح اليوم  </th>
+                                        <th>  حالة الخطة   </th>
                                         <th> العمليات</th>
                                     </tr>
                                     </thead>
@@ -68,7 +68,13 @@
                                             <td>{{$plan['main_price']}} $</td>
                                             <td>{{$plan['current_price']}} $</td>
                                             <td>{{$plan['return_investment']}} $</td>
-                                            <td>{{$plan['daily_percentage']}} $</td>
+                                            <td>
+                                                @if($plan['status'] == 1)
+                                                    <span class="badge badge-outline-success"> فعالة  </span>
+                                                @else
+                                                    <span class="badge badge-outline-danger"> مغلقة  </span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 <div class="d-flex gap-2">
                                                     <button type="button" class="btn btn-soft-danger btn-sm"
@@ -78,6 +84,14 @@
                                                                       class="align-middle fs-18"></iconify-icon>
                                                     </button>
 
+                                                    @if($plan->status !=2)
+                                                        <button type="button" class="btn btn-soft-danger btn-sm"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#lock_plan_{{$plan['id']}}">
+                                                            <iconify-icon icon="solar:lock-broken"
+                                                                          class="align-middle fs-18"></iconify-icon>
+                                                        </button>
+                                                    @endif
                                                     <button type="button" class="btn btn-soft-danger btn-sm"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#delete_withdraw_{{$plan['id']}}">
@@ -91,6 +105,7 @@
                                         <!-- Modal -->
                                         @include('admin.Plans.update')
                                         @include('admin.Plans.delete')
+                                        @include('admin.Plans.lock_plan')
                                     @endforeach
                                     </tbody>
                                 </table>

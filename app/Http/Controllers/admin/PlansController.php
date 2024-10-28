@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
 use App\Models\admin\Plan;
 use App\Models\admin\Platform;
+use App\Models\front\Invoice;
+use http\Client\Curl\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -51,6 +53,7 @@ class PlansController extends Controller
             $plan->current_price = $data['main_price'];
             $plan->step_price = $data['step_price'];
             $plan->return_investment = $data['return_investment'];
+            $plan->withdraw_discount = $data['withdraw_discount'];
             $plan->save();
             return $this->success_message(' تم اضافة الخطة بنجاح  ');
             // $plan->daily_percentage = $data['daily_percentage'];
@@ -91,7 +94,8 @@ class PlansController extends Controller
                 //'current_price' => $data['current_price'],
                 'step_price' => $data['step_price'],
                 'return_investment' => $data['return_investment'],
-                'daily_percentage' => $data['daily_percentage'],
+//                'daily_percentage' => $data['daily_percentage'],
+                'withdraw_discount'=>$data['withdraw_discount'],
             ]);
             if ($data['main_price'] > $plan['current_price']) {
                 $plan->update([
@@ -104,6 +108,30 @@ class PlansController extends Controller
             return $this->exception_message($e);
         }
     }
+
+
+    public function lock(Request $request,$id)
+    {
+        $plan = Plan::findOrFail($id);
+       ///////// Get All Active invoice
+        ///
+        $invoices = Invoice::where('plan_id',$plan['id'])->where('status',1)->get();
+       // dd($invoices);
+        foreach ($invoices as $invoice){
+            $user = \App\Models\front\User::findOrFail($invoice['user_id']);
+            $user_old_balance = $user['total_balance'];
+            $new_user_balance = $user_old_balance + $invoice['plan_price'];
+            $user->total_balance = $new_user_balance;
+            $user->save();
+            $invoice->status = 2;
+            $invoice->save();
+        }
+        $plan->status = 2;
+        $plan->save();
+        return $this->success_message(' تم اغلاق الصفقة بنجاح  ');
+    }
+
+
 
     public function delete($id)
     {
