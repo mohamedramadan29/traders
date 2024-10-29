@@ -50,6 +50,9 @@
                                         <th> السعر الاساسي   </th>
                                         <th>  السعر الحالي   </th>
                                         <th>   العائد الاستثماري  </th>
+                                        <th>    راس المال الكلي   </th>
+                                        <th> عدد الاشتراكات الكلي   </th>
+                                        <th> عدد الاشتراكات الفعال   </th>
                                         <th>  حالة الخطة   </th>
                                         <th> العمليات</th>
                                     </tr>
@@ -68,6 +71,15 @@
                                             <td>{{$plan['main_price']}} $</td>
                                             <td>{{$plan['current_price']}} $</td>
                                             <td>{{$plan['return_investment']}} $</td>
+                                            <td>
+                                                @php
+                                                  echo   \App\Models\front\Invoice::where('plan_id',$plan['id'])->where('status',1)->sum('plan_price');
+                                                @endphp
+                                                $
+                                            </td>
+                                            <td> @php echo  count(\App\Models\front\Invoice::where('plan_id',$plan['id'])->get()) @endphp </td>
+                                            <td> @php echo  count(\App\Models\front\Invoice::where('status',1)->where('plan_id',$plan['id'])->get()) @endphp </td>
+
                                             <td>
                                                 @if($plan['status'] == 1)
                                                     <span class="badge badge-outline-success"> فعالة  </span>

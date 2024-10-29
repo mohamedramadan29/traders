@@ -49,6 +49,9 @@
                                         </th>
                                         <th>  الاسم   </th>
                                         <th> اللوجو  </th>
+                                        <th> راس المال الحالي  </th>
+                                        <th> عدد الاشتراكات الكلي   </th>
+                                        <th> عدد الاشتراكات الفعال   </th>
                                         <th> العمليات</th>
                                     </tr>
                                     </thead>
@@ -57,12 +60,20 @@
                                         $i = 1;
                                     @endphp
                                     @foreach($platforms as $platform)
+                                        @php
+                                        $total_invoice_sum = \App\Models\front\Invoice::where('platform_id',$platform['id'])->where('status',1)->sum('plan_price');
+                                        @endphp
                                         <tr>
                                             <td>
                                                 {{$i++}}
                                             </td>
                                             <td>{{$platform['name']}}</td>
+
                                             <td><img width="80px" height="80px" src="{{Storage::url('uploads/platforms/'.$platform['logo'])}}" alt="">  </td>
+                                            <td>{{$total_invoice_sum}} $ </td>
+                                            <td> @php echo  count(\App\Models\front\Invoice::where('platform_id',$platform['id'])->get()) @endphp </td>
+                                            <td> @php echo  count(\App\Models\front\Invoice::where('status',1)->where('platform_id',$platform['id'])->get()) @endphp </td>
+
                                             <td>
                                                 <div class="d-flex gap-2">
                                                     <button type="button" class="btn btn-soft-danger btn-sm"
