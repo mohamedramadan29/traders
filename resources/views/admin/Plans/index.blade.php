@@ -105,6 +105,7 @@
                                                         </button>
                                                     @endif
                                                     <a href="{{url('admin/investments/'.$plan['id'])}}" class="btn btn-success"> عوائد الاستثمار   </a>
+                                                    <a href="{{url('admin/plan_report/'.$plan['id'])}}" class="btn btn-success">  تقرير الخطة   </a>
                                                     <button type="button" class="btn btn-soft-danger btn-sm"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#delete_withdraw_{{$plan['id']}}">

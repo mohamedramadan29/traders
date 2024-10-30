@@ -131,7 +131,20 @@ class PlansController extends Controller
         return $this->success_message(' تم اغلاق الصفقة بنجاح  ');
     }
 
-
+    public function report($id)
+    {
+        $plan = Plan::findORFail($id);
+        $allinvoices = Invoice::where('plan_id',$id)->count();
+        $active_invoice = Invoice::where('plan_id',$id)->where('status',1)->count();
+        $active_invoice_sum = Invoice::where('plan_id',$id)->where('status',1)->sum('plan_price');
+        // تجميع الاشتراكات اليومية
+        $dailyReport = Invoice::selectRaw('DATE(created_at) as date, COUNT(*) as daily_count, SUM(plan_price) as daily_sum, MIN(plan_price) as min_price, MAX(plan_price) as max_price')
+            ->where('plan_id', $id)
+            ->groupBy('date')
+            ->orderBy('date', 'desc')
+            ->get();
+        return view('admin.Plans.report',compact('allinvoices','active_invoice','active_invoice_sum','dailyReport'));
+    }
 
     public function delete($id)
     {

@@ -5,6 +5,7 @@ use \App\Http\Controllers\admin\AdminController;
 use \App\Http\Controllers\admin\PlansController;
 use \App\Http\Controllers\admin\PlatformController;
 use \App\Http\Controllers\admin\PlatFormInvestmentController;
+use \App\Http\Controllers\Admin\UserController;
 Route::group(['prefix' => 'admin'], function () {
     // Admin Login
     Route::controller(AdminController::class)->group(function () {
@@ -38,6 +39,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::match(['post','get'],'plan/update/{id}','update');
             Route::post('plan/delete/{id}','delete');
             Route::post('plan/lock/{id}','lock');
+            Route::get('plan_report/{id}','report');
         });
 
         Route::controller(PlatFormInvestmentController::class)->group(function (){
@@ -45,6 +47,10 @@ Route::group(['prefix' => 'admin'], function () {
             Route::match(['post','get'],'investment/store/{id}','store');
         });
 
+        Route::controller(UserController::class)->group(function (){
+            Route::get('users','index');
+            Route::get('user_report/{id}','report');
+        });
 
 
     });
