@@ -30,14 +30,14 @@ class PlansController extends Controller
             $data = $request->all();
             $rules = [
                 'name' => 'required',
-                'platform_id' => 'required',
+               // 'platform_id' => 'required',
                 'main_price' => 'required',
                 'step_price' => 'required',
                 'return_investment' => 'required'
             ];
             $messages = [
                 'name.required' => ' من فضلك ادخل اسم الخطة  ',
-                'platform_id.required' => ' من فضلك حدد منصة التداول  ',
+                //'platform_id.required' => ' من فضلك حدد منصة التداول  ',
                 'main_price.required' => ' من فضلك حدد سعر الخطة  ',
                 'step_price.required' => ' من فضلك حدد نسبة الزيادة علي كل اشتراك  ',
                 'return_investment.required' => ' حدد العائد الاستثماري  ',
@@ -48,7 +48,7 @@ class PlansController extends Controller
             }
             $plan = new Plan();
             $plan->name = $data['name'];
-            $plan->platform_id = $data['platform_id'];
+            //$plan->platform_id = $data['platform_id'];
             $plan->main_price = $data['main_price'];
             $plan->current_price = $data['main_price'];
             $plan->step_price = $data['step_price'];

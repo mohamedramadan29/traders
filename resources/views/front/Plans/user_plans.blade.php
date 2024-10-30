@@ -55,17 +55,17 @@
                                 </div>
                             </div>
                         </div>
-                        @foreach($platforms as $platform)
+                        @foreach($Plans as $platform)
                             @php
-                                $user = \Illuminate\Support\Facades\Auth::user();
-                                    $totalPlansCount = \App\Models\front\Invoice::where('user_id', $user->id)->where('platform_id',$platform['id'])->count();
-                                    $totalbalance = \App\Models\front\Invoice::where('user_id', $user->id)->where('platform_id',$platform['id'])->sum('plan_price');
-                                    $investment_earning = \App\Models\admin\UserPlatformEarning::where('user_id', $user->id)->where('platform_id',$platform['id'])->sum('investment_return');
-                                    $daily_earning = \App\Models\admin\UserPlatformEarning::where('user_id', $user->id)->where('platform_id',$platform['id'])->sum('daily_earning');
-                                    $daily_percentage = \App\Models\admin\UserPlatformEarning::where('user_id',$user->id)->where('platform_id',$platform['id'])->sum('profit_percentage');
+                                    $user = \Illuminate\Support\Facades\Auth::user();
+                                    $totalPlansCount = \App\Models\front\Invoice::where('user_id', $user->id)->where('plan_id',$platform['id'])->count();
+                                    $totalbalance = \App\Models\front\Invoice::where('user_id', $user->id)->where('plan_id',$platform['id'])->sum('plan_price');
+                                    $investment_earning = \App\Models\admin\UserPlatformEarning::where('user_id', $user->id)->where('plan_id',$platform['id'])->sum('investment_return');
+                                    $daily_earning = \App\Models\admin\UserPlatformEarning::where('user_id', $user->id)->where('plan_id',$platform['id'])->sum('daily_earning');
+                                    $daily_percentage = \App\Models\admin\UserPlatformEarning::where('user_id',$user->id)->where('plan_id',$platform['id'])->sum('profit_percentage');
                             @endphp
                             <div class="platform-header">
-                                <h2 class="platform_name"> خطط الاستثمار في :: {{  $platform->name }}</h2>
+                                <h2 class="platform_name"> عدد الاستثمارات في :: {{  $platform->name }}</h2>
                             </div>
                             <div class="card info_card">
                                 <div class="plan">
@@ -91,14 +91,13 @@
                                     </div>
                                     <div class="plan_price">
                                         <a class="btn main_button btn-sm"
-                                           href="{{ route('user.plans.details', ['platform_id' => $platform->id]) }}">
+                                           href="{{ route('user.plans.details', ['plan_id' => $platform->id]) }}">
                                             عرض الخطط
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
-
                     </div>
                     <!-- end table-responsive -->
 

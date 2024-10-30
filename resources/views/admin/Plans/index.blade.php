@@ -46,7 +46,7 @@
                                         <th style="width: 20px;">
                                         </th>
                                         <th> الاسم </th>
-                                        <th> المنصة   </th>
+{{--                                        <th> المنصة   </th>--}}
                                         <th> السعر الاساسي   </th>
                                         <th>  السعر الحالي   </th>
                                         <th>   العائد الاستثماري  </th>
@@ -67,7 +67,7 @@
                                                 {{$i++}}
                                             </td>
                                             <td>{{$plan['name']}}</td>
-                                            <td>{{$plan['platform']['name']}}</td>
+{{--                                            <td>{{$plan['platform']['name']}}</td>--}}
                                             <td>{{$plan['main_price']}} $</td>
                                             <td>{{$plan['current_price']}} $</td>
                                             <td>{{$plan['return_investment']}} $</td>
@@ -104,6 +104,7 @@
                                                                           class="align-middle fs-18"></iconify-icon>
                                                         </button>
                                                     @endif
+                                                    <a href="{{url('admin/investments/'.$plan['id'])}}" class="btn btn-success"> عوائد الاستثمار   </a>
                                                     <button type="button" class="btn btn-soft-danger btn-sm"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#delete_withdraw_{{$plan['id']}}">

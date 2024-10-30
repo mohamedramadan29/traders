@@ -32,12 +32,12 @@
                     </div>
                         <div>
                             <div class="table-responsive">
-                                @foreach ($plans->groupBy('platform_id') as $platformPlans)
+{{--                                @foreach ($plans->groupBy('platform_id') as $platformPlans)--}}
                                     <!-- عرض اسم المنصة -->
-                                    <div class="platform-header">
-                                        <h2 class="platform_name"> خطط الاستثمار في ::  {{ $platformPlans->first()->platform->name }}</h2>
-                                    </div>
-                                    @foreach($platformPlans as $plan)
+{{--                                    <div class="platform-header">--}}
+{{--                                        <h2 class="platform_name"> خطط الاستثمار في ::  {{ $platformPlans->first()->platform->name }}</h2>--}}
+{{--                                    </div>--}}
+                                    @foreach($plans as $plan)
                                         <div class="card info_card">
                                             <div class="plan">
                                                 <div class="plan_price">
@@ -66,7 +66,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
+{{--                                    @endforeach--}}
                                 @endforeach
                             </div>
 

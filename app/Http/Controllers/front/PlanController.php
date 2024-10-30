@@ -29,7 +29,7 @@ class PlanController extends Controller
     {
         $user = Auth::user();
         // الحصول على عدد الاشتراكات لكل منصة
-        $platforms = Platform::withCount(['invoices' => function ($query) use ($user) {
+        $Plans = Plan::withCount(['invoices' => function ($query) use ($user) {
             $query->where('user_id', $user->id);
         }])->get();
         $totalPlansCount = Invoice::where('user_id', $user->id)->count();
@@ -65,15 +65,15 @@ class PlanController extends Controller
         }
 
 
-        return view('front.Plans.user_plans', compact('platforms', 'totalPlansCount', 'totalbalance', 'investment_earning', 'daily_earning', 'totalDailyPercentage'));
+        return view('front.Plans.user_plans', compact('Plans', 'totalPlansCount', 'totalbalance', 'investment_earning', 'daily_earning', 'totalDailyPercentage'));
     }
 
-    public function platformPlans($platform_id)
+    public function platformPlans($plan_id)
     {
         $user = Auth::user();
         $plans = Invoice::with('plan')
             ->where('user_id', $user->id)
-            ->where('platform_id', $platform_id)
+            ->where('plan_id', $plan_id)
             ->get();
 
         return view('front.Plans.platform_plans', compact('plans'));
@@ -87,7 +87,7 @@ class PlanController extends Controller
             // dd($plan['platform_id']);
             $plan_step = $plan['step_price'];
             $current_price = $plan['current_price'];
-            $platform_id = $plan['platform_id'];
+           // $platform_id = $plan['platform_id'];
 
             //$invoice = new Invoice();
             DB::beginTransaction();
@@ -96,7 +96,7 @@ class PlanController extends Controller
                 'user_id' => Auth::id(), // ID المستخدم الحالي
                 // 'transaction_id' => Invoice::max('id') + 1, // يمكنك استخدام رقم الفاتورة وزيادته بمقدار 1
                 'plan_id' => $plan['id'], // ID الخطة
-                'platform_id' => $platform_id,
+                //'platform_id' => $platform_id,
                 'plan_price' => $current_price, // السعر
                 'order_id' => $orderId, // ID الطلب
                 'order_description' => "Payment for order #" . $orderId, // وصف الطلب

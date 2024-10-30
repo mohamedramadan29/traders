@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
+use App\Models\admin\Plan;
 use App\Models\admin\Platform;
 use App\Models\admin\PlatformInvestmentReturn;
 use App\Models\admin\UserPlatformEarning;
@@ -19,15 +20,16 @@ class PlatFormInvestmentController extends Controller
 
     public function index($id)
     {
-        $platform = Platform::findOrFail($id);
-        $platform_invests = PlatformInvestmentReturn::where('platform_id', $platform['id'])->get();
-        return view('admin.Platforms.investments', compact('platform', 'platform_invests'));
+        $plan = Plan::findOrFail($id);
+        $plan_invests = PlatformInvestmentReturn::where('plan_id', $plan['id'])->get();
+        return view('admin.Plans.investments', compact('plan', 'plan_invests'));
     }
 
     public function store(Request $request, $id)
     {
         try {
-            $platform = Platform::findOrFail($id);
+            $plan = Plan::findOrFail($id);
+            //dd($plan);
             $data = $request->all();
             $rules = [
                 'return_amount' => 'required|min:0'
@@ -42,7 +44,7 @@ class PlatFormInvestmentController extends Controller
             }
             DB::beginTransaction();
             PlatformInvestmentReturn::create([
-                'platform_id' => $platform->id,
+                'plan_id' => $plan->id,
                 'return_amount' => $request->return_amount,
                 'return_date' => now(),
             ]);
@@ -51,9 +53,10 @@ class PlatFormInvestmentController extends Controller
             // جلب جميع الفواتير المتعلقة بالمنصة
             //  $invoices = Invoice::where('platform_id', $platform->id)->get();
 
-            $invoices = Invoice::where('platform_id', $platform->id)
+            $invoices = Invoice::where('plan_id', $plan->id)->where('status',1)
                 ->with('user') // لجلب بيانات المستخدم
                 ->get();
+           // dd($invoices);
 
             if ($invoices->isEmpty()) {
                 return redirect()->back()->with('error', 'لا يوجد مشتركين في هذه المنصة.');
@@ -67,12 +70,14 @@ class PlatFormInvestmentController extends Controller
 
             // توزيع العائد على المستخدمين بناءً على عدد خططهم في المنصة
             foreach ($invoices->groupBy('user_id') as $userInvoices) {
+               // dd($plan->id);
                 $user = $userInvoices->first()->user;
                 //  dd($user);
                 // جلب سجل عائد الاستثمار للمستخدم في هذه المنصة
+              //  dd($plan->id);
                 $userEarning = UserPlatformEarning::firstOrCreate([
                     'user_id' => $user->id,
-                    'platform_id' => $platform->id,
+                    'plan_id' => $plan->id,
                 ]);
                 // حساب عدد الخطط (الاشتراكات) التي يملكها المستخدم في هذه المنصة
                 $userPlanCount = $userInvoices->count();
