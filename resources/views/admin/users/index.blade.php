@@ -40,12 +40,9 @@
                                         </th>
                                         <th>  الاسم  </th>
                                         <th>  البريد الالكتروني  </th>
-                                        <th> عدد ال traders id  </th>
-                                        <th> حجم التداول  </th>
-                                        <th> المستوي الحالي  </th>
-                                        <th> عدد السحوبات   </th>
-                                        <th>  قيمة السحوبات  </th>
-                                        <th> الرصيد الحالي  </th>
+                                        <th>  الرصيد الكلي  </th>
+                                        <th> العمليات  </th>
+
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -59,12 +56,10 @@
                                             </td>
                                             <td> {{$user['name']}}  </td>
                                             <td> {{$user['email']}} </td>
-                                            <td> {{$user->traderIds->count()}} </td>
-                                            <td> {{$user->transactions->sum('turnover-clear')}} $ </td>
-                                            <td> {{$user->level->name}} </td>
-                                            <td> {{$user->withdrawals->count()}} </td>
-                                             <td>{{$user->withdrawals->sum('amount')}}</td>
-                                            <td>  </td>
+                                            <td> {{$user['total_balance']}} $ </td>
+                                            <td>
+                                                <a href="{{url('admin/user_report/'.$user['id'])}}" class="btn btn-success">   تفاصيل اضافية  </a>
+                                            </td>
                                         </tr>
 
                                     @endforeach
@@ -73,17 +68,7 @@
                                 </table>
                             </div>
                             <!-- end table-responsive -->
-                            <script>
-                                function copyToClipboard(element) {
-                                    var temp = document.createElement("textarea");
-                                    temp.value = document.querySelector(element).textContent;
-                                    document.body.appendChild(temp);
-                                    temp.select();
-                                    document.execCommand("copy");
-                                    document.body.removeChild(temp);
-                                    alert("تم نسخ الرابط بنجاح!");
-                                }
-                            </script>
+
                         </div>
                     </div>
                 </div>

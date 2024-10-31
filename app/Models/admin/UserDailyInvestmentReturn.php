@@ -5,12 +5,12 @@ namespace App\Models\admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserPlatformEarning extends Model
+class UserDailyInvestmentReturn extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id','plan_id','investment_return'];
+    protected $guarded = [];
 
-    public function plan_invest()
+    public function plan()
     {
         return $this->belongsTo(Plan::class,'plan_id');
     }

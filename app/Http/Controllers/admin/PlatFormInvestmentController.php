@@ -7,6 +7,7 @@ use App\Http\Traits\Message_Trait;
 use App\Models\admin\Plan;
 use App\Models\admin\Platform;
 use App\Models\admin\PlatformInvestmentReturn;
+use App\Models\admin\UserDailyInvestmentReturn;
 use App\Models\admin\UserPlatformEarning;
 use App\Models\front\Invoice;
 use Illuminate\Http\Request;
@@ -97,6 +98,14 @@ class PlatFormInvestmentController extends Controller
                 $userEarning->profit_percentage = $profitPercentage;
                 $userEarning->daily_earning = $dailyEarning;
                 $userEarning->save();
+
+                $user_daily_investment_return = new UserDailyInvestmentReturn();
+                $user_daily_investment_return->user_id = $user->id;
+                $user_daily_investment_return->plan_id = $plan->id;
+                $user_daily_investment_return->daily_return = $dailyEarning;
+                $user_daily_investment_return->profit_percentage = $profitPercentage;
+                $user_daily_investment_return->save();
+
                 // يمكنك هنا تسجيل البيانات أو إرسال إشعار للمستخدم إن أردت
                 ///////////// تحديث ربح الكلي للمستخدم
                 $old_user_balance = $user['total_balance'];
