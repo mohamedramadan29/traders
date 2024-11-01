@@ -3,23 +3,28 @@
 <footer class="main_footer">
     <div class="data">
         <div>
-            <a href="{{url('user/dashboard')}}">
+            <a href="{{url('user/dashboard')}}" class="{{ Request::is('user/dashboard') ? 'active_link' : '' }}">
                 <i class="bi bi-house-door-fill"></i>
             </a>
         </div>
         <div>
-            <a href="#">
-                <i class="bi bi-cash-coin"></i>
+            <a href="{{url('user/plans')}}"  class="{{ Request::is('user/plans') ? 'active_link' : '' }}">
+                <i class="bi bi-file-spreadsheet-fill"></i>
             </a>
         </div>
         <div>
-            <a href="#" class="active_link">
+            <a href="{{url('user/user_plans')}}"  class="{{ Request::is('user/user_plans') ? 'active_link' : '' }}">
+                <i class="bi bi-substack"></i>
+            </a>
+        </div>
+        <div>
+            <a href="{{url('user/details')}}"  class="{{ Request::is('user/details') ? 'active_link' : '' }}" >
                 <i class="bi bi-person-circle"></i>
             </a>
         </div>
         <div>
-            <a href="#">
-                <i class="bi bi-bank2"></i>
+            <a href="{{url('user/withdraws')}}" class="{{ Request::is('user/withdraws') ? 'active_link' : '' }}">
+                <i class="bi bi-cash-coin"></i>
             </a>
         </div>
         <div>

@@ -152,4 +152,36 @@ class PlanController extends Controller
             return $this->exception_message($e);
         }
     }
+
+    // PlanController.php
+    public function getPlanReport($platformId, $period)
+    {
+        $userId = auth()->id();
+
+        // تأسيس الاستعلام العام بناءً على `user_id` و `plan_id`
+        $query = \App\Models\admin\UserDailyInvestmentReturn::where('user_id', $userId)
+            ->where('plan_id', $platformId);
+
+        // تحديد الفترات وجمع البيانات المتاحة لكل فترة
+        if ($period === 'day') {
+            $query->whereDate('created_at', now()->subDay());
+            $dailyEarning = $query->sum('daily_return');
+            $dailyPercentage = $query->sum('profit_percentage');
+        } elseif ($period === '7day') {
+            $query->whereDate('created_at', '>=', now()->subDays(7));
+            $dailyEarning = $query->sum('daily_return');
+            $dailyPercentage = $query->sum('profit_percentage');
+        } elseif ($period === '30day') {
+            $query->whereDate('created_at', '>=', now()->subDays(30));
+            $dailyEarning = $query->sum('daily_return');
+            $dailyPercentage = $query->sum('profit_percentage');
+        }
+
+        // تنسيق القيم للعرض
+        return response()->json([
+            'daily_earning' => number_format($dailyEarning, 2),
+            'daily_percentage' => number_format($dailyPercentage, 2),
+        ]);
+    }
+
 }

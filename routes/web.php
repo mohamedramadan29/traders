@@ -56,6 +56,7 @@ Route::group(['prefix' => 'user'], function () {
             Route::match(['post','get'],'invoice_create','invoice_create');
             Route::match(['post','get'],'invoice_withdraw','invoice_withdraw');
             Route::get('plans/{plan_id}', 'platformPlans')->name('user.plans.details');
+            Route::get('/plans/report/{platformId}/{period}','getPlanReport');
         });
 
         /////////////// Start WithDraws ///////////////

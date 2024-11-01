@@ -24829,7 +24829,9 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     height: 40px;
     line-height: 45px;
 }
-
+.main_footer .data a img{
+    width: 20px;
+}
 .main_footer .data .active_link {
     border: 1px solid #9F002A;
 }
