@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -61,6 +62,7 @@ class UserController extends Controller
                     'name' => $data['name'],
                     'email' => $data['email'],
                     'password' => Hash::make($data['password']),
+                    'status'=> 1
                 ]);
                 ////////////////////// Send Confirmation Email ///////////////////////////////
                 ///
@@ -126,10 +128,10 @@ class UserController extends Controller
                     return redirect()->back()->withErrors($validator)->withInput();
                 }
                 if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
-                    if (Auth::user()->status == 0) {
-                        Auth::logout();
-                        return Redirect::back()->withInput()->withErrors('  من فضلك يجب تفعيل الحساب الخاص بك اولا  ');
-                    }
+//                    if (Auth::user()->status == 0) {
+//                        Auth::logout();
+//                        return Redirect::back()->withInput()->withErrors('  من فضلك يجب تفعيل الحساب الخاص بك اولا  ');
+//                    }
                     return \redirect('user/dashboard');
                 } else {
                     return Redirect::back()->withInput()->withErrors('لا يوجد حساب بهذه البيانات  ');
