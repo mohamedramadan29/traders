@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('with_draws', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
+            $table->string('amount');
+            $table->string('withdraw_method')->nullable();
+            $table->string('status')->default(0);
             $table->timestamps();
         });
     }

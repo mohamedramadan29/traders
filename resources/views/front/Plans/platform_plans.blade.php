@@ -3,7 +3,6 @@
     تفاصيل الخطة
 @endsection
 @section('css')
-
     {{--    <!-- DataTables CSS -->--}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 @endsection
@@ -35,57 +34,118 @@
                     <div class="table-responsive">
                         @foreach ($plans as $invoice)
 
-                            <div class="card info_card">
-                                <div class="plan">
-                                    <div class="plan_price">
-                                        <h2> اسم الخطة </h2>
-                                        <h6> {{ $invoice['plan']->name }} </h6>
-                                    </div>
-                                    <div class="plan_price">
-                                        <h2> سعر الشراء </h2>
-                                        <h6> {{ $invoice->plan_price }} $</h6>
-                                    </div>
-                                    <div class="plan_price">
-                                        <h2> سعر السوق </h2>
-                                        <h6> {{ $invoice['plan']->current_price }} $</h6>
-                                    </div>
-                                    <div class="plan_price">
-                                        <h2> ربح </h2>
-                                        <h6> {{ number_format($invoice['plan']->current_price - $invoice->plan_price,2) }}
-                                            $</h6>
-                                    </div>
-                                    <div class="plan_price">
-                                        <h2> تاريخ الاشتراك </h2>
-                                        <h6>  {{ $invoice->created_at }} </h6>
-                                    </div>
-
+                            <div class="plans_total_report plan_report_section">
+                                <div class="total_report">
+                                    <p> $ {{ number_format($invoice->plan_price,2)}}   </p>
                                     <div class="plan_price">
                                         <h2> حالة الخطة  </h2>
-                                        <h6>
+                                        <h6 class="btn analytics_button">
                                             @if($invoice->status == 1)
                                                 فعالة
                                             @elseif($invoice->status == 2)
-                                               تم اغلاق الصفقة
+                                                تم اغلاق الصفقة
                                             @elseif($invoice->status == 3)
                                                 انسحاب
-                                            @endif  </h6>
+                                            @endif
+                                        </h6>
                                     </div>
 
-                                    <div class="plan_price">
+                                </div>
+                                <div class="plans">
+                                    <div class="plans_details">
+                                        <div class="plan1">
+                                            <h4>  اسم الخطة   </h4>
+                                            <h4 style="color:#10AE59"> {{ $invoice['plan']->name }} </h4>
+                                        </div>
+                                        <div class="plan1">
+                                            <h4> سعر الشراء   </h4>
+                                            <h4 style="color:#10AE59"> {{ $invoice->plan_price }} $ </h4>
+                                        </div>
+                                        <div class="plan1">
+                                            <h4>   سعر السوق   </h4>
+                                            <h4 style="color:#10AE59"> {{ $invoice['plan']->current_price }} $ </h4>
+                                        </div>
+                                        <div class="plan1">
+                                            <h4>  ربح </h4>
+                                           <h4 style="color:#10AE59"> {{ number_format($invoice['plan']->current_price - $invoice->plan_price,2) }}
+                                               $ </h4>
+                                        </div>
+                                        <div class="plan1">
+                                            <h4>   تاريخ الاشتراك </h4>
+                                            <h4 style="color:#10AE59">  {{ $invoice->created_at }} </h4>
+                                        </div>
+                                    </div>
+
+                                    <div class="button_sections">
+
                                         @if($invoice->status ==1)
                                             <form method="post" action="{{url('user/invoice_withdraw')}}">
                                                 <input type="hidden" name="invoice_id" value="{{$invoice['id']}}">
                                                 @csrf
-                                                <button type="submit" class="btn main_button btn-sm">
+                                                <button type="submit" class="btn withdraw_button">
                                                     انسحاب
                                                 </button>
                                             </form>
                                         @endif
-
                                     </div>
-
                                 </div>
+
                             </div>
+
+
+
+
+{{--                            <div class="card info_card">--}}
+{{--                                <div class="plan">--}}
+{{--                                    <div class="plan_price">--}}
+{{--                                        <h2> اسم الخطة </h2>--}}
+{{--                                        <h6> {{ $invoice['plan']->name }} </h6>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="plan_price">--}}
+{{--                                        <h2> سعر الشراء </h2>--}}
+{{--                                        <h6> {{ $invoice->plan_price }} $</h6>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="plan_price">--}}
+{{--                                        <h2> سعر السوق </h2>--}}
+{{--                                        <h6> {{ $invoice['plan']->current_price }} $</h6>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="plan_price">--}}
+{{--                                        <h2> ربح </h2>--}}
+{{--                                        <h6> {{ number_format($invoice['plan']->current_price - $invoice->plan_price,2) }}--}}
+{{--                                            $</h6>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="plan_price">--}}
+{{--                                        <h2> تاريخ الاشتراك </h2>--}}
+{{--                                        <h6>  {{ $invoice->created_at }} </h6>--}}
+{{--                                    </div>--}}
+
+{{--                                    <div class="plan_price">--}}
+{{--                                        <h2> حالة الخطة  </h2>--}}
+{{--                                        <h6>--}}
+{{--                                            @if($invoice->status == 1)--}}
+{{--                                                فعالة--}}
+{{--                                            @elseif($invoice->status == 2)--}}
+{{--                                               تم اغلاق الصفقة--}}
+{{--                                            @elseif($invoice->status == 3)--}}
+{{--                                                انسحاب--}}
+{{--                                            @endif  </h6>--}}
+{{--                                    </div>--}}
+
+{{--                                    <div class="plan_price">--}}
+{{--                                        @if($invoice->status ==1)--}}
+{{--                                            <form method="post" action="{{url('user/invoice_withdraw')}}">--}}
+{{--                                                <input type="hidden" name="invoice_id" value="{{$invoice['id']}}">--}}
+{{--                                                @csrf--}}
+{{--                                                <button type="submit" class="btn main_button btn-sm">--}}
+{{--                                                    انسحاب--}}
+{{--                                                </button>--}}
+{{--                                            </form>--}}
+{{--                                        @endif--}}
+
+{{--                                    </div>--}}
+
+{{--                                </div>--}}
+{{--                            </div>--}}
 
                         @endforeach
                     </div>

@@ -1,17 +1,36 @@
+<!-----------/////////////// Start Footer  ////////////////////-------->
 
-{{--<!-- ========== Footer Start ========== -->--}}
-{{--<footer class="footer">--}}
-{{--    <div class="container-fluid">--}}
-{{--        <div class="row">--}}
-{{--            <div class="col-12 text-center">--}}
-{{--                جميع الحقوق محفوظة--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</footer>--}}
-{{--<!-- ========== Footer End ========== -->--}}
+<footer class="main_footer">
+    <div class="data">
+        <div>
+            <a href="{{url('user/dashboard')}}">
+                <i class="bi bi-house-door-fill"></i>
+            </a>
+        </div>
+        <div>
+            <a href="#">
+                <i class="bi bi-cash-coin"></i>
+            </a>
+        </div>
+        <div>
+            <a href="#" class="active_link">
+                <i class="bi bi-person-circle"></i>
+            </a>
+        </div>
+        <div>
+            <a href="#">
+                <i class="bi bi-bank2"></i>
+            </a>
+        </div>
+        <div>
+            <a href="#">
+                <i class="bi bi-ticket-fill"></i>
+            </a>
+        </div>
+    </div>
+</footer>
 
-
+<!-- ///////////////////////// End Footer ////////// -->
 </div>
 </div>
 <!-- END Wrapper -->

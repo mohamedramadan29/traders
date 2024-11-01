@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\WithDrawController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\admin\AdminController;
 use \App\Http\Controllers\admin\PlansController;
@@ -50,6 +51,15 @@ Route::group(['prefix' => 'admin'], function () {
         Route::controller(UserController::class)->group(function (){
             Route::get('users','index');
             Route::get('user_report/{id}','report');
+        });
+
+        /////////////// Start WithDraws ///////////////
+        ///
+        Route::controller(WithDrawController::class)->group(function (){
+            Route::get('withdraws','index');
+            Route::post('withdraw/add','store');
+            Route::post('withdraw/update/{id}','update');
+            Route::post('withdraw/delete/{id}','delete');
         });
 
 

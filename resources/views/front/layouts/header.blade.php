@@ -5,7 +5,7 @@
     <meta charset="utf-8"/>
     <title> @yield('title') </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A fully responsive premium admin dashboard template"/>
+    <meta name="description" content=""/>
     <meta name="author" content="Techzaa"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 
@@ -21,7 +21,7 @@
     <!-- App css (Require in all Page) -->
     <link href="{{asset('assets/front/css/app-rtl.min.css')}}" rel="stylesheet" type="text/css"/>
 
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Theme Config js (Require in all Page) -->
     <script src="{{asset('assets/front/js/config.js')}}"></script>
     @toastifyCss
@@ -37,96 +37,30 @@
     <header class="topbar">
         <div class="container-fluid">
             <div class="navbar-header">
-                <div class="d-flex align-items-center">
+                <div class="top_bar_data">
                     <!-- Menu Toggle Button -->
+{{--                    <div class="topbar-item">--}}
+{{--                        <button type="button" class="button-toggle-menu me-2">--}}
+{{--                            <iconify-icon icon="solar:hamburger-menu-broken" class="fs-24 align-middle"></iconify-icon>--}}
+{{--                        </button>--}}
+{{--                    </div>--}}
                     <div class="topbar-item">
-                        <button type="button" class="button-toggle-menu me-2">
-                            <iconify-icon icon="solar:hamburger-menu-broken" class="fs-24 align-middle"></iconify-icon>
-                        </button>
+                         <a href="#" class="deposit_button"> إيداع </a>
                     </div>
                     <div class="topbar-item">
-                        <div class="section_balance">
-                            <div class="image_logo">
-                                <img src="{{ asset('assets/admin/images/logo-letter.svg') }}" alt="">
+                        <div class="noti_section">
+                            <div class="notification">
+                                <i class="bi bi-bell-fill"></i>
                             </div>
-                            <div class="image_info">
-                                <h5> Quolink </h5>
-                                <p> مركز وكالات كيوتكس </p>
+                            <div>
+                                <button> <span class="total_balance"> @php
+                                            echo \Illuminate\Support\Facades\Auth::user()->total_balance . ' $ ';
+                                        @endphp  </span> مباشر  <i class="bi bi-send-fill"></i> </button>
                             </div>
-                        </div>
-                        <style>
-                            .section_balance{
-                                display: flex;
-                                align-items: center;
-                            }
-                            .section_balance .image_logo{
-                                margin-left: 10px;
-                            }
-
-                            .section_balance .image_info{
-                            }
-                            .section_balance .image_info h5{
-                                font-size: 22px;
-                                margin: 0;
-                                margin-top: 15px;
-                            }
-                            .section_balance .image_info p{
-                                font-size:17px;
-                            }
-                            @media(max-width: 991px){
-                                /*section_balance{*/
-                                /*    align-items:flex-start;*/
-                                /*}*/
-                                .section_balance .image_logo img{
-                                    width:30px;
-                                }
-                                .section_balance .image_info h5{
-                                    font-size: 17px;
-                                    margin-top: 15px;
-                                }
-                                .section_balance .image_info p{
-                                    font-size: 14px;
-                                }
-                            }
-                        </style>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center gap-1">
-                    <!-- Theme Color (Light/Dark) -->
-                    <div class="topbar-item">
-                        <button type="button" class="topbar-button" id="light-dark-mode">
-                            <iconify-icon icon="solar:moon-bold-duotone" class="fs-24 align-middle"></iconify-icon>
-                        </button>
-                    </div>
-
-                    <!-- User -->
-                    <div class="dropdown topbar-item">
-                        <a type="button" class="topbar-button" id="page-header-user-dropdown" data-bs-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">
-                                        <span class="d-flex align-items-center">
-                                             <i class='bx bxs-down-arrow'></i> <img width="35px"
-                                                                                    src="{{asset('assets/front/images/user.png')}}">
-                                        </span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <!-- item-->
-                            <h6 class="dropdown-header"> مرحبا {{\Illuminate\Support\Facades\Auth::user()->name}}
-                                ! </h6>
-                            <a class="dropdown-item" href="{{url('user/update_user_details')}}">
-                                <i class="bx bx-user-circle text-muted fs-18 align-middle me-1"></i><span
-                                    class="align-middle"> حسابي  </span>
-                            </a>
-                            <a class="dropdown-item" href="{{url('user/update_user_password')}}">
-                                <i class="bx bx-message-dots text-muted fs-18 align-middle me-1"></i><span
-                                    class="align-middle"> تغير كلمة المرور  </span>
-                            </a>
-                            <div class="dropdown-divider my-1"></div>
-                            <a class="dropdown-item text-danger" href="{{route('user_logout')}}">
-                                <i class="bx bx-log-out fs-18 align-middle me-1"></i><span class="align-middle"> تسجيل خروج  </span>
-                            </a>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </header>

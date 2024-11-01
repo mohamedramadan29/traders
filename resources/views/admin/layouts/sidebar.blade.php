@@ -57,6 +57,15 @@
                     <span class="nav-text"> الاعدادات العامة </span>
                 </a>
             </li>
+            <li class="menu-title mt-2"> طلبات السحب  </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('admin/withdraws') }}">
+                    <span class="nav-icon">
+                        <iconify-icon icon="solar:document-text-bold-duotone"></iconify-icon>
+                    </span>
+                    <span class="nav-text">  طلبات السحب   </span>
+                </a>
+            </li>
 
             <li class="menu-title mt-2"> المستخدمين</li>
 

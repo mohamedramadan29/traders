@@ -1,11 +1,12 @@
-@extends('admin.layouts.master')
+@extends('front.layouts.master_dashboard')
 @section('title')
     طلبات السحب
 @endsection
 @section('css')
-
     {{--    <!-- DataTables CSS -->--}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+
+
 @endsection
 @section('content')
     <!-- ==================================================== -->
@@ -26,10 +27,56 @@
                         @endphp
                     @endforeach
                 @endif
+
+                <div class="col-12">
+                    <div class="card info_card">
+                        <div class="card-header">
+                            <h4 class="card-title flex-grow-1"> الرصيد والمعاملات المالية </h4>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="table-responsive">
+                            <div class="plans_total_report plan_report_section">
+                                <div class="total_report">
+                                    <h4 style="font-size: 17px">  الرصيد الكلي   </h4>
+
+                                    <h4 style="color:#10AE59;font-size:17px">  {{number_format($total_balance,2)}} $ </h4>
+{{--                                        <a style="display: block;width: 100%;margin-top: 20px" type="submit" class="btn withdraw_button">--}}
+{{--                                            سحب الرصيد--}}
+{{--                                        </a>--}}
+                                    <button style="display: block;width: 100%;margin-top: 20px" type="button" class="btn withdraw_button" data-bs-toggle="modal"
+                                            data-bs-target="#add_attribute">
+                                        سحب الرصيد
+
+                                    </button>
+                                </div>
+                                <div class="plans" id="withdraws">
+                                    <div class="plans_details">
+                                        <div class="plan1">
+                                            <h4>طلبت السحب الحالية  </h4>
+                                            <h4 style="color:#10AE59">  {{ number_format($withdrawSum,2) }} $ </h4>
+                                        </div>
+                                        <div class="plan1">
+                                            <h4> مجموع السحوبات  </h4>
+                                            <h4 style="color:#10AE59"> {{ number_format($withdrawSumCompeleted,2) }} $ </h4>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
                 <div class="col-xl-12">
                     <div class="card">
+                        @php
+
+                                @endphp
                         <div class="card-header d-flex justify-content-between align-items-center gap-1">
                             <h4 class="card-title flex-grow-1"> طلبات السحب </h4>
+
+                            @include('front.WithDraws.add')
                         </div>
 
 
@@ -41,10 +88,9 @@
                                     <tr>
                                         <th style="width: 20px;">
                                         </th>
-                                        <th> المستخدم</th>
                                         <th> المبلغ</th>
                                         <th> المحفظة</th>
-                                        <th> عنوان المحفظة</th>
+                                        <th> عنوان المحفظة  </th>
                                         <th> الحالة</th>
                                         <th> العمليات</th>
                                     </tr>
@@ -59,15 +105,13 @@
                                             <td>
                                                 {{$i++}}
                                             </td>
-                                            <td> {{$withdraw['user']['name']}} </td>
+
                                             <td> {{$withdraw['amount']}} دولار</td>
                                             <td> {{$withdraw['withdraw_method']}} </td>
                                             <td>
-                                                <span
-                                                    id="usdtLink_{{$withdraw['id']}}">{{$withdraw['usdt_link']}}</span>
-                                                <button onclick="copyToClipboard('#usdtLink_{{$withdraw['id']}}')"
-                                                        class="btn btn-sm btn-secondary">
-                                                    <i class='bx bx-copy'></i>
+                                                <span id="usdtLink_{{$withdraw['id']}}">{{$withdraw['usdt_link']}}</span>
+                                                <button onclick="copyToClipboard('#usdtLink_{{$withdraw['id']}}')" class="btn btn-sm btn-secondary">
+                                                    <i class='bx bx-copy' ></i>
                                                 </button>
                                             </td>
                                             <td>
@@ -80,12 +124,6 @@
                                                 @endif </td>
                                             <td>
                                                 <div class="d-flex gap-2">
-                                                    <button type="button" class="btn btn-soft-danger btn-sm"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edit_withdraw_{{$withdraw['id']}}">
-                                                        <iconify-icon  icon="solar:pen-2-broken"
-                                                                      class="align-middle fs-18"></iconify-icon>
-                                                    </button>
                                                     @if($withdraw['status'] != 1)
                                                         <button type="button" class="btn btn-soft-danger btn-sm"
                                                                 data-bs-toggle="modal"
@@ -99,25 +137,25 @@
                                             </td>
                                         </tr>
                                         <!-- Modal -->
-                                        @include('admin.WithDraws.delete')
-                                        @include('admin.WithDraws.update')
+                                        @include('front.WithDraws.delete')
+                                        @include('front.WithDraws.update')
                                     @endforeach
 
                                     </tbody>
                                 </table>
-                                <script>
-                                    function copyToClipboard(element) {
-                                        var temp = document.createElement("textarea");
-                                        temp.value = document.querySelector(element).textContent;
-                                        document.body.appendChild(temp);
-                                        temp.select();
-                                        document.execCommand("copy");
-                                        document.body.removeChild(temp);
-                                        alert("تم نسخ الرابط بنجاح!");
-                                    }
-                                </script>
                             </div>
                             <!-- end table-responsive -->
+                            <script>
+                                function copyToClipboard(element) {
+                                    var temp = document.createElement("textarea");
+                                    temp.value = document.querySelector(element).textContent;
+                                    document.body.appendChild(temp);
+                                    temp.select();
+                                    document.execCommand("copy");
+                                    document.body.removeChild(temp);
+                                    alert("تم نسخ الرابط بنجاح!");
+                                }
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -147,6 +185,9 @@
 
             // تهيئة DataTables من جديد
             $('#table-search').DataTable({
+                "searching": false, // إلغاء البحث
+                "ordering": false,  // إلغاء الترتيب
+                "lengthChange": false,
                 "language": {
                     "search": "بحث:",
                     "lengthMenu": "عرض _MENU_ عناصر لكل صفحة",
@@ -163,3 +204,4 @@
         });
     </script>
 @endsection
+
