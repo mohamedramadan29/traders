@@ -63,7 +63,6 @@ class WithDrawController extends Controller
             return $this->exception_message($e);
         }
     }
-
     public function update(Request $request, $id)
     {
         if ($request->isMethod('post')) {

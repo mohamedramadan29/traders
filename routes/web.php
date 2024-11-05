@@ -5,6 +5,7 @@ use App\Http\Controllers\front\UserController;
 use App\Http\Controllers\front\WithDrawController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\front\PlanController;
+use \App\Http\Controllers\front\ExchangeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -67,61 +68,11 @@ Route::group(['prefix' => 'user'], function () {
             Route::post('withdraw/update/{id}', 'update');
             Route::post('withdraw/delete/{id}', 'delete');
         });
-        ///////////////// Start BootController ////////////////
+        ///////////////// Start Exchange Controller  ////////////////
         ///
-        Route::controller(BootController::class)->group(function () {
-            Route::get('boots', 'index');
-            Route::match(['post', 'get'], 'boot/add', 'store');
-            Route::match(['post', 'get'], 'boot/update/{id}', 'update');
-            Route::post('boot/delete/{id}', 'delete');
-
-        });
-
-        //////////////////// Start Message Support ////////////
-        ///
-        Route::controller(SupportController::class)->group(function () {
-            Route::get('messages', 'index');
-            Route::match(['post', 'get'], 'message/add', 'store');
-            Route::match(['post', 'get'], 'message/update/{id}', 'update');
-            Route::post('message/delete/{id}', 'delete');
-        });
-
-        //////////////////// Start Faqs //////////////
-        ///
-        Route::controller(FaqController::class)->group(function () {
-            Route::get('faqs', 'index');
-            Route::match(['post', 'get'], 'faq/add', 'store');
-            Route::match(['post', 'get'], 'faq/update/{id}', 'update');
-            Route::post('faq/delete/{id}', 'delete');
-        });
-        ///////////////////  Start Traders ////////////
-        ///
-        Route::controller(TraderIdController::class)->group(function (){
-            Route::get('traderIds','index');
-            Route::post('trader-id/add','store');
-            Route::post('trader-id/update/{id}','update');
-            Route::post('trader-id/delete/{id}','delete');
-        });
-
-
-        //////////// Message Replay
-        ///
-        Route::controller(MessageReplay::class)->group(function (){
-            Route::get('messages_replay/{id}','index');
-            Route::match(['post','get'],'message_replay/add/{id}','store');
-        });
-        Route::view('link','front.links.index');
-
-        ////////////// Start Referal
-        ///
-        Route::controller(ReferalController::class)->group(function (){
-            Route::get('referrals','index');
-        });
-        ///////////// Start show Levels
-        ///
-        Route::controller(LevelController::class)->group(function (){
-            Route::get('levels','index');
-        });
+         Route::controller(ExchangeController::class)->group(function (){
+             Route::get('exchange','index');
+         });
     });
 });
 

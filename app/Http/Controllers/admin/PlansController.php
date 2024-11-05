@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
+use App\Http\Traits\Upload_Images;
 use App\Models\admin\Plan;
 use App\Models\admin\Platform;
 use App\Models\front\Invoice;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 class PlansController extends Controller
 {
     use Message_Trait;
+    use Upload_Images;
 
     public function index()
     {
@@ -30,30 +32,41 @@ class PlansController extends Controller
             $data = $request->all();
             $rules = [
                 'name' => 'required',
-               // 'platform_id' => 'required',
+               'platform_name' => 'required',
                 'main_price' => 'required',
                 'step_price' => 'required',
-                'return_investment' => 'required'
+                'return_investment' => 'required',
+                'platform_logo'=>'required',
             ];
             $messages = [
                 'name.required' => ' من فضلك ادخل اسم الخطة  ',
-                //'platform_id.required' => ' من فضلك حدد منصة التداول  ',
+               'platform_name.required' => ' من فضلك  ادخل  منصة التداول  ',
                 'main_price.required' => ' من فضلك حدد سعر الخطة  ',
                 'step_price.required' => ' من فضلك حدد نسبة الزيادة علي كل اشتراك  ',
                 'return_investment.required' => ' حدد العائد الاستثماري  ',
+                'platform_logo.required'=>' من فضلك ادخل لوجو المنصة  ',
             ];
             $validator = Validator::make($data, $rules, $messages);
             if ($validator->fails()) {
                 return Redirect::back()->withInput()->withErrors($validator);
             }
+            // معالجة الصورة وحفظها
+            if ($request->hasFile('platform_logo')){
+                $filename = $this->saveImage($request->file('platform_logo'),public_path('assets/uploads/plans/'));
+            } else {
+                return Redirect::back()->withInput()->withErrors(['platform_logo' => 'حدث خطأ في رفع الصورة.']);
+            }
+
             $plan = new Plan();
             $plan->name = $data['name'];
-            //$plan->platform_id = $data['platform_id'];
+            $plan->platform_name = $data['platform_name'];
             $plan->main_price = $data['main_price'];
             $plan->current_price = $data['main_price'];
             $plan->step_price = $data['step_price'];
             $plan->return_investment = $data['return_investment'];
             $plan->withdraw_discount = $data['withdraw_discount'];
+            $plan->logo = $filename;
+            $plan->platform_link = $data['platform_link'];
             $plan->save();
             return $this->success_message(' تم اضافة الخطة بنجاح  ');
             // $plan->daily_percentage = $data['daily_percentage'];
@@ -70,7 +83,7 @@ class PlansController extends Controller
             $data = $request->all();
             $rules = [
                 'name' => 'required',
-                'platform_id' => 'required',
+                'platform_name' => 'required',
                 'main_price' => 'required',
                 'step_price' => 'required',
                 'return_investment' => 'required'
@@ -87,15 +100,29 @@ class PlansController extends Controller
             if ($validator->fails()) {
                 return Redirect::back()->withInput()->withErrors($validator);
             }
+            // معالجة الصورة وحفظها
+            if ($request->hasFile('platform_logo')){
+                $old_image = public_path('assets/uploads/plans/'.$plan['logo']);
+                if (file_exists($old_image)){
+                    @unlink($old_image);
+                }
+                $filename = $this->saveImage($request->file('platform_logo'),public_path('assets/uploads/plans/'));
+                $plan->update([
+                    'logo'=>$filename,
+                ]);
+            } else {
+                return Redirect::back()->withInput()->withErrors(['platform_logo' => 'حدث خطأ في رفع الصورة.']);
+            }
             $plan->update([
                 'name' => $data['name'],
-                'platform_id' => $data['platform_id'],
+                'platform_name' => $data['platform_name'],
                 'main_price' => $data['main_price'],
                 //'current_price' => $data['current_price'],
                 'step_price' => $data['step_price'],
                 'return_investment' => $data['return_investment'],
 //                'daily_percentage' => $data['daily_percentage'],
                 'withdraw_discount'=>$data['withdraw_discount'],
+                'platform_link'=>$data['platform_link'],
             ]);
             if ($data['main_price'] > $plan['current_price']) {
                 $plan->update([

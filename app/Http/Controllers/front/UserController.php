@@ -4,6 +4,7 @@ namespace App\Http\Controllers\front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
+use App\Models\admin\Plan;
 use App\Models\front\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,8 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('front.dashboard');
+        $plans = Plan::where('status', 1)->with('platform')->get();
+        return view('front.dashboard',compact('plans'));
     }
 
     public function register(Request $request)

@@ -11,6 +11,7 @@ class FrontController extends Controller
     public function index()
     {
         $plans = Plan::where('status',1)->get();
+
         return view('front.index',compact('plans'));
     }
 }

@@ -28,7 +28,7 @@
             </a>
         </div>
         <div>
-            <a href="#">
+            <a href="{{url('user/exchange')}}" class="{{ Request::is('user/exchange') ? 'active_link' : '' }}">
                 <i class="bi bi-ticket-fill"></i>
             </a>
         </div>

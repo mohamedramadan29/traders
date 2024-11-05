@@ -1,151 +1,258 @@
+{{--@extends('front.layouts.master_dashboard')--}}
+{{--@section('title')--}}
+{{--    الرئيسية--}}
+{{--@endsection--}}
+{{--@section('content')--}}
+{{--    @if (Session::has('Success_message'))--}}
+{{--        @php--}}
+{{--            toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));--}}
+{{--        @endphp--}}
+{{--    @endif--}}
+{{--    @if ($errors->any())--}}
+{{--        @foreach ($errors->all() as $error)--}}
+{{--            @php--}}
+{{--                toastify()->error($error);--}}
+{{--            @endphp--}}
+{{--        @endforeach--}}
+{{--    @endif--}}
+{{--    <div class="page-content">--}}
+{{--        <!-- Start Container Fluid -->--}}
+{{--        <div class="container-xxl">--}}
+
+{{--            <!-- Start here.... -->--}}
+{{--            <div class="row">--}}
+
+{{--                <div class="plans_total_report plan_report_section">--}}
+{{--                    <div class="total_report">--}}
+{{--                        <h4>  الرصيد الكلي </h4>--}}
+{{--                        <p>  @php--}}
+{{--                                echo  \Illuminate\Support\Facades\Auth::user()->total_balance  . ' $ ';--}}
+{{--                            @endphp--}}
+{{--                        </p>--}}
+{{--                        <br>--}}
+{{--                        <a href="{{url('user/withdraws')}}"--}}
+{{--                           class="btn analytics_button"> الاحصائيات </a>--}}
+{{--                    </div>--}}
+{{--                    <div class="plans">--}}
+{{--                        <div class="plans_details">--}}
+{{--                            <div class="plan1">--}}
+{{--                                <h4>  كل الخطط </h4>--}}
+{{--                                <h4 style="color:#10AE59"> @php--}}
+{{--                                        echo count(\App\Models\admin\Plan::where('status',1)->get())--}}
+{{--                                    @endphp--}}
+{{--                                </h4>--}}
+{{--                                <a style="margin-top: 10px;display: block" href="{{url('user/plans')}}" type="button"--}}
+{{--                                   class="btn btn-sm btn-success">--}}
+{{--                                      التفاصيل--}}
+{{--                                    <i class="ti ti-eye"></i>--}}
+{{--                                </a>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="plans">--}}
+{{--                        <div class="plans_details">--}}
+{{--                            <div class="plan1">--}}
+{{--                                <h4> عدد الخطط المفعلة  </h4>--}}
+{{--                                <h4 style="color:#10AE59">--}}
+{{--                                    @php--}}
+{{--                                        echo count(\App\Models\front\Invoice::where('user_id',\Illuminate\Support\Facades\Auth::id())->where('status',1)->get())--}}
+{{--                                    @endphp--}}
+{{--                                </h4>--}}
+{{--                                <a style="margin-top: 10px;display: block" href="{{url('user/user_plans')}}" type="button"--}}
+{{--                                   class="btn btn-sm btn-success">--}}
+{{--                                      التفاصيل--}}
+{{--                                    <i class="ti ti-eye"></i>--}}
+{{--                                </a>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+
+{{--                </div>--}}
+{{-- --}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--@endsection--}}
+
 @extends('front.layouts.master_dashboard')
 @section('title')
-    الرئيسية
+    الخطط المتاحة
+@endsection
+@section('css')
+
+    {{--    <!-- DataTables CSS -->--}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 @endsection
 @section('content')
-    @if (Session::has('Success_message'))
-        @php
-            toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-        @endphp
-    @endif
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            @php
-                toastify()->error($error);
-            @endphp
-        @endforeach
-    @endif
-    <!-- ==================================================== -->
-    <!-- Start right Content here -->
     <!-- ==================================================== -->
     <div class="page-content">
+
         <!-- Start Container Fluid -->
         <div class="container-xxl">
-
-            <!-- Start here.... -->
             <div class="row">
+                @if (Session::has('Success_message'))
+                    @php
+                        toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
+                    @endphp
+                @endif
+                @if ($errors->any())
+                    @foreach ($errors->all() as $error)
+                        @php
+                            toastify()->error($error);
+                        @endphp
+                    @endforeach
+                @endif
+                <div class="col-xl-12">
+                    <div class="card info_card">
+                        <h4 class="card-title flex-grow-1"> الخطط المتاحة </h4>
+                    </div>
+                    <div>
+                        <div class="table-responsive my_new_container">
+                            @foreach($plans as $plan)
+                                <div class="plans_total_report plan_report_section">
+                                    <div class="total_report increment_section">
+                                        <p>{{ $plan['name'] }} <br> {{ $plan['current_price'] }} $</p>
+                                        <!-- Subscription form -->
+                                        <form method="post" action="{{ url('user/invoice_create') }}">
+                                            @csrf
+                                            <!-- Quantity input with increment and decrement buttons -->
+                                            <div style="display: flex; align-items: center; margin-top: 10px;">
+                                                <button class="mines_button" type="button" onclick="decrementQuantity({{ $plan['id'] }})"
+                                                        style="width: 30px; height: 30px; font-size: 18px;">-
+                                                </button>
+                                                <input class="quantity" type="number" id="quantity_{{ $plan['id'] }}" name="quantity"
+                                                       value="1" min="1" readonly
+                                                       style="text-align: center; width: 60px; margin: 0 10px;"
+                                                       data-plan-price="{{ $plan['current_price'] }}"
+                                                       data-plan-step="{{ $plan['step_price'] }}"
+                                                       oninput="calculateTotal({{ $plan['id'] }})">
+                                                <button class="increase_button" type="button" onclick="incrementQuantity({{ $plan['id'] }})"
+                                                        style="width: 30px; height: 30px; font-size: 18px;">+
+                                                </button>
+                                            </div>
+                                            <p style="margin-top: 10px;" class="total_price"> <span
+                                                    id="totalPrice_{{ $plan['id'] }}">{{ $plan['current_price'] }}</span>
+                                                $</p>
+                                            <input type="hidden" name="plan_id" value="{{ $plan['id'] }}">
+                                            <input type="hidden" name="total_price"
+                                                   id="total_price_input_{{ $plan['id'] }}"
+                                                   value="{{ $plan['current_price'] }}">
+                                            <button style="display: block; width: 100%; margin-top: 20px;" type="submit"
+                                                    class="btn withdraw_button">
+                                                اشتراك
+                                            </button>
+                                        </form>
 
-                <div class="plans_total_report plan_report_section">
-                    <div class="total_report">
-                        <h4>  الرصيد الكلي </h4>
-                        <p>  @php
-                                echo  \Illuminate\Support\Facades\Auth::user()->total_balance  . ' $ ';
-                            @endphp
-                        </p>
-                        <br>
-                        <a href="{{url('user/withdraws')}}"
-                           class="btn analytics_button"> الاحصائيات </a>
-                    </div>
-                    <div class="plans">
-                        <div class="plans_details">
-                            <div class="plan1">
-                                <h4>  كل الخطط </h4>
-                                <h4 style="color:#10AE59"> @php
-                                        echo count(\App\Models\admin\Plan::where('status',1)->get())
-                                    @endphp
-                                </h4>
-                                <a style="margin-top: 10px;display: block" href="{{url('user/plans')}}" type="button"
-                                   class="btn btn-sm btn-success">
-                                      التفاصيل
-                                    <i class="ti ti-eye"></i>
-                                </a>
-                            </div>
+                                    </div>
+                                    <div class="plans">
+                                        <div class="plans_details">
+                                            <div class="plan1 hide_mobile">
+                                                <h4>سعر الشراء </h4>
+                                                <h4 style="color:#10AE59">  {{ $plan['current_price'] }} $ </h4>
+                                            </div>
+                                            <div class="plan1 investment_return">
+                                                <h4> عائد الاستثمار </h4>
+                                                <h4 style="color:#10AE59"> {{ $plan['return_investment']  }} $ </h4>
+                                            </div>
+                                            <div class="plan1 platform_info">
+                                                <h4 data-bs-toggle="modal"
+                                                    data-bs-target="#add_attribute_{{$plan['id']}}">
+                                                    <span class="platform-trigger"
+                                                          style="cursor:pointer;">{{$plan['platform_name']}}</span>
+                                                    <i class="bi bi-arrow-down-square platform-trigger"
+                                                       style="cursor:pointer;"></i>
+                                                </h4>
+                                                <img src="{{asset('assets/uploads/plans/'.$plan['logo'])}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal structure  -->
+                                <div class="modal fade platform_data" id="add_attribute_{{$plan['id']}}" tabindex="-1"
+                                     aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title"
+                                                    id="platformModalLabel">{{$plan['platform_name']}}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                <h6> {{$plan['platform_name']}} </h6>
+                                                <!-- Platform logo -->
+                                                <img src="{{ asset('assets/uploads/plans/'.$plan['logo']) }}"
+                                                     alt="{{$plan['platform_name']}}" class="img-fluid"
+                                                     style="max-width: 150px;">
+                                                <!-- Platform link -->
+                                                <p class="mt-3">
+                                                    <a href="{{url($plan['platform_link'])}}" target="_blank"
+                                                       class="btn btn-success">
+                                                        زيارة الموقع
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                    </div>
-                    <div class="plans">
-                        <div class="plans_details">
-                            <div class="plan1">
-                                <h4> عدد الخطط المفعلة  </h4>
-                                <h4 style="color:#10AE59">
-                                    @php
-                                        echo count(\App\Models\front\Invoice::where('user_id',\Illuminate\Support\Facades\Auth::id())->where('status',1)->get())
-                                    @endphp
-                                </h4>
-                                <a style="margin-top: 10px;display: block" href="{{url('user/user_plans')}}" type="button"
-                                   class="btn btn-sm btn-success">
-                                      التفاصيل
-                                    <i class="ti ti-eye"></i>
-                                </a>
-                            </div>
-                        </div>
+
+                        <!-- end table-responsive -->
                     </div>
 
                 </div>
-
-{{--                <div class="col-md-6 col-xl-3">--}}
-{{--                    <div class="card info_card">--}}
-{{--                        <div class="col-12 text-start">--}}
-{{--                            <p class=" mb-0"> الرصيد الكلي  </p>--}}
-{{--                            <h3 class="mt-1 mb-0">--}}
-{{--                                @php--}}
-{{--                                   echo \Illuminate\Support\Facades\Auth::user()->total_balance . ' $ ';--}}
-{{--                                @endphp--}}
-{{--                            </h3>--}}
-{{--                        </div>--}}
-{{--                        <a style="margin-top: 10px" href="{{url('user/plans')}}" type="button"--}}
-{{--                           class="btn btn-sm btn-success">--}}
-{{--                            سحب الرصيد--}}
-{{--                            <i class="ti ti-eye"></i>--}}
-{{--                        </a>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                <div class="col-md-6 col-xl-3">--}}
-{{--                    <div class="card info_card">--}}
-{{--                        <div class="col-12 text-start">--}}
-{{--                            <p class=" mb-0"> كل الخطط </p>--}}
-{{--                            <h3 class="mt-1 mb-0">--}}
-{{--                                @php--}}
-{{--                                    echo count(\App\Models\admin\Plan::where('status',1)->get())--}}
-{{--                                @endphp--}}
-{{--                            </h3>--}}
-{{--                        </div>--}}
-{{--                        <a style="margin-top: 10px" href="{{url('user/plans')}}" type="button"--}}
-{{--                           class="btn btn-sm btn-success">--}}
-{{--                            مشاهدة التفاصيل--}}
-{{--                            <i class="ti ti-eye"></i>--}}
-{{--                        </a>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                <div class="col-md-6 col-xl-3">--}}
-{{--                    <div class="card info_card">--}}
-{{--                        <div class="col-8 text-start">--}}
-{{--                            <p class="mb-0"> عدد الخطط المفعلة   </p>--}}
-{{--                            <h3 class="mt-1 mb-0">--}}
-{{--                                @php--}}
-{{--                                    echo count(\App\Models\front\Invoice::where('user_id',\Illuminate\Support\Facades\Auth::id())->where('status',1)->get())--}}
-{{--                                @endphp--}}
-{{--                            </h3>--}}
-{{--                        </div>--}}
-{{--                        <a style="margin-top: 10px" href="{{url('user/user_plans')}}" type="button"--}}
-{{--                           class="btn btn-sm btn-success">--}}
-{{--                            مشاهدة التفاصيل--}}
-{{--                            <i class="ti ti-eye"></i>--}}
-{{--                        </a>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                <div class="col-md-6 col-xl-3">--}}
-{{--                    <div class="card info_card">--}}
-{{--                        <div class="col-8 text-start">--}}
-{{--                            <p class="mb-0">  الخطط المغلقة    </p>--}}
-{{--                            <h3 class="mt-1 mb-0">--}}
-{{--                                @php--}}
-{{--                                    echo count(\App\Models\front\Invoice::where('user_id',\Illuminate\Support\Facades\Auth::id())->where('status','!=',1)->get())--}}
-{{--                                @endphp--}}
-{{--                            </h3>--}}
-{{--                        </div>--}}
-{{--                        <a style="margin-top: 10px" href="{{url('user/user_plans')}}" type="button"--}}
-{{--                           class="btn btn-sm btn-success">--}}
-{{--                            مشاهدة التفاصيل--}}
-{{--                            <i class="ti ti-eye"></i>--}}
-{{--                        </a>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
             </div>
+
         </div>
+        <!-- End Container Fluid -->
+
     </div>
     <!-- ==================================================== -->
     <!-- End Page Content -->
     <!-- ==================================================== -->
 
 @endsection
+
+@section('js')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        function calculateTotal(planId) {
+            const quantityInput = document.getElementById(`quantity_${planId}`);
+            const planPrice = parseFloat(quantityInput.getAttribute('data-plan-price'));
+            const stepPrice = parseFloat(quantityInput.getAttribute('data-plan-step'));
+            const quantity = parseInt(quantityInput.value);
+
+            // حساب السعر النهائي على أساس العدد والتزايد لكل اشتراك إضافي
+            let totalPrice = 0;
+            for (let i = 0; i < quantity; i++) {
+                totalPrice += planPrice + (i * stepPrice);
+            }
+            totalPrice = totalPrice.toFixed(2);
+
+            // تحديث السعر النهائي في الواجهة
+            document.getElementById(`totalPrice_${planId}`).textContent = totalPrice;
+            document.getElementById(`total_price_input_${planId}`).value = totalPrice;
+        }
+
+        function incrementQuantity(planId) {
+            const quantityInput = document.getElementById(`quantity_${planId}`);
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            calculateTotal(planId);
+        }
+
+        function decrementQuantity(planId) {
+            const quantityInput = document.getElementById(`quantity_${planId}`);
+            if (quantityInput.value > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+                calculateTotal(planId);
+            }
+        }
+
+
+    </script>
+@endsection
+
 

@@ -8,7 +8,7 @@
 @endsection
 @section('content')
     <!-- ==================================================== -->
-    <div class="page-content user_plans">
+    <div class="page-content user_plans user_plans_details">
         <!-- Start Container Fluid -->
         <div class="container-xxl">
             <div class="row">
@@ -25,10 +25,10 @@
                     @endforeach
                 @endif
                 <div class="col-xl-12">
-                    <div class="card info_card">
-                        <h4 class="card-title flex-grow-1">  خططي  </h4>
+                    <div class="card info_card ">
+                        <h4 class="card-title flex-grow-1"> خططي </h4>
                     </div>
-                    <div class="plans_total_report">
+                    <div class="plans_total_report my_new_container">
                         <div class="total_report">
                             <h4> حجم الاستثمارت / الربح </h4>
                             <p> $ {{ number_format($totalbalance,2)}}   </p>
@@ -64,54 +64,27 @@
                             @endforeach
 
 
+                            <script>
+                                document.querySelectorAll('.period-select').forEach(select => {
+                                    select.addEventListener('change', function () {
+                                        const platformId = this.getAttribute('data-platform-id');
+                                        const period = this.value;
 
-                                <script>
-                                    document.querySelectorAll('.period-select').forEach(select => {
-                                        select.addEventListener('change', function () {
-                                            const platformId = this.getAttribute('data-platform-id');
-                                            const period = this.value;
-
-                                            fetch(`plans/report/${platformId}/${period}`)
-                                                .then(response => response.json())
-                                                .then(data => {
-                                                    // تحديث الأرباح والنسبة على الشاشة باستخدام data-platform-id
-                                                    document.querySelector(`.daily-earning[data-platform-id="${platformId}"]`).textContent = `${data.daily_earning} $`;
-                                                    document.querySelector(`.daily-percentage[data-platform-id="${platformId}"]`).textContent = `${data.daily_percentage} %`;
-                                                })
-                                                .catch(error => console.error('Error:', error));
-                                        });
+                                        fetch(`plans/report/${platformId}/${period}`)
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                // تحديث الأرباح والنسبة على الشاشة باستخدام data-platform-id
+                                                document.querySelector(`.daily-earning[data-platform-id="${platformId}"]`).textContent = `${data.daily_earning} $`;
+                                                document.querySelector(`.daily-percentage[data-platform-id="${platformId}"]`).textContent = `${data.daily_percentage} %`;
+                                            })
+                                            .catch(error => console.error('Error:', error));
                                     });
-                                </script>
+                                });
+                            </script>
 
                         </div>
                     </div>
-                    <div class="table-responsive">
-                        {{--                        <div class="total_plans">--}}
-                        {{--                            <div class="card info_card">--}}
-                        {{--                                <div class="plan">--}}
-                        {{--                                    <div class="plan_price">--}}
-                        {{--                                        <h2> عدد الخطط </h2>--}}
-                        {{--                                        <h3> {{$totalPlansCount}}  </h3>--}}
-                        {{--                                    </div>--}}
-                        {{--                                    <div class="plan_price">--}}
-                        {{--                                        <h2> راس المال </h2>--}}
-                        {{--                                        <h6>  {{ number_format($totalbalance,2)}} $</h6>--}}
-                        {{--                                    </div>--}}
-                        {{--                                    <div class="plan_price">--}}
-                        {{--                                        <h2>عائد الاستثمار</h2>--}}
-                        {{--                                        <h6>  {{ number_format($investment_earning,2)}} $</h6>--}}
-                        {{--                                    </div>--}}
-                        {{--                                    <div class="plan_price">--}}
-                        {{--                                        <h2> ربح اليوم </h2>--}}
-                        {{--                                        <h6>  {{ number_format($daily_earning,2)}} $</h6>--}}
-                        {{--                                    </div>--}}
-                        {{--                                    <div class="plan_price">--}}
-                        {{--                                        <h2> نسبة الربح </h2>--}}
-                        {{--                                        <h6>  {{ number_format($totalDailyPercentage,2)}} %</h6>--}}
-                        {{--                                    </div>--}}
-                        {{--                                </div>--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
+                    <div class="table-responsive my_new_container">
                         @foreach($Plans as $platform)
                             @php
                                 $user = \Illuminate\Support\Facades\Auth::user();
@@ -163,22 +136,24 @@
                                             <h4> 24 ساعة </h4>
                                             <h4 style="color:#10AE59"> {{$lastDayReturns}} $ </h4>
                                             <h4 style="color:#10AE59"> {{$lastDayPercentage}} % </h4>
-                                        </div>
-                                        <div class="plan1">
                                             <h4> 7 ايام </h4>
                                             <h4 style="color:#10AE59"> {{$sevenDaysReturns}} $ </h4>
                                             <h4 style="color:#10AE59"> {{$sevenDaysPercentage}} % </h4>
                                         </div>
+{{--                                        <div class="plan1">--}}
+
+{{--                                        </div>--}}
                                         <div class="plan1">
                                             <h4> 30 يوم </h4>
                                             <h4 style="color:#10AE59"> {{$thirtyDaysReturns}} $ </h4>
                                             <h4 style="color:#10AE59"> {{$thirtyDaysPercentage}} % </h4>
-                                        </div>
-                                        <div class="plan1">
                                             <h4> {{  $platform->name }} </h4>
                                             <h4> {{ $platform->invoices_count  }} </h4>
-                                            <img src="{{asset('assets/uploads/payments.svg')}}">
+                                            <img src="{{asset('assets/uploads/plans/'.$platform['logo'])}}">
                                         </div>
+{{--                                        <div class="plan1">--}}
+{{--                                            --}}
+{{--                                        </div>--}}
                                     </div>
 
                                     <div class="button_sections">

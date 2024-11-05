@@ -84,37 +84,44 @@ class PlanController extends Controller
         try {
             $data = $request->all();
             $plan = Plan::findOrFail($data['plan_id']);
-            // dd($plan['platform_id']);
             $plan_step = $plan['step_price'];
             $current_price = $plan['current_price'];
-           // $platform_id = $plan['platform_id'];
 
-            //$invoice = new Invoice();
+            $quantity = isset($data['quantity']) ? (int)$data['quantity'] : 1; // احصل على عدد الاشتراكات من الطلب، 1 كحد أدنى
             DB::beginTransaction();
-            $orderId = uniqid();
-            Invoice::create([
-                'user_id' => Auth::id(), // ID المستخدم الحالي
-                // 'transaction_id' => Invoice::max('id') + 1, // يمكنك استخدام رقم الفاتورة وزيادته بمقدار 1
-                'plan_id' => $plan['id'], // ID الخطة
-                //'platform_id' => $platform_id,
-                'plan_price' => $current_price, // السعر
-                'order_id' => $orderId, // ID الطلب
-                'order_description' => "Payment for order #" . $orderId, // وصف الطلب
-                'payment_status' => 'confirmed', // حالة الدفع مبدئيًا
-            ]);
-            $new_plan_price = $current_price + $plan_step;
-            $plan->update([
-                'current_price' => $new_plan_price
-            ]);
-            DB::commit();
-            return Redirect::route('user_plans')->with('success_message', ' تم الاشتراك بنجاح في الخطة  ');
 
-            // return Redirect::route('user/user_plans')->with('success_message', 'تم الاشتراك بنجاح في الخطة');
+            for ($i = 0; $i < $quantity; $i++) {
+                $orderId = uniqid();
+
+                // إنشاء سجل جديد في جدول الفواتير لكل اشتراك
+                Invoice::create([
+                    'user_id' => Auth::id(),
+                    'plan_id' => $plan['id'],
+                    'plan_price' => $current_price,
+                    'order_id' => $orderId,
+                    'order_description' => "Payment for order #" . $orderId,
+                    'payment_status' => 'confirmed',
+                ]);
+
+                // تحديث السعر بعد كل اشتراك
+                $current_price += $plan_step;
+            }
+
+            // تحديث سعر الخطة في النهاية
+            $plan->update([
+                'current_price' => $current_price
+            ]);
+
+            DB::commit();
+
+            return Redirect::route('user_plans')->with('success_message', ' تم الاشتراك بنجاح في الخطة ');
 
         } catch (\Exception $e) {
+            DB::rollBack();
             return $this->exception_message($e);
         }
     }
+
 
     //////////////// انسحاب المستخدم من الخظة
     public function invoice_withdraw(Request $request)

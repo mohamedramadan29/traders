@@ -31,13 +31,15 @@
                             <h4 class="card-title flex-grow-1"> تفاصيل الاشتراكات </h4>
 
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive my_new_container">
                         @foreach ($plans as $invoice)
 
                             <div class="plans_total_report plan_report_section">
                                 <div class="total_report">
+                                    <h4 style="color:#10AE59"> {{ $invoice['plan']->name }} </h4>
                                     <p> $ {{ number_format($invoice->plan_price,2)}}   </p>
                                     <div class="plan_price">
+
                                         <h2> حالة الخطة  </h2>
                                         <h6 class="btn analytics_button">
                                             @if($invoice->status == 1)
@@ -54,25 +56,18 @@
                                 <div class="plans">
                                     <div class="plans_details">
                                         <div class="plan1">
-                                            <h4>  اسم الخطة   </h4>
-                                            <h4 style="color:#10AE59"> {{ $invoice['plan']->name }} </h4>
-                                        </div>
-                                        <div class="plan1">
-                                            <h4> سعر الشراء   </h4>
-                                            <h4 style="color:#10AE59"> {{ $invoice->plan_price }} $ </h4>
-                                        </div>
-                                        <div class="plan1">
-                                            <h4>   سعر السوق   </h4>
-                                            <h4 style="color:#10AE59"> {{ $invoice['plan']->current_price }} $ </h4>
-                                        </div>
-                                        <div class="plan1">
-                                            <h4>  ربح </h4>
-                                           <h4 style="color:#10AE59"> {{ number_format($invoice['plan']->current_price - $invoice->plan_price,2) }}
-                                               $ </h4>
+                                            <h4>  العائد اليومي   </h4>
+                                            @php
+
+                                            $user_platform_earning = \App\Models\admin\UserPlatformEarning::where('plan_id',$invoice['plan']->id)->first();
+
+
+                                            @endphp
+                                            <h4 style="color:#10AE59"> {{ $user_platform_earning['daily_earning']}} $ </h4>
                                         </div>
                                         <div class="plan1">
                                             <h4>   تاريخ الاشتراك </h4>
-                                            <h4 style="color:#10AE59">  {{ $invoice->created_at }} </h4>
+                                            <h4 style="color:#10AE59">  {{ $invoice->created_at->diffForHumans() }} </h4>
                                         </div>
                                     </div>
 

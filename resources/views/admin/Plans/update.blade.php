@@ -15,14 +15,19 @@
                                value="{{$plan['name']}}">
                     </div>
                     <div class="mb-3">
-                        <label for=""> منصة التداول </label>
-                        <select name="platform_id" id="" class="form-select">
-                            <option value="" selected disabled> -- حدد --</option>
-                            @foreach($platforms as $platform)
-                                <option @if($plan['platform_id'] == $platform['id']) selected
-                                        @endif value="{{$platform['id']}}"> {{ $platform['name'] }}</option>
-                            @endforeach
-                        </select>
+                        <label for=""> اسم المنصة  </label>
+                        <input required type="text" name="platform_name" class="form-control"
+                               value="{{$plan['platform_name']}}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="">  لوجو المنصة  </label>
+                        <input type="file" name="platform_logo" class="form-control">
+                        <img src="{{asset('assets/uploads/plans/'.$plan['logo'])}}" width="40px" height="40px" alt="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="">  رابط المنصة  </label>
+                        <input required type="text" name="platform_link" class="form-control"
+                               value="{{$plan['platform_link']}}">
                     </div>
                     <div class="mb-3">
                         <label for=""> سعر الخطة </label>

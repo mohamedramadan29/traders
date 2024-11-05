@@ -14,15 +14,20 @@
                         <input required type="text" name="name" class="form-control"
                                value="{{old('name')}}">
                     </div>
-{{--                    <div class="mb-3">--}}
-{{--                        <label for=""> منصة التداول </label>--}}
-{{--                        <select name="platform_id" id="" class="form-select">--}}
-{{--                            <option value="" selected disabled> -- حدد --</option>--}}
-{{--                            @foreach($platforms as $platform)--}}
-{{--                                <option value="{{$platform['id']}}"> {{ $platform['name'] }}</option>--}}
-{{--                            @endforeach--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
+                    <div class="mb-3">
+                        <label for=""> اسم المنصة  </label>
+                        <input required type="text" name="platform_name" class="form-control"
+                               value="{{old('platform_name')}}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="">  رابط المنصة  </label>
+                        <input required type="text" name="platform_link" class="form-control"
+                               value="{{old('platform_link')}}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="">  لوجو المنصة  </label>
+                        <input required type="file" name="platform_logo" class="form-control">
+                    </div>
                     <div class="mb-3">
                         <label for=""> سعر الخطة </label>
                         <input required type="number" name="main_price" class="form-control"

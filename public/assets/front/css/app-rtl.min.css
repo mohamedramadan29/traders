@@ -24696,7 +24696,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
 }
 
 .topbar {
-    background:#1c1f2e;
+    background: #1c1f2e;
     margin-bottom: 10px;
 }
 
@@ -24801,7 +24801,10 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
 
 .main_footer {
     background-color: #1c1f2e;
-    padding: 10px
+    padding: 10px;
+    position: sticky;
+    bottom: 0;
+    z-index: 99999999;
 }
 
 .main_footer .data {
@@ -24829,9 +24832,11 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     height: 40px;
     line-height: 45px;
 }
-.main_footer .data a img{
+
+.main_footer .data a img {
     width: 20px;
 }
+
 .main_footer .data .active_link {
     border: 1px solid #9F002A;
 }
@@ -24845,18 +24850,22 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
 
 
 /************************************ start Top BAr Data ***************************/
-.topbar{
+.topbar {
     border-bottom: 1px solid #a4a4a4;
 }
-.top_bar_data{
+
+.top_bar_data {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     flex-wrap: wrap;
 }
-.top_bar_data .topbar-item{}
-.top_bar_data .topbar-item .deposit_button{
+
+.top_bar_data .topbar-item {
+}
+
+.top_bar_data .topbar-item .deposit_button {
     background-color: #0faf59;
     color: #fff;
     width: 100px;
@@ -24866,11 +24875,12 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     font-size: 18px;
 }
 
-.top_bar_data .topbar-item .noti_section{
+.top_bar_data .topbar-item .noti_section {
     display: flex;
     align-items: center;
 }
-.top_bar_data .topbar-item .noti_section .notification{
+
+.top_bar_data .topbar-item .noti_section .notification {
     color: #fff;
     width: 35px;
     display: inline-block;
@@ -24882,50 +24892,58 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     line-height: 40px;
     border-radius: 5px;
 }
-.top_bar_data .topbar-item .noti_section button{
+
+.top_bar_data .topbar-item .noti_section button {
     background-color: #373A4C;
     color: #ccc;
     border: none;
     height: 35px;
     border-radius: 5px;
 }
-.top_bar_data .topbar-item .noti_section button i{
+
+.top_bar_data .topbar-item .noti_section button i {
     color: #0efe7d;
     margin-right: 10px;
     font-size: 16px;
 }
-.top_bar_data .topbar-item .noti_section button .total_balance{
+
+.top_bar_data .topbar-item .noti_section button .total_balance {
     font-weight: bold;
     color: #fff;
     font-size: 18px;
     margin-left: 20px;
 }
-@media(max-width:991px){
-    .top_bar_data .topbar-item .deposit_button{
-        font-size: 16px;
-        width: 65px;
+
+@media (max-width: 991px) {
+    .top_bar_data .topbar-item .deposit_button {
+        font-size: 13px;
+        width: 55px;
     }
-    .top_bar_data .topbar-item .noti_section button .total_balance{
+
+    .top_bar_data .topbar-item .noti_section button .total_balance {
         margin-left: 5px;
     }
-    .top_bar_data .topbar-item .noti_section button i{
-        margin-right:5px
+
+    .top_bar_data .topbar-item .noti_section button i {
+        margin-right: 5px
     }
 
     .main_footer .data a {
         width: 35px;
         height: 35px;
     }
-    .main_footer .data a i{
+
+    .main_footer .data a i {
         font-size: 18px;
         line-height: 40px;
     }
 }
+
 /*************** End Top Bar Data *********************/
 
 /***************Start Plans Total Report ****************/
 
-.plans_total_report{
+.plans_total_report {
     display: flex;
     background-color: #2a3040;
     color: #fff;
@@ -24933,12 +24951,14 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     border-radius: 20px;
     margin-bottom: 30px;
 }
-.plans_total_report .total_report{
+
+.plans_total_report .total_report {
     background: #383c48;
     color: #fff;
     border-radius: 10px;
     padding: 10px;
 }
+
 .plans_total_report .total_report h4 {
     background: #2A3040;
     color: #fff;
@@ -24947,6 +24967,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     border-radius: 10px;
     text-align: center;
 }
+
 .plans_total_report .total_report p {
     background: #2A3040;
     text-align: center;
@@ -24956,59 +24977,81 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     margin: 0;
     padding: 2px 10px;
 }
-.plans_total_report .total_report h2{
+
+.plans_total_report .total_report h2 {
     color: #11af59;
     text-align: center;
     margin-top: 15px;
     font-weight: bold;
 }
-.plans_total_report .total_report .withdraw_button{
+
+.plans_total_report .total_report .withdraw_button {
     background-color: #11af59;
     color: #fff;
     display: block;
     border-radius: 23px;
 }
-.plans_total_report .total_report .analytics_button{
+
+.plans_total_report .total_report .analytics_button {
     background-color: #2A3040;
     color: #fff;
     display: block;
     border-radius: 23px;
 }
-.plans_total_report .total_report .withdraw_button i{
+
+.plans_total_report .total_report .withdraw_button i {
     position: relative;
     top: 2px;
     margin-right: 3px;
 }
-.plans_total_report .total_report span{
+
+.plans_total_report .total_report span {
     color: #11af59;
     display: inline-block;
     font-weight: bold;
     position: relative;
-    top: -7px;
+
     font-size: 17px;
 }
-.plans_total_report .plans{
+
+.plans_total_report .plans {
     display: flex;
     /*flex-wrap: wrap;*/
 }
-.plans_total_report .plans .plans_details{
+
+.plans_total_report .plans .plans_details {
     display: flex;
 }
-.plans_total_report .plans .plan1{
-    margin-left: 15px;
+
+.plans_total_report .plans .plan1 {
+    margin-left: 0px;
     background: #383c48;
     color: #fff;
-    border-radius: 10px;
+
     padding: 15px;
-    margin-right: 15px;
+    margin-right: 0px;
     margin-bottom: 10px;
     min-width: 120px;
 }
-.plans_total_report .plans .plan1 img{
-    width: 120px;
-    height: 120px;
+
+.plans_total_report .plans .plan1:nth-of-type(1) {
+    border-radius: 0 10px 10px 0;
+    margin-right: 5px;
 }
-.plans_total_report .plans .plan1 h4{
+
+.plans_total_report .plans .plan1:last-of-type {
+    border-radius: 10px 0px 0px 10px;
+
+}
+
+.plans_total_report .plans .plan1 img {
+    width: 110px;
+    height: 110px;
+    background: #2a3040;
+    border-radius: 10px;
+}
+
+.plans_total_report .plans .plan1 h4 {
     background: #2A3040;
     text-align: center;
     font-weight: bolder;
@@ -25020,55 +25063,521 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     margin-top: 10px;
     margin-bottom: 10px;
 }
-.plans_total_report .plans .plan1 select{
+
+.plans_total_report .plans .plan1 select {
     background-color: #2a3040;
     border-color: transparent;
-    color:#fff;
+    color: #fff;
 }
-.plan_report_section .plans{
+
+.plan_report_section .plans {
     flex-direction: column;
 }
-.button_sections{
+
+.button_sections {
     display: flex;
-    margin-right:10px
+    margin-right: 10px
 }
-.button_sections .analytics_button{
+
+.button_sections .analytics_button {
     background-color: #383a4c;
     color: #fff;
     border-radius: 23px;
-    margin-left:10px
+    margin-left: 10px
 }
-.button_sections .analytics_button i{
+
+.button_sections .analytics_button i {
     position: relative;
     color: #11af59;
     font-weight: bold;
     top: 2px;
     right: 4px;
 }
-.button_sections .withdraw_button{
+
+.button_sections .withdraw_button {
     background-color: #11af59;
     color: #fff;
     border-radius: 23px;
 }
-@media(max-width:991px){
-    .plans_total_report{
-        padding:10px;
+
+.platform_info i {
+    margin-right: 3px;
+    font-size: 15px;
+}
+
+.platform_data .modal-content {
+    background-color: #28292a;
+}
+
+.platform_data .modal-title {
+    color: #fff;
+}
+
+.platform_data .modal-body {
+    background-color: #45505f;
+}
+
+.platform_data .modal-body h6 {
+    color: #fff;
+    font-size: 20px;
+}
+
+.platform_data .modal-body img {
+    background: #28292a;
+    border-radius: 15px;
+    width: 100px;
+    height: 100px;
+}
+
+.increment_section {
+
+}
+
+.increment_section form {
+
+}
+
+.increment_section form .mines_button,
+.increment_section form .increase_button {
+    background: #2a3040;
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.increment_section .quantity {
+    background: #2a3040;
+    border: 2px solid #2a3040;
+    border-radius: 5px;
+    padding: 2px;
+    color: #fff;
+    text-align: center !important;
+    outline: none;
+}
+
+.increment_section .total_price {
+
+}
+
+/************************************* Start Exchange Page ***********/
+.exchange_page {
+
+}
+
+.exchange_page .exchange_header {
+
+}
+
+.exchange_page .exchange_header {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom: 1px solid #a4a4a4;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.exchange_page .exchange_header h4 {
+    background: #1d1f2e;
+    color: #fff;
+    font-size: 16px;
+    padding: 11px;
+    border-radius: 20px;
+}
+
+.exchange_page .exchange_header h4 span {
+    color: #ccc;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.exchange_page .exchange_header h4 i {
+    color: #ccc;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.exchange_page .exchange_header .exchange {
+    font-size: 13px;
+}
+
+.exchange_page .exchange_header .exchange i {
+    font-size: 15px;
+    position: relative;
+    top: 4px;
+    left: -3px;
+}
+
+.exchange_page .open_exchange {
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 25px;
+}
+
+.exchange_page .open_exchange .open_button {
+    background-color: #11af59;
+    border: none;
+    color: #fff;
+    padding: 0;
+    border-radius: 16px;
+    margin: 0;
+    height: 38px;
+    width: 95px;
+}
+
+.exchange_page .open_exchange h4 {
+    background: #1d1f2e;
+    color: #fff;
+    font-size: 16px;
+    padding: 11px;
+    border-radius: 20px;
+}
+
+.exchange_page .open_exchange .save_exchange {
+    background-color: #1d1f2e;
+    border: none;
+    color: #dcd9d9;
+    padding: 0;
+    border-radius: 16px;
+    margin: 0;
+    height: 38px;
+    width: 95px;
+}
+
+.exchange_page .main_data {
+    display: flex;
+    justify-content: center;
+    max-width: 65%;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.exchange_page .main_data .right_data {
+    min-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #2a2a3c;
+    border-radius: 10px;
+    height: 555px;
+    margin-left: 5px;
+
+}
+
+.exchange_page .main_data .right_data .section {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #383a4c;
+}
+
+.exchange_page .main_data .right_data .section p {
+    font-size: 13px;
+    margin: 0;
+    color: #fff;
+    position: relative;
+    background: #383a4c;
+    border-radius: 25px;
+    top: 17px;
+    left: -11px;
+    z-index: 99;
+    width: 98px;
+    margin-bottom: 2px;
+    border: 2px solid #2a2a3c;
+    text-align: center;
+}
+
+.exchange_page .main_data .right_data .section h6 {
+    text-align: center;
+    color: #fff;
+}
+
+.exchange_page .main_data .right_data .value {
+    font-size: 24px;
+    color: #ffffff;
+    margin: 10px 0;
+}
+
+.exchange_page .main_data .right_data .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #383a4c;
+    max-width: 80%;
+    border-radius: 10px;
+    margin: auto;
+    position: relative;
+}
+
+.exchange_page .main_data .right_data .buttons button {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    color: #ffffff;
+    background-color: #33334a;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.exchange_page .main_data .right_data .slider {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.exchange_page .main_data .right_data .profit {
+    font-size: 20px;
+    color: #10AE59;
+}
+
+.exchange_page .main_data .right_data .submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #10AE59;
+    color: #ffffff;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.exchange_page .main_data .left_data {
+    min-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #2a2a3c;
+    border-radius: 10px;
+    height: 555px;
+    margin-right: 5px;
+}
+
+.exchange_page .main_data .left_data button {
+    background: #383a4c;
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.exchange_page .main_data .left_data .data_info {
+    display: flex;
+    background: #383a4c;
+    max-width: 80%;
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 15px;
+    border-radius: 10px;
+    color: #fff;
+    justify-content: center;
+}
+
+.exchange_page .main_data .left_data .data_info h4 {
+    font-size: 17px;
+    color: #fff;
+    margin-left: 11px;
+    font-weight: normal;
+    text-align: center;
+}
+
+.exchange_page .main_data .left_data .data_info span {
+    color: #ccc;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.exchange_page .main_data .left_data .data_info .profit {
+    color: #13ae59;
+}
+
+.expert_report {
+    margin-top: 20px;
+}
+
+.expert_report h5 {
+    color: #fff;
+}
+
+.expert_report .plans_total_report .plans .plan1:nth-of-type(1) {
+    margin-right: -3px;
+}
+
+.expert_report .plans_total_report .plans .plan1 {
+
+}
+
+/******************************************** Exchange Page **********/
+
+@media (max-width: 991px) {
+    .plans_total_report {
+        padding: 5px;
         overflow: scroll;
-        margin-bottom:30px;
+        margin-bottom: 30px;
+        border-radius: 5px;
     }
-    .plans_total_report .total_report{
-        padding:5px;
-        min-width: 140px;
+
+    .plans_total_report .total_report {
+        padding: 3px;
+        min-width: 120px;
     }
-    .plans_total_report .plans .plan1{
-        margin-left: 5px;
+
+    .plans_total_report .plans .plan1 {
+        margin-left: 0px;
         padding: 5px;
         margin-right: 5px;
         margin-bottom: 10px;
-        min-width: 120px;
+        min-width: 90px;
     }
-    .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl{
-        max-width:100%;
+
+    .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
+        max-width: 100%;
+    }
+
+    .plans_total_report .total_report p {
+        font-weight: normal;
+        font-size: 14px;
+    }
+
+    .plans_total_report .plans .plan1 h4 {
+        font-weight: normal;
+        font-size: 13px;
+        padding: 3px
+    }
+
+    .investment_return {
+        border-radius: 0 10px 10px 0;
+    }
+
+    .plans_total_report .plans .plan1:last-of-type {
+        margin-right: 0;
+    }
+
+    .my_new_container {
+        margin-right: -12px;
+        margin-left: -12px;
+    }
+
+    .plans_total_report .plans .plan1 img {
+        width: 65px;
+        height: 65px;
+    }
+
+    .plans_total_report .total_report .withdraw_button {
+        font-size: 13px;
+        padding: 5px;
+        margin-top: 5px !important;
+    }
+
+    .plans_total_report .total_report .analytics_button {
+        font-weight: normal;
+        font-size: 14px;
+        padding: 3px;
+    }
+
+    .plans_total_report .total_report h2 {
+        font-size: 14px;
+    }
+
+    .user_plans_details .plans_total_report .plans .plan1 select {
+        padding: 3px;
+        font-size: 13px;
+    }
+
+    .user_plans_details .plans_total_report .plans .plan1 {
+        min-width: 90px;
+        padding: 2px;
+    }
+
+    .user_plans_details .plans_total_report .plans .plan1 {
+        margin-left: -5px;
+        text-align: center;
+    }
+
+    .user_plans_details .plans_total_report .total_report h4 {
+        font-size: 10px;
+    }
+
+    .user_plans_details .plans_total_report .total_report span {
+        font-size: 12px;
+    }
+
+    .user_plans_details .plans_total_report .total_report {
+        max-width: 100px;
+    }
+
+    .user_plans_details .button_sections .analytics_button {
+        font-size: 11px;
+        padding: 10px;
+        margin-left: 2px;
+    }
+
+    .top_bar_data .topbar-item .noti_section .notification {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .top_bar_data .topbar-item .noti_section .notification i {
+        font-size: 15px;
+    }
+
+    .top_bar_data .topbar-item .noti_section button .total_balance {
+        font-size: 14px;
+    }
+
+    .top_bar_data .topbar-item .noti_section button i {
+        font-size: 12px;
+    }
+
+    .info_card .card-title {
+        font-size: 14px
+    }
+
+    .info_card {
+        padding: 6px;
+    }
+
+    .hide_mobile {
+        display: none;
+    }
+
+    .exchange_page .main_data .right_data,
+    .exchange_page .main_data .left_data {
+        min-width: 155px;
+        padding: 3px;
+    }
+
+    .exchange_page .main_data .right_data .buttons {
+        max-width: 100%;
+    }
+
+    .exchange_page .main_data .left_data .data_info {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .exchange_page .main_data .left_data .data_info h4 {
+        font-size: 14px;
+    }
+
+    .exchange_page .main_data .right_data .value {
+        font-size: 17px;
+    }
+
+    .exchange_page .main_data .right_data .submit-btn {
+        font-size: 15px;
+    }
+
+    .exchange_page .main_data .left_data button {
+        margin-top: 30px;
+    }
+
+    .expert_report .plans_total_report .plans .plan1 {
+        margin-right: 0;
+        padding: 2px;
+    }
+    .expert_report .plans_total_report .plans .plan1{
+        min-width: 80px;
     }
 }
+
 /**************************** end Plans Toala Report ***********/

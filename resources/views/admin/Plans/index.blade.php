@@ -29,7 +29,7 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center gap-1">
-                            <h4 class="card-title flex-grow-1"> خطط التداول   </h4>
+                            <h4 class="card-title flex-grow-1"> خطط التداول </h4>
                             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#add_attribute">
                                 اضافة خطة
@@ -45,15 +45,16 @@
                                     <tr>
                                         <th style="width: 20px;">
                                         </th>
-                                        <th> الاسم </th>
-{{--                                        <th> المنصة   </th>--}}
-                                        <th> السعر الاساسي   </th>
-                                        <th>  السعر الحالي   </th>
-                                        <th>   العائد الاستثماري  </th>
-                                        <th>    راس المال الكلي   </th>
-                                        <th> عدد الاشتراكات الكلي   </th>
-                                        <th> عدد الاشتراكات الفعال   </th>
-                                        <th>  حالة الخطة   </th>
+                                        <th> الاسم</th>
+                                        <th> اسم المنصة  </th>
+                                        <th> اللوجو   </th>
+                                        <th> السعر الاساسي</th>
+                                        <th> السعر الحالي</th>
+                                        <th> العائد الاستثماري</th>
+                                        <th> راس المال الكلي</th>
+                                        <th> عدد الاشتراكات الكلي</th>
+                                        <th> عدد الاشتراكات الفعال</th>
+                                        <th> حالة الخطة</th>
                                         <th> العمليات</th>
                                     </tr>
                                     </thead>
@@ -67,13 +68,14 @@
                                                 {{$i++}}
                                             </td>
                                             <td>{{$plan['name']}}</td>
-{{--                                            <td>{{$plan['platform']['name']}}</td>--}}
+                                            <td>{{$plan['platform_name']}}</td>
+                                            <td><img width="40px" height="40px" src="{{asset('assets/uploads/plans/'.$plan['logo'])}}" alt=""></td>
                                             <td>{{$plan['main_price']}} $</td>
                                             <td>{{$plan['current_price']}} $</td>
                                             <td>{{$plan['return_investment']}} $</td>
                                             <td>
                                                 @php
-                                                  echo   \App\Models\front\Invoice::where('plan_id',$plan['id'])->where('status',1)->sum('plan_price');
+                                                    echo   \App\Models\front\Invoice::where('plan_id',$plan['id'])->where('status',1)->sum('plan_price');
                                                 @endphp
                                                 $
                                             </td>
@@ -104,8 +106,10 @@
                                                                           class="align-middle fs-18"></iconify-icon>
                                                         </button>
                                                     @endif
-                                                    <a href="{{url('admin/investments/'.$plan['id'])}}" class="btn btn-success"> عوائد الاستثمار   </a>
-                                                    <a href="{{url('admin/plan_report/'.$plan['id'])}}" class="btn btn-success">  تقرير الخطة   </a>
+                                                    <a href="{{url('admin/investments/'.$plan['id'])}}"
+                                                       class="btn btn-success"> عوائد الاستثمار </a>
+                                                    <a href="{{url('admin/plan_report/'.$plan['id'])}}"
+                                                       class="btn btn-success"> تقرير الخطة </a>
                                                     <button type="button" class="btn btn-soft-danger btn-sm"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#delete_withdraw_{{$plan['id']}}">
