@@ -25021,6 +25021,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
 
 .plans_total_report .plans .plans_details {
     display: flex;
+    position: relative;
 }
 
 .plans_total_report .plans .plan1 {
@@ -25036,7 +25037,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
 
 .plans_total_report .plans .plan1:nth-of-type(1) {
     border-radius: 0 10px 10px 0;
-    margin-right: 5px;
+    margin-right: 0px;
 }
 
 .plans_total_report .plans .plan1:last-of-type {
@@ -25072,6 +25073,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
 
 .plan_report_section .plans {
     flex-direction: column;
+    position: relative;
 }
 
 .button_sections {
@@ -25102,7 +25104,9 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
 
 .platform_info i {
     margin-right: 3px;
-    font-size: 15px;
+    font-size: 13px;
+    position: relative;
+    top: 2px;
 }
 
 .platform_data .modal-content {
@@ -25440,7 +25444,9 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     .plans_total_report .plans .plan1 h4 {
         font-weight: normal;
         font-size: 13px;
-        padding: 3px
+        padding: 0px;
+        margin-top:5px;
+        margin-bottom:5px;
     }
 
     .investment_return {
@@ -25483,7 +25489,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     }
 
     .user_plans_details .plans_total_report .plans .plan1 {
-        min-width: 90px;
+        min-width: 78px;
         padding: 2px;
     }
 
@@ -25578,6 +25584,57 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     .expert_report .plans_total_report .plans .plan1{
         min-width: 80px;
     }
+    .user_plans_page{
+        flex-direction: column;
+    }
+    .user_plans_page .total_report{
+        display: flex;
+        max-width: 100% !important;
+        margin-bottom: 5px;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .button_sections_user_plans_page{
+        position: absolute;
+        top: 68px;
+    }
+    .plans_total_report_user_plans{
+        flex-direction: column;
+    }
+    .plans_total_report_user_plans .total_report{
+        max-width:100% !important;
+        margin-bottom: 5px;
+        justify-content: space-between;
+        align-items: center;
+        display: flex;
+    }
+    .plans_total_report_user_plans .plans{
+        justify-content: space-around;
+        background: #383c48;
+        border-radius: 10px;
+    }
+    .plans_total_report_platform_plans .plans .plan1{
+        min-width:75px;
+    }
 }
 
 /**************************** end Plans Toala Report ***********/
+.button_footer{
+    background-color: #383c48;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 8px;
+    margin: 0;
+    margin-right: 6px;
+    padding: 3px;
+    margin-top: -6px;
+}
+.button_footer .statics{
+    position: relative;
+    top: 2px;
+}
+.button_footer .statics  i{
+    margin-left: 3px;
+}
+.button_footer .statics span {}

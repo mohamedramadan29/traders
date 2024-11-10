@@ -68,7 +68,7 @@
                                         </form>
 
                                     </div>
-                                    <div class="plans">
+                                    <div class="plans ">
                                         <div class="plans_details">
                                             <div class="plan1 hide_mobile">
                                                 <h4>سعر الشراء </h4>
@@ -76,17 +76,39 @@
                                             </div>
                                             <div class="plan1 investment_return">
                                                 <h4> عائد الاستثمار </h4>
-                                                <h4 style="color:#10AE59"> {{ $plan['return_investment']  }} $ </h4>
+                                                <h4> 24 H
+                                                    <br>
+                                                    <span style="color:#10AE59"> 10 $</span>
+                                                </h4>
+                                                <h4> 7 D
+                                                    <br>
+                                                    <span style="color:#10AE59"> 20 $</span>
+                                                </h4>
+                                                <h4> 30 D
+                                                    <br>
+                                                    <span style="color:#10AE59"> 200.20$</span>
+                                                </h4>
                                             </div>
                                             <div class="plan1 platform_info">
                                                 <h4 data-bs-toggle="modal"
                                                     data-bs-target="#add_attribute_{{$plan['id']}}">
                                                     <span class="platform-trigger"
                                                           style="cursor:pointer;">{{$plan['platform_name']}}</span>
-                                                    <i class="bi bi-arrow-down-square platform-trigger"
-                                                       style="cursor:pointer;"></i>
+                                                    <i class="bi bi-caret-down-fill" style="cursor:pointer;"></i>
                                                 </h4>
                                                 <img src="{{asset('assets/uploads/plans/'.$plan['logo'])}}">
+                                            </div>
+                                        </div>
+                                        <div class="button_footer">
+                                            <div class="statics">
+                                                <i class="bi bi-people-fill"></i>
+                                                <span style="color:#10AE59">  20  </span>
+
+                                            </div>
+                                            <div class="statics">
+                                                <i class="bi bi-wallet-fill"></i>
+                                                <span style="color:#10AE59"> 4000.300 $ </span>
+
                                             </div>
                                         </div>
                                     </div>

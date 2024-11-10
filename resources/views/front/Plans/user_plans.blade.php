@@ -28,12 +28,20 @@
                     <div class="card info_card ">
                         <h4 class="card-title flex-grow-1"> خططي </h4>
                     </div>
-                    <div class="plans_total_report my_new_container">
+                    <div class="plans_total_report my_new_container plans_total_report_user_plans">
                         <div class="total_report">
-                            <h4> حجم الاستثمارت / الربح </h4>
-                            <p> $ {{ number_format($totalbalance,2)}}   </p>
-                            <h2> $ {{ number_format($investment_earning,2)}} </h2> <span> {{ number_format($totalDailyPercentage,2)}} % </span>
-                            <a href="#" class="btn withdraw_button"> السحب <i class="bi bi-wallet"></i> </a>
+                            <div>
+                                <h4> حجم الاستثمارت / الربح </h4>
+                                <p> $ {{ number_format($totalbalance,2)}}   </p>
+                            </div>
+                            <div style="width: 35%">
+                                <h4>   الربح </h4>
+                                <p> <span style="font-size: 10px;position: relative; top: 4px;"> {{ number_format($totalDailyPercentage,2)}} % </span> $ {{ number_format($investment_earning,2)}}  </p>
+                            </div>
+                            <div>
+                                <a href="{{url('user/withdraws')}}" class="btn withdraw_button"> السحب <i class="bi bi-wallet"></i> </a>
+                            </div>
+
                         </div>
                         <div class="plans">
                             @foreach($Plans as $platform)
@@ -52,9 +60,9 @@
                                 <div class="plan1">
                                     <h4> {{ $platform->name }} </h4>
                                     <select class="form-select period-select" data-platform-id="{{ $platform->id }}">
-                                        <option value="day">24 ساعة</option>
-                                        <option value="7day">7 أيام</option>
-                                        <option value="30day">30 يوم</option>
+                                        <option value="day">24 H</option>
+                                        <option value="7day">7 D</option>
+                                        <option value="30day">30 D</option>
                                     </select>
                                     <h4 style="color:#10AE59" class="daily-earning"
                                         data-platform-id="{{ $platform->id }}">{{$lastDayReturns}} $</h4>
@@ -122,41 +130,47 @@
         $availableDays30 = $thirtyDaysData->count();
 
                             @endphp
-                            <div class="plans_total_report plan_report_section">
+                            <div class="plans_total_report plan_report_section user_plans_page">
                                 <div class="total_report">
-                                    <h4> حجم الاستثمارت / الربح </h4>
-                                    <p> $ {{ number_format($totalbalance,2)}}   </p>
-                                    <h2> $ {{ number_format($investment_earning,2)}} </h2> <span> {{ number_format($totalDailyPercentage,2)}} % </span>
-                                    <a href="{{ route('user.plans.details', ['plan_id' => $platform->id]) }}"
-                                       class="btn analytics_button"> الاحصائيات </a>
+                                    <div>
+                                        <h4> حجم الاستثمارت / الربح </h4>
+                                        <p> $ {{ number_format($totalbalance,2)}}   </p>
+                                    </div>
+                                    <div style="width: 35%">
+                                        <h4>   الربح </h4>
+                                        <p> <span style="font-size: 10px;position: relative; top: 4px;"> {{ number_format($totalDailyPercentage,2)}} % </span>  $ {{ number_format($investment_earning,2)}}  </p>
+                                    </div>
+                                    <div>
+                                        <a href="{{ route('user.plans.details', ['plan_id' => $platform->id]) }}"
+                                           class="btn analytics_button"> الاحصائيات </a>
+                                    </div>
+
                                 </div>
                                 <div class="plans">
                                     <div class="plans_details">
                                         <div class="plan1">
-                                            <h4> 24 ساعة </h4>
+                                            <h4> 24 H </h4>
                                             <h4 style="color:#10AE59"> {{$lastDayReturns}} $ </h4>
                                             <h4 style="color:#10AE59"> {{$lastDayPercentage}} % </h4>
-                                            <h4> 7 ايام </h4>
+                                        </div>
+                                        <div class="plan1">
+                                            <h4> 7 D </h4>
                                             <h4 style="color:#10AE59"> {{$sevenDaysReturns}} $ </h4>
                                             <h4 style="color:#10AE59"> {{$sevenDaysPercentage}} % </h4>
                                         </div>
-{{--                                        <div class="plan1">--}}
 
-{{--                                        </div>--}}
                                         <div class="plan1">
-                                            <h4> 30 يوم </h4>
+                                            <h4> 30 D </h4>
                                             <h4 style="color:#10AE59"> {{$thirtyDaysReturns}} $ </h4>
                                             <h4 style="color:#10AE59"> {{$thirtyDaysPercentage}} % </h4>
+                                        </div>
+                                        <div class="plan1">
                                             <h4> {{  $platform->name }} </h4>
                                             <h4> {{ $platform->invoices_count  }} </h4>
                                             <img src="{{asset('assets/uploads/plans/'.$platform['logo'])}}">
                                         </div>
-{{--                                        <div class="plan1">--}}
-{{--                                            --}}
-{{--                                        </div>--}}
                                     </div>
-
-                                    <div class="button_sections">
+                                    <div class="button_sections button_sections_user_plans_page ">
                                         <a href="{{ route('user.plans.details', ['plan_id' => $platform->id]) }}"
                                            class="btn analytics_button"> عرض كل الخطط <i class="bi bi-arrow-left"></i>
                                         </a>
@@ -168,43 +182,10 @@
                                             </button>
                                         </form>
                                     </div>
+
+
                                 </div>
-
                             </div>
-
-                            {{--                            <div class="platform-header">--}}
-                            {{--                                <h2 class="platform_name"> عدد الاستثمارات في :: {{  $platform->name }}</h2>--}}
-                            {{--                            </div>--}}
-                            {{--                            <div class="card info_card">--}}
-                            {{--                                <div class="plan">--}}
-                            {{--                                    <div class="plan_price">--}}
-                            {{--                                        <h2> مجموع الخطط </h2>--}}
-                            {{--                                        <h3>{{ $platform->invoices_count  }}</h3>--}}
-                            {{--                                    </div>--}}
-                            {{--                                    <div class="plan_price">--}}
-                            {{--                                        <h2> راس المال </h2>--}}
-                            {{--                                        <h6> {{ $totalbalance  }} $</h6>--}}
-                            {{--                                    </div>--}}
-                            {{--                                    <div class="plan_price">--}}
-                            {{--                                        <h2>عائد الاستثمار</h2>--}}
-                            {{--                                        <h6> {{ $investment_earning  }} $</h6>--}}
-                            {{--                                    </div>--}}
-                            {{--                                    <div class="plan_price">--}}
-                            {{--                                        <h2> ربح اليوم </h2>--}}
-                            {{--                                        <h6> {{ $daily_earning }} $</h6>--}}
-                            {{--                                    </div>--}}
-                            {{--                                    <div class="plan_price">--}}
-                            {{--                                        <h2> نسبة الربح </h2>--}}
-                            {{--                                        <h6> {{ $daily_percentage   }} %</h6>--}}
-                            {{--                                    </div>--}}
-                            {{--                                    <div class="plan_price">--}}
-                            {{--                                        <a class="btn main_button btn-sm"--}}
-                            {{--                                           href="{{ route('user.plans.details', ['plan_id' => $platform->id]) }}">--}}
-                            {{--                                            عرض الخطط--}}
-                            {{--                                        </a>--}}
-                            {{--                                    </div>--}}
-                            {{--                                </div>--}}
-                            {{--                            </div>--}}
                         @endforeach
                     </div>
                     <!-- end table-responsive -->

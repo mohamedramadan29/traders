@@ -1,85 +1,8 @@
-{{--@extends('front.layouts.master_dashboard')--}}
-{{--@section('title')--}}
-{{--    الرئيسية--}}
-{{--@endsection--}}
-{{--@section('content')--}}
-{{--    @if (Session::has('Success_message'))--}}
-{{--        @php--}}
-{{--            toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));--}}
-{{--        @endphp--}}
-{{--    @endif--}}
-{{--    @if ($errors->any())--}}
-{{--        @foreach ($errors->all() as $error)--}}
-{{--            @php--}}
-{{--                toastify()->error($error);--}}
-{{--            @endphp--}}
-{{--        @endforeach--}}
-{{--    @endif--}}
-{{--    <div class="page-content">--}}
-{{--        <!-- Start Container Fluid -->--}}
-{{--        <div class="container-xxl">--}}
-
-{{--            <!-- Start here.... -->--}}
-{{--            <div class="row">--}}
-
-{{--                <div class="plans_total_report plan_report_section">--}}
-{{--                    <div class="total_report">--}}
-{{--                        <h4>  الرصيد الكلي </h4>--}}
-{{--                        <p>  @php--}}
-{{--                                echo  \Illuminate\Support\Facades\Auth::user()->total_balance  . ' $ ';--}}
-{{--                            @endphp--}}
-{{--                        </p>--}}
-{{--                        <br>--}}
-{{--                        <a href="{{url('user/withdraws')}}"--}}
-{{--                           class="btn analytics_button"> الاحصائيات </a>--}}
-{{--                    </div>--}}
-{{--                    <div class="plans">--}}
-{{--                        <div class="plans_details">--}}
-{{--                            <div class="plan1">--}}
-{{--                                <h4>  كل الخطط </h4>--}}
-{{--                                <h4 style="color:#10AE59"> @php--}}
-{{--                                        echo count(\App\Models\admin\Plan::where('status',1)->get())--}}
-{{--                                    @endphp--}}
-{{--                                </h4>--}}
-{{--                                <a style="margin-top: 10px;display: block" href="{{url('user/plans')}}" type="button"--}}
-{{--                                   class="btn btn-sm btn-success">--}}
-{{--                                      التفاصيل--}}
-{{--                                    <i class="ti ti-eye"></i>--}}
-{{--                                </a>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="plans">--}}
-{{--                        <div class="plans_details">--}}
-{{--                            <div class="plan1">--}}
-{{--                                <h4> عدد الخطط المفعلة  </h4>--}}
-{{--                                <h4 style="color:#10AE59">--}}
-{{--                                    @php--}}
-{{--                                        echo count(\App\Models\front\Invoice::where('user_id',\Illuminate\Support\Facades\Auth::id())->where('status',1)->get())--}}
-{{--                                    @endphp--}}
-{{--                                </h4>--}}
-{{--                                <a style="margin-top: 10px;display: block" href="{{url('user/user_plans')}}" type="button"--}}
-{{--                                   class="btn btn-sm btn-success">--}}
-{{--                                      التفاصيل--}}
-{{--                                    <i class="ti ti-eye"></i>--}}
-{{--                                </a>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
-{{--                </div>--}}
-{{-- --}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--@endsection--}}
-
 @extends('front.layouts.master_dashboard')
 @section('title')
     الخطط المتاحة
 @endsection
 @section('css')
-
     {{--    <!-- DataTables CSS -->--}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 @endsection
@@ -144,7 +67,7 @@
                                         </form>
 
                                     </div>
-                                    <div class="plans">
+                                    <div class="plans ">
                                         <div class="plans_details">
                                             <div class="plan1 hide_mobile">
                                                 <h4>سعر الشراء </h4>
@@ -152,17 +75,39 @@
                                             </div>
                                             <div class="plan1 investment_return">
                                                 <h4> عائد الاستثمار </h4>
-                                                <h4 style="color:#10AE59"> {{ $plan['return_investment']  }} $ </h4>
+                                                <h4> 24 H
+                                                <br>
+                                                  <span style="color:#10AE59"> 10 $</span>
+                                                </h4>
+                                                <h4> 7 D
+                                                    <br>
+                                                    <span style="color:#10AE59"> 20 $</span>
+                                                </h4>
+                                                <h4> 30 D
+                                                    <br>
+                                                    <span style="color:#10AE59"> 200.20$</span>
+                                                </h4>
                                             </div>
                                             <div class="plan1 platform_info">
                                                 <h4 data-bs-toggle="modal"
                                                     data-bs-target="#add_attribute_{{$plan['id']}}">
                                                     <span class="platform-trigger"
                                                           style="cursor:pointer;">{{$plan['platform_name']}}</span>
-                                                    <i class="bi bi-arrow-down-square platform-trigger"
-                                                       style="cursor:pointer;"></i>
+                                                    <i class="bi bi-caret-down-fill" style="cursor:pointer;"></i>
                                                 </h4>
                                                 <img src="{{asset('assets/uploads/plans/'.$plan['logo'])}}">
+                                            </div>
+                                        </div>
+                                        <div class="button_footer">
+                                             <div class="statics">
+                                                 <i class="bi bi-people-fill"></i>
+                                                 <span style="color:#10AE59">  20  </span>
+
+                                             </div>
+                                            <div class="statics">
+                                                <i class="bi bi-wallet-fill"></i>
+                                                <span style="color:#10AE59"> 4000.300 $ </span>
+
                                             </div>
                                         </div>
                                     </div>

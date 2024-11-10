@@ -6,6 +6,7 @@ use App\Http\Controllers\front\WithDrawController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\front\PlanController;
 use \App\Http\Controllers\front\ExchangeController;
+use \App\Http\Controllers\front\SalesOrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -73,6 +74,12 @@ Route::group(['prefix' => 'user'], function () {
          Route::controller(ExchangeController::class)->group(function (){
              Route::get('exchange','index');
          });
+
+         ///////////////////// Start Currency Sales Orders /////////
+
+        Route::controller(SalesOrderController::class)->group(function (){
+            Route::post('sales/create','create');
+        });
     });
 });
 
