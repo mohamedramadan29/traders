@@ -36,9 +36,110 @@
                         فتح صفقة
                     </button>
                     <h4> {{$market_price}} <span> +1 % </span></h4>
-                    <button class="save_exchange">
+                    <button class="save_exchange" data-bs-toggle="modal" data-bs-target="#save_exchange_click">
                         تخرين العملة
                     </button>
+
+                </div>
+                <div class="save_exchange_data">
+                    <!-- Modal structure  -->
+                    <div class="modal fade platform_data" id="save_exchange_click" tabindex="-1"
+                         aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"
+                                        id="platformModalLabel"> تخرين العملة </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <div class="exchange_first_section">
+                                        empty div
+                                    </div>
+                                    <div class="exchange_second_section">
+                                        <h4><span>  30 d  </span> <span> 1 % </span></h4>
+                                        <h4><span>  60 d  </span> <span> 2.5 % </span></h4>
+                                        <h4><span>  90 d  </span> <span> 4.5 % </span></h4>
+                                        <h4><span>  180 d  </span> <span> 9 % </span></h4>
+                                        <h4 class="active"><span>  360 d  </span> <span> 12 % </span></h4>
+                                    </div>
+                                    <div class="exchange_third_section">
+                                        <div class="form-group">
+                                            <label> المبلغ </label>
+                                            <div class="input_data">
+                                                <input type="number" step="0.01" placeholder="الحد الادني 5000 bin">
+                                                <span>BIN</span>
+                                                <button> الحد الاقصي</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="exchange_fourth_section">
+                                        <div class="right_section">
+                                            <p> المتاح 400 دولار - 400 Bin </p>
+                                            <p> الحد الاقصي 500,000 Bin </p>
+                                        </div>
+                                        <div class="left_section">
+
+                                            <div class="form-check form-switch">
+                                                <div>
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                           id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                                <div>
+                                                    <label class="form-check-label" for="flexSwitchCheckChecked"> سحب
+                                                        يومي للارباح </label>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="form-check form-switch">
+                                                <div>
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                           id="flexSwitchCheckChecked2" checked>
+                                                </div>
+                                                <div>
+                                                    <label class="form-check-label" for="flexSwitchCheckChecked2">
+                                                        استثمار تلقائيا </label>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="exchange_fifth_section">
+                                        <h6> الملخص </h6>
+                                        <div class="summary">
+                                            <div>
+                                                <h4> مبلغ الاستثمار </h4>
+                                                <span> 5000 BIN  </span>
+                                            </div>
+                                            <div>
+                                                <h4> المكافئات المالية المقدرة </h4>
+                                                <span style="color: #11af59">  +2.5 BIN   </span>
+                                            </div>
+                                            <div>
+                                                <h4> العائد السنوي </h4>
+                                                <span style="color: #11af59"> 12 %  </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="exchange_six_section">
+                                        <p> تاريخ البدء : <span> 5/7/2024 </span></p>
+                                        <p> تاريخ الانتهاء : <span> 5/10/2024 </span></p>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                            <label class="form-check-label" for="defaultCheck1">
+                                                لقد قرات ووافقت علي <a href="#"> اتفاقية خدمة binviste stacing </a>
+                                            </label>
+                                        </div>
+                                        <button class="btn btn-success"> تاكيد</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-xl-12">
                     <div>
@@ -64,9 +165,10 @@
                                                 <span class="value" id="sellPrice">{{$minimum_selling_price}}</span>
                                                 <button onclick="increment('sellPrice',event)">+</button>
 
-                                                <input type="hidden" name="selling_currency_rate" id="sellPriceInput" value="{{$market_price}}">
+                                                <input type="hidden" name="selling_currency_rate" id="sellPriceInput"
+                                                       value="{{$market_price}}">
                                             </div>
-{{--                                            <input type="range" id="entryPrice" class="slider" min="0" max="100" step="0.1" oninput="updateValue('sellPrice', this.value)" value="10.5">--}}
+                                            {{--                                            <input type="range" id="entryPrice" class="slider" min="0" max="100" step="0.1" oninput="updateValue('sellPrice', this.value)" value="10.5">--}}
                                         </div>
 
                                         <div class="section">
@@ -76,9 +178,10 @@
                                                 <span class="value" id="dealAmount">100</span>
                                                 <button onclick="increment('dealAmount', event)">+</button>
                                             </div>
-{{--                                            <input type="range" id="amountSlider" class="slider" min="0" max="1000" step="10"--}}
-{{--                                                   oninput="updateValue('dealAmount', this.value)" value="150">--}}
-                                            <input type="hidden" name="currency_amount" id="dealAmountInput" value="100">
+                                            {{--                                            <input type="range" id="amountSlider" class="slider" min="0" max="1000" step="10"--}}
+                                            {{--                                                   oninput="updateValue('dealAmount', this.value)" value="150">--}}
+                                            <input type="hidden" name="currency_amount" id="dealAmountInput"
+                                                   value="100">
                                         </div>
                                         <div class="section">
                                             <h6> هل تريد شراء <span> 500  </span> مقابل <span> 150 </span> دولار </h6>
@@ -110,10 +213,70 @@
                         </div>
                         <!-- end table-responsive -->
                     </div>
+                    <div class="table-responsive my_new_container">
+                        <div class="open_trader">
+                            <h6> الصفقات المفتوحة </h6>
+                            <h3> BIN / USD </h3>
+                            <div class="open_trader_details">
+                                <div class="details">
+                                    <div class="first_details">
+                                        <p> الربح والخسارة (usdt) </p>
+                                        <span class="sp_span"> 15.88 </span>
+                                    </div>
+                                    <div class="first_details">
+                                        <p> سعر الدخول (usdt) </p>
+                                        <span> 1.00 </span>
+                                    </div>
+                                </div>
+                                <div class="details">
+                                    <div class="first_details">
+                                        <p> الحجم (usdt) </p>
+                                        <span> 15.88 </span>
+                                    </div>
+                                    <div class="first_details">
+                                        <p> سعر الحالي (usdt) </p>
+                                        <span> 1.00 </span>
+                                    </div>
+                                </div>
+                                <div class="details">
+                                    <div class="first_details">
+                                        <p> عائد الاستثمار </p>
+                                        <span class="sp_span"> 15.88 </span>
+                                    </div>
+                                    <div class="first_details">
+                                        <p> سعر البيع (usdt) </p>
+                                        <span> 1.00 </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <h6 style="border-top: 1px solid #78797a;padding-top: 10px"> سجل الصفقات </h6>
+                            <div class="trader_archive">
+                                <div class="first_main">
+                                    <h3> BIN / USD </h3>
+                                    <p> ربح </p>
+                                </div>
+                                <div class="second_main">
+                                    <div class="first">
+                                        <div><p> الربح </p> <span class="sp_span"> 10  </span></div>
+                                        <div><p> الحجم </p> <span> 300  </span></div>
+                                        <div><p> العائد </p>  <span class="sp_span"> + 1%  </span></div>
+                                    </div>
+                                    <div class="second">
+                                        <div style="margin-left: 8px">
+                                            <p> سعر الدخول   </p>
+                                            <span> 1.00 </span>
+                                        </div>
+                                        <div>
+                                            <p> سعر البيع  (usdt) </p>
+                                            <span> 1.00 </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div>
-
                         <div class="table-responsive my_new_container expert_report">
-
                             <div class="plans_total_report plan_report_section">
                                 <div class="plans">
                                     <h5> سجل التداول </h5>
@@ -196,6 +359,7 @@
                 document.getElementById('dealAmountInput').value = parseFloat(value).toFixed(2);
             }
         }
+
         function calculateProfit() {
             let entryPrice = parseFloat(document.getElementById('entryPrice')?.innerText || 0);
             let sellPrice = parseFloat(document.getElementById('sellPrice').innerText);

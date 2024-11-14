@@ -25262,7 +25262,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     padding: 20px;
     background-color: #2a2a3c;
     border-radius: 10px;
-    height: 555px;
+    height: 400px;
     margin-left: 5px;
 
 }
@@ -25349,7 +25349,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     padding: 20px;
     background-color: #2a2a3c;
     border-radius: 10px;
-    height: 555px;
+    height: 400px;
     margin-right: 5px;
 }
 
@@ -25638,3 +25638,268 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     margin-left: 3px;
 }
 .button_footer .statics span {}
+
+
+/******************************************************* Start Save Exchange *****************/
+.save_exchange_data{
+
+}
+.save_exchange_data .modal-body {
+background-color:#28292a;
+    padding:0px;
+}
+.save_exchange_data .exchange_first_section{
+    background: #383a4c;
+    height: 80px;
+    border-radius: 30px;
+    margin:5px;
+}
+.save_exchange_data .exchange_second_section{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 2px solid #383a4c;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+.save_exchange_data .exchange_second_section h4{
+    background: #383a4c;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    min-width: 55px;
+}
+.save_exchange_data .exchange_second_section h4 span {}
+.save_exchange_data .exchange_second_section h4 span:last-child {
+    color: #11af59;
+}
+.save_exchange_data .exchange_second_section .active {
+    border: 3px solid #11af59;
+}
+.save_exchange_data .exchange_third_section{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-algin:right;
+    margin:10px;
+}
+.save_exchange_data .exchange_third_section .form-group{
+    text-align: right;
+}
+.save_exchange_data .exchange_third_section .form-group label {
+    color: #fff;
+    font-size: 17px;
+    margin-bottom: 10px;
+}
+.save_exchange_data .exchange_third_section .form-group .input_data {
+    background-color: #383a4c;
+    padding: 0px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.save_exchange_data .exchange_third_section .form-group .input_data input{
+    background: transparent;
+    border: none;
+    padding: 15px;
+    outline: none;
+    color: #fff;
+}
+.save_exchange_data .exchange_third_section .form-group .input_data span{
+    color: #fff;
+    font-size: 20px;
+}
+.save_exchange_data .exchange_third_section .form-group .input_data button{
+    background: transparent;
+    color: #fff;
+    border: none;
+    font-size: 17px;
+}
+
+.save_exchange_data .exchange_fourth_section{
+    display: flex;
+    justify-content: space-around;
+}
+.save_exchange_data .exchange_fourth_section .right_section{
+
+}
+.save_exchange_data .exchange_fourth_section .right_section p{
+    color: #c0c0c0;
+    border-bottom: 1px dashed #c0c0c0;
+}
+.save_exchange_data .exchange_fourth_section .left_section{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width:55%;
+}
+.save_exchange_data .exchange_fourth_section .left_section .form-switch {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    padding-bottom: 15px;
+}
+.save_exchange_data .exchange_fourth_section .left_section .form-switch  label{
+    color: #c0c0c0;
+    border-bottom: 1px dashed #c0c0c0;
+}
+.save_exchange_data .exchange_fourth_section .left_section .form-switch input{}
+.save_exchange_data .exchange_fifth_section {
+   text-align: right;
+    padding-bottom: 25px;
+    padding-top: 10px;
+}
+.save_exchange_data .exchange_fifth_section h6{
+    text-align: right;
+    padding: 10px;
+    border-top: 2px solid #383a4c;
+    border-bottom: 2px solid #383a4c;
+}
+.save_exchange_data .exchange_fifth_section .summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+.save_exchange_data .exchange_fifth_section .summary h4{
+    color: #fff;
+    font-size: 14px;
+    border-bottom: 1px dashed #383a4c;
+}
+.save_exchange_data .exchange_fifth_section .summary span{
+    border-bottom: 1px dashed #383a4c;
+    color: #fff;
+    font-weight: bold;
+    font-size: 17px;
+}
+.save_exchange_data .exchange_six_section{
+    text-align: right;
+    padding: 10px;
+    color: #bfbfbf;
+    padding-bottom:70px;
+}
+.save_exchange_data .exchange_six_section p{}
+.save_exchange_data .exchange_six_section span{
+    margin-right:10px;
+}
+.save_exchange_data .exchange_six_section .form-check{}
+.save_exchange_data .exchange_six_section .form-check input {}
+.save_exchange_data .exchange_six_section .form-check label {
+    font-size: 13px;
+}
+.save_exchange_data .exchange_six_section .form-check label a{
+    color:#fff;
+    font-weight: bold;
+}
+.save_exchange_data .exchange_six_section button{
+    width: 100%;
+    margin-top: 10px;
+}
+/******************************************************* End  Save Exchange *****************/
+
+/************************************ Start Open Trader **********************/
+
+.open_trader{
+    color: #fff;
+    padding-top: 25px;
+}
+.open_trader h6{
+    color: #fff;
+    font-size: 17px;
+    border-bottom: 1px solid #78797a;
+    padding-bottom: 10px;
+    padding-right:20px
+}
+.open_trader h3{
+    color:#fff;
+    padding-right: 20px;
+}
+.open_trader .open_trader_details{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.open_trader .open_trader_details .details {}
+.open_trader .open_trader_details .details .first_details{
+    text-align: center;
+    margin-bottom: 15px;
+}
+.open_trader .open_trader_details .details .first_details p{
+    border-bottom: 1px dashed #aaa5a5;
+    color: #aaa5a5;
+}
+.open_trader .open_trader_details .details .first_details span{
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.open_trader .open_trader_details .details .first_details .sp_span{
+    font-weight: bold;
+    color: #11af59;
+    font-size: 20px;
+    margin-bottom: -5px;
+    display: inline-block;
+}
+
+.open_trader .trader_archive{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #78797a;
+    padding-bottom: 10px;
+}
+.open_trader .trader_archive .first_main{
+    text-align: center;
+}
+.open_trader .trader_archive .first_main h3{}
+.open_trader .trader_archive .first_main p{
+    color: #11af59;
+    font-weight: bold;
+    font-size: 25px;
+}
+.open_trader .trader_archive .second_main {
+    display: flex;
+
+    flex-direction: column;
+}
+.open_trader .trader_archive .second_main .first{
+    display: flex;
+    justify-content: space-between;
+}
+.open_trader .trader_archive .second_main .first div{
+    display: flex;
+    border-bottom: 1px dashed #aaa5a5;
+    color: #aaa5a5;
+}
+.open_trader .trader_archive .second_main .second{
+    display: flex;
+    justify-content: space-between;
+    margin-top:25px;
+}
+.open_trader .trader_archive .second_main .second div{
+    display: flex;
+    border-bottom: 1px dashed #aaa5a5;
+    color: #aaa5a5;
+    margin-left: 5px;
+}
+.open_trader .trader_archive .second_main p {
+    margin: 0;
+}
+.open_trader .trader_archive .second_main span {
+    font-size: 15px;
+    margin-right: 5px;
+}
+.open_trader .trader_archive .second_main .sp_span {
+    font-weight: bold;
+    color: #11af59;
+    font-size: 15px;
+    margin-right: 5px;
+}
+.open_trader .trader_archive .second_main .second p{
+   font-size:12px
+}
+.open_trader .trader_archive .second_main .second span{
+    color:#fff
+}
+/***************************************** End Open Trader ********************************/
