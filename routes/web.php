@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\front\PlanController;
 use \App\Http\Controllers\front\ExchangeController;
 use \App\Http\Controllers\front\SalesOrderController;
+use \App\Http\Controllers\front\UserBalanceController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -79,6 +80,11 @@ Route::group(['prefix' => 'user'], function () {
 
         Route::controller(SalesOrderController::class)->group(function (){
             Route::post('sales/create','create');
+        });
+
+        //////////////////////////////// Start User Make Deposit And WithDraw //////////
+        Route::controller(UserBalanceController::class)->group(function (){
+            Route::match(['post','get'],'deposit','deposit');
         });
     });
 });

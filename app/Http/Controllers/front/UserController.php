@@ -296,22 +296,4 @@ class UserController extends Controller
         return redirect('/');
     }
 
-
-    public function update_trader_id(Request $request)
-    {
-        $user = Auth::user();
-        try {
-            $data = $request->all();
-            $trader_id = $data['trader_id'];
-            $user_traders_count = User::where('trader_id', $trader_id)->count();
-            if ($user_traders_count > 0) {
-                return Redirect::back()->withInput()->withErrors(' تم استخدام هذا الرمز التعريفي من قبل  ');
-            }
-            $user->trader_id = $data['trader_id'];
-            $user->save();
-            return $this->success_message(' تم اضافة الرمز التعريفي الخاص بك بنجاح شاهد عملياتك الان  ');
-        } catch (\Exception $e) {
-            return $this->exception_message($e);
-        }
-    }
 }

@@ -25321,7 +25321,15 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     cursor: pointer;
     margin: 0 5px;
 }
-
+.exchange_page .main_data .right_data .buttons input{
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 12px;
+    text-align: center;
+    outline: none;
+    font-size: 16px;
+}
 .exchange_page .main_data .right_data .slider {
     width: 100%;
     margin: 10px 0;
@@ -25903,3 +25911,7 @@ background-color:#28292a;
     color:#fff
 }
 /***************************************** End Open Trader ********************************/
+
+.modal-backdrop.show{
+    display:none;
+}

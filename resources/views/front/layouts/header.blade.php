@@ -39,14 +39,11 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <div class="top_bar_data">
-                    <!-- Menu Toggle Button -->
-{{--                    <div class="topbar-item">--}}
-{{--                        <button type="button" class="button-toggle-menu me-2">--}}
-{{--                            <iconify-icon icon="solar:hamburger-menu-broken" class="fs-24 align-middle"></iconify-icon>--}}
-{{--                        </button>--}}
-{{--                    </div>--}}
                     <div class="topbar-item">
-                         <a href="#" class="deposit_button"> إيداع </a>
+                         <a href="#" class="deposit_button" data-bs-toggle="modal"  data-bs-target="#main_add_balance"> إيداع </a>
+                    </div>
+                     @include('front.layouts.add_balance')
+                    <div>
                     </div>
                     <div class="topbar-item">
                         <div class="noti_section">
@@ -54,9 +51,10 @@
                                 <i class="bi bi-bell-fill"></i>
                             </div>
                             <div>
-                                <button> <span class="total_balance"> @php
-                                            echo \Illuminate\Support\Facades\Auth::user()->total_balance . ' $ ';
-                                        @endphp  </span> مباشر  <i class="bi bi-send-fill"></i> </button>
+                                <button> <span class="total_balance">
+                                        @php
+                                            echo number_format(Auth::user()->dollar_balance,6)  . ' $ ';
+                                        @endphp  </span> Usd   </button>
                             </div>
                         </div>
                     </div>
