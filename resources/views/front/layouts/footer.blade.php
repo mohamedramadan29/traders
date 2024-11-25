@@ -32,6 +32,12 @@
                 <i class="bi bi-ticket-fill"></i>
             </a>
         </div>
+        <div>
+            <a href="{{url('user/storage')}}" class="{{ Request::is('user/exchange') ? 'active_link' : '' }}">
+                <i class="bi bi-ticket-fill"></i>
+                storage
+            </a>
+        </div>
     </div>
 </footer>
 

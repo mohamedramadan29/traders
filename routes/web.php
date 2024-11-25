@@ -8,6 +8,8 @@ use \App\Http\Controllers\front\PlanController;
 use \App\Http\Controllers\front\ExchangeController;
 use \App\Http\Controllers\front\SalesOrderController;
 use \App\Http\Controllers\front\UserBalanceController;
+use \App\Http\Controllers\front\StorageInvestment;
+use \App\Http\Controllers\front\StorageInvestmentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -81,10 +83,16 @@ Route::group(['prefix' => 'user'], function () {
         Route::controller(SalesOrderController::class)->group(function (){
             Route::post('sales/create','create');
         });
-
         //////////////////////////////// Start User Make Deposit And WithDraw //////////
         Route::controller(UserBalanceController::class)->group(function (){
             Route::match(['post','get'],'deposit','deposit');
+        });
+
+        ///////////////////////// Storage InvestMent ///// تخزين الغملات
+        ///
+        Route::controller(StorageInvestmentController::class)->group(function (){
+            Route::get('storage','index');
+            Route::post('storage/add','store');
         });
     });
 });
