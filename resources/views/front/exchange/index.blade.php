@@ -36,110 +36,11 @@
                         فتح صفقة
                     </button>
                     <h4> {{$market_price}} <span> +1 % </span></h4>
-                    <button class="save_exchange" data-bs-toggle="modal" data-bs-target="#save_exchange_click">
-                        تخرين العملة
+                    <button class="save_exchange" >
+                        <a href="{{url('user/storage')}}">  تخرين العملة </a>
+
                     </button>
 
-                </div>
-                <div class="save_exchange_data">
-                    <!-- Modal structure  -->
-                    <div class="modal fade platform_data" id="save_exchange_click" tabindex="-1"
-                         aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title"
-                                        id="platformModalLabel"> تخرين العملة </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body text-center">
-                                    <div class="exchange_first_section">
-                                        empty div
-                                    </div>
-                                    <div class="exchange_second_section">
-                                        <h4><span>  30 d  </span> <span> 1 % </span></h4>
-                                        <h4><span>  60 d  </span> <span> 2.5 % </span></h4>
-                                        <h4><span>  90 d  </span> <span> 4.5 % </span></h4>
-                                        <h4><span>  180 d  </span> <span> 9 % </span></h4>
-                                        <h4 class="active"><span>  360 d  </span> <span> 12 % </span></h4>
-                                    </div>
-                                    <div class="exchange_third_section">
-                                        <div class="form-group">
-                                            <label> المبلغ </label>
-                                            <div class="input_data">
-                                                <input type="number" step="0.01" placeholder="الحد الادني 5000 bin">
-                                                <span>BIN</span>
-                                                <button> الحد الاقصي</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="exchange_fourth_section">
-                                        <div class="right_section">
-                                            <p> المتاح 400 دولار - 400 Bin </p>
-                                            <p> الحد الاقصي 500,000 Bin </p>
-                                        </div>
-                                        <div class="left_section">
-
-                                            <div class="form-check form-switch">
-                                                <div>
-                                                    <input class="form-check-input" type="checkbox" role="switch"
-                                                           id="flexSwitchCheckChecked" checked>
-                                                </div>
-                                                <div>
-                                                    <label class="form-check-label" for="flexSwitchCheckChecked"> سحب
-                                                        يومي للارباح </label>
-                                                </div>
-
-
-                                            </div>
-                                            <div class="form-check form-switch">
-                                                <div>
-                                                    <input class="form-check-input" type="checkbox" role="switch"
-                                                           id="flexSwitchCheckChecked2" checked>
-                                                </div>
-                                                <div>
-                                                    <label class="form-check-label" for="flexSwitchCheckChecked2">
-                                                        استثمار تلقائيا </label>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="exchange_fifth_section">
-                                        <h6> الملخص </h6>
-                                        <div class="summary">
-                                            <div>
-                                                <h4> مبلغ الاستثمار </h4>
-                                                <span> 5000 BIN  </span>
-                                            </div>
-                                            <div>
-                                                <h4> المكافئات المالية المقدرة </h4>
-                                                <span style="color: #11af59">  +2.5 BIN   </span>
-                                            </div>
-                                            <div>
-                                                <h4> العائد السنوي </h4>
-                                                <span style="color: #11af59"> 12 %  </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="exchange_six_section">
-                                        <p> تاريخ البدء : <span> 5/7/2024 </span></p>
-                                        <p> تاريخ الانتهاء : <span> 5/10/2024 </span></p>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                            <label class="form-check-label" for="defaultCheck1">
-                                                لقد قرات ووافقت علي <a href="#"> اتفاقية خدمة binviste stacing </a>
-                                            </label>
-                                        </div>
-                                        <button class="btn btn-success"> تاكيد</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="col-xl-12">
                     <div>

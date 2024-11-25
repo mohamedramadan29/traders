@@ -84,13 +84,15 @@ class PlanController extends Controller
         try {
             $data = $request->all();
             $plan = Plan::findOrFail($data['plan_id']);
-            $plan_step = $plan['step_price'];
-            $current_price = $plan['current_price'];
+         //   $plan_step = $plan['step_price'];
+           // $current_price = $plan['current_price'];
 
-            $quantity = isset($data['quantity']) ? (int)$data['quantity'] : 1; // احصل على عدد الاشتراكات من الطلب، 1 كحد أدنى
+            $current_price = $data['total_price'];
+
+           // $quantity = isset($data['quantity']) ? (int)$data['quantity'] : 1; // احصل على عدد الاشتراكات من الطلب، 1 كحد أدنى
             DB::beginTransaction();
 
-            for ($i = 0; $i < $quantity; $i++) {
+//            for ($i = 0; $i < $quantity; $i++) {
                 $orderId = uniqid();
 
                 // إنشاء سجل جديد في جدول الفواتير لكل اشتراك
@@ -103,14 +105,14 @@ class PlanController extends Controller
                     'payment_status' => 'confirmed',
                 ]);
 
-                // تحديث السعر بعد كل اشتراك
-                $current_price += $plan_step;
-            }
+//                // تحديث السعر بعد كل اشتراك
+//                $current_price += $plan_step;
+//            }
 
             // تحديث سعر الخطة في النهاية
-            $plan->update([
-                'current_price' => $current_price
-            ]);
+//            $plan->update([
+//                'current_price' => $current_price
+//            ]);
 
             DB::commit();
 

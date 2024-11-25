@@ -34,7 +34,9 @@
                             @foreach($plans as $plan)
                                 <div class="plans_total_report plan_report_section">
                                     <div class="total_report increment_section">
-                                        <p>{{ $plan['name'] }} <br> {{ $plan['current_price'] }} $</p>
+                                        <p>{{ $plan['name'] }}
+{{--                                            <br> {{ $plan['current_price'] }} $--}}
+                                        </p>
                                         <!-- Subscription form -->
                                         <form method="post" action="{{ url('user/invoice_create') }}">
                                             @csrf
@@ -43,8 +45,8 @@
                                                 <button class="mines_button" type="button" onclick="decrementQuantity({{ $plan['id'] }})"
                                                         style="width: 30px; height: 30px; font-size: 18px;">-
                                                 </button>
-                                                <input class="quantity" type="number" id="quantity_{{ $plan['id'] }}" name="quantity"
-                                                       value="1" min="1" readonly
+                                                <input class="quantity" type="number" id="quantity_{{ $plan['id'] }}" name="total_price"
+                                                       value="1" min="1"
                                                        style="text-align: center; width: 60px; margin: 0 10px;"
                                                        data-plan-price="{{ $plan['current_price'] }}"
                                                        data-plan-step="{{ $plan['step_price'] }}"
@@ -53,13 +55,13 @@
                                                         style="width: 30px; height: 30px; font-size: 18px;">+
                                                 </button>
                                             </div>
-                                            <p style="margin-top: 10px;" class="total_price"> <span
-                                                    id="totalPrice_{{ $plan['id'] }}">{{ $plan['current_price'] }}</span>
-                                                $</p>
+{{--                                            <p style="margin-top: 10px;" class="total_price"> <span--}}
+{{--                                                    id="totalPrice_{{ $plan['id'] }}">{{ $plan['current_price'] }}</span>--}}
+{{--                                                $</p>--}}
                                             <input type="hidden" name="plan_id" value="{{ $plan['id'] }}">
-                                            <input type="hidden" name="total_price"
-                                                   id="total_price_input_{{ $plan['id'] }}"
-                                                   value="{{ $plan['current_price'] }}">
+{{--                                            <input type="hidden" name="total_price"--}}
+{{--                                                   id="total_price_input_{{ $plan['id'] }}"--}}
+{{--                                                   value="{{ $plan['current_price'] }}">--}}
                                             <button style="display: block; width: 100%; margin-top: 20px;" type="submit"
                                                     class="btn withdraw_button">
                                                 اشتراك
