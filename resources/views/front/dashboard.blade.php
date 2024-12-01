@@ -3,7 +3,7 @@
     الخطط المتاحة
 @endsection
 @section('css')
-    {{--    <!-- DataTables CSS -->--}}
+    {{--    <!-- DataTables CSS --> --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 @endsection
 @section('content')
@@ -31,39 +31,41 @@
                     </div>
                     <div>
                         <div class="table-responsive my_new_container">
-                            @foreach($plans as $plan)
+                            @foreach ($plans as $plan)
                                 <div class="plans_total_report plan_report_section">
                                     <div class="total_report increment_section">
                                         <p>{{ $plan['name'] }}
-{{--                                            <br> {{ $plan['current_price'] }} $--}}
+                                            {{--                                            <br> {{ $plan['current_price'] }} $ --}}
                                         </p>
                                         <!-- Subscription form -->
                                         <form method="post" action="{{ url('user/invoice_create') }}">
                                             @csrf
                                             <!-- Quantity input with increment and decrement buttons -->
                                             <div style="display: flex; align-items: center; margin-top: 10px;">
-                                                <button class="mines_button" type="button" onclick="decrementQuantity({{ $plan['id'] }})"
-                                                        style="width: 30px; height: 30px; font-size: 18px;">-
+                                                <button class="mines_button" type="button"
+                                                    onclick="decrementQuantity({{ $plan['id'] }})"
+                                                    style="width: 30px; height: 30px; font-size: 18px;">-
                                                 </button>
-                                                <input class="quantity" type="number" id="quantity_{{ $plan['id'] }}" name="total_price"
-                                                       value="1" min="1"
-                                                       style="text-align: center; width: 60px; margin: 0 10px;"
-                                                       data-plan-price="{{ $plan['current_price'] }}"
-                                                       data-plan-step="{{ $plan['step_price'] }}"
-                                                       oninput="calculateTotal({{ $plan['id'] }})">
-                                                <button class="increase_button" type="button" onclick="incrementQuantity({{ $plan['id'] }})"
-                                                        style="width: 30px; height: 30px; font-size: 18px;">+
+                                                <input class="quantity" type="number" id="quantity_{{ $plan['id'] }}"
+                                                    name="total_price" value="1" min="1"
+                                                    style="text-align: center; width: 60px; margin: 0 10px;"
+                                                    data-plan-price="{{ $plan['current_price'] }}"
+                                                    data-plan-step="{{ $plan['step_price'] }}"
+                                                    oninput="calculateTotal({{ $plan['id'] }})">
+                                                <button class="increase_button" type="button"
+                                                    onclick="incrementQuantity({{ $plan['id'] }})"
+                                                    style="width: 30px; height: 30px; font-size: 18px;">+
                                                 </button>
                                             </div>
-{{--                                            <p style="margin-top: 10px;" class="total_price"> <span--}}
-{{--                                                    id="totalPrice_{{ $plan['id'] }}">{{ $plan['current_price'] }}</span>--}}
-{{--                                                $</p>--}}
+                                            {{--                                            <p style="margin-top: 10px;" class="total_price"> <span --}}
+                                            {{--                                                    id="totalPrice_{{ $plan['id'] }}">{{ $plan['current_price'] }}</span> --}}
+                                            {{--                                                $</p> --}}
                                             <input type="hidden" name="plan_id" value="{{ $plan['id'] }}">
-{{--                                            <input type="hidden" name="total_price"--}}
-{{--                                                   id="total_price_input_{{ $plan['id'] }}"--}}
-{{--                                                   value="{{ $plan['current_price'] }}">--}}
+                                            {{--                                            <input type="hidden" name="total_price" --}}
+                                            {{--                                                   id="total_price_input_{{ $plan['id'] }}" --}}
+                                            {{--                                                   value="{{ $plan['current_price'] }}"> --}}
                                             <button style="display: block; width: 100%; margin-top: 20px;" type="submit"
-                                                    class="btn withdraw_button">
+                                                class="btn withdraw_button">
                                                 اشتراك
                                             </button>
                                         </form>
@@ -73,13 +75,13 @@
                                         <div class="plans_details">
                                             <div class="plan1 hide_mobile">
                                                 <h4>سعر الشراء </h4>
-                                                <h4 style="color:#10AE59">  {{ $plan['current_price'] }} $ </h4>
+                                                <h4 style="color:#10AE59"> {{ $plan['current_price'] }} $ </h4>
                                             </div>
                                             <div class="plan1 investment_return">
                                                 <h4> عائد الاستثمار </h4>
                                                 <h4> 24 H
-                                                <br>
-                                                  <span style="color:#10AE59"> 10 $</span>
+                                                    <br>
+                                                    <span style="color:#10AE59"> 10 $</span>
                                                 </h4>
                                                 <h4> 7 D
                                                     <br>
@@ -92,20 +94,20 @@
                                             </div>
                                             <div class="plan1 platform_info">
                                                 <h4 data-bs-toggle="modal"
-                                                    data-bs-target="#add_attribute_{{$plan['id']}}">
+                                                    data-bs-target="#add_attribute_{{ $plan['id'] }}">
                                                     <span class="platform-trigger"
-                                                          style="cursor:pointer;">{{$plan['platform_name']}}</span>
+                                                        style="cursor:pointer;">{{ $plan['platform_name'] }}</span>
                                                     <i class="bi bi-caret-down-fill" style="cursor:pointer;"></i>
                                                 </h4>
-                                                <img src="{{asset('assets/uploads/plans/'.$plan['logo'])}}">
+                                                <img src="{{ asset('assets/uploads/plans/' . $plan['logo']) }}">
                                             </div>
                                         </div>
                                         <div class="button_footer">
-                                             <div class="statics">
-                                                 <i class="bi bi-people-fill"></i>
-                                                 <span style="color:#10AE59">  20  </span>
+                                            <div class="statics">
+                                                <i class="bi bi-people-fill"></i>
+                                                <span style="color:#10AE59"> 20 </span>
 
-                                             </div>
+                                            </div>
                                             <div class="statics">
                                                 <i class="bi bi-wallet-fill"></i>
                                                 <span style="color:#10AE59"> 4000.300 $ </span>
@@ -115,27 +117,26 @@
                                     </div>
                                 </div>
                                 <!-- Modal structure  -->
-                                <div class="modal fade platform_data" id="add_attribute_{{$plan['id']}}" tabindex="-1"
-                                     aria-labelledby="exampleModalLabel"
-                                     aria-hidden="true">
+                                <div class="modal fade platform_data" id="add_attribute_{{ $plan['id'] }}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title"
-                                                    id="platformModalLabel">{{$plan['platform_name']}}</h5>
+                                                <h5 class="modal-title" id="platformModalLabel">
+                                                    {{ $plan['platform_name'] }}</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                                    aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body text-center">
-                                                <h6> {{$plan['platform_name']}} </h6>
+                                                <h6> {{ $plan['platform_name'] }} </h6>
                                                 <!-- Platform logo -->
-                                                <img src="{{ asset('assets/uploads/plans/'.$plan['logo']) }}"
-                                                     alt="{{$plan['platform_name']}}" class="img-fluid"
-                                                     style="max-width: 150px;">
+                                                <img src="{{ asset('assets/uploads/plans/' . $plan['logo']) }}"
+                                                    alt="{{ $plan['platform_name'] }}" class="img-fluid"
+                                                    style="max-width: 150px;">
                                                 <!-- Platform link -->
                                                 <p class="mt-3">
-                                                    <a href="{{url($plan['platform_link'])}}" target="_blank"
-                                                       class="btn btn-success">
+                                                    <a href="{{ url($plan['platform_link']) }}" target="_blank"
+                                                        class="btn btn-success">
                                                         زيارة الموقع
                                                     </a>
                                                 </p>
@@ -197,9 +198,5 @@
                 calculateTotal(planId);
             }
         }
-
-
     </script>
 @endsection
-
-

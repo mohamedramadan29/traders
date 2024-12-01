@@ -11,7 +11,7 @@ class Invoice extends Model
 {
     use HasFactory;
     protected $fillable = ['user_id', 'transaction_id', 'plan_id', 'plan_price', 'order_id', 'order_description',
-        'payment_status', 'payment_id', 'original_price', 'amount_received','platform_id'];
+        'payment_status', 'payment_id', 'original_price', 'amount_received','platform_id','bin_amount'];
 
     public function plan()
     {

@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
 use App\Models\admin\Plan;
 use App\Models\admin\Platform;
+use App\Models\admin\PublicSetting;
 use App\Models\admin\UserPlatformEarning;
 use App\Models\front\Invoice;
+use App\Models\front\SalesOrder;
 use App\Models\front\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +34,7 @@ class PlanController extends Controller
         $Plans = Plan::withCount(['invoices' => function ($query) use ($user) {
             $query->where('user_id', $user->id);
         }])->get();
+
         $totalPlansCount = Invoice::where('user_id', $user->id)->count();
         $totalbalance = Invoice::where('user_id', $user->id)->sum('plan_price');
         $investment_earning = UserPlatformEarning::where('user_id', $user->id)->sum('investment_return');
@@ -82,45 +85,125 @@ class PlanController extends Controller
     public function invoice_create(Request $request)
     {
         try {
+            $user = User::where('id', Auth::id())->first();
+            if (!$user) {
+                return redirect()->back()->with('error', 'المستخدم غير موجود.');
+            }
+
             $data = $request->all();
-            $plan = Plan::findOrFail($data['plan_id']);
-         //   $plan_step = $plan['step_price'];
-           // $current_price = $plan['current_price'];
+           // dd($data);
 
-            $current_price = $data['total_price'];
+            // التحقق من إدخال السعر والخطة
+            if (!isset($data['total_price']) || $data['total_price'] <= 0) {
+                return redirect()->back()->with('error', 'يرجى إدخال مبلغ صحيح.');
+            }
 
-           // $quantity = isset($data['quantity']) ? (int)$data['quantity'] : 1; // احصل على عدد الاشتراكات من الطلب، 1 كحد أدنى
+            if (!isset($data['plan_id'])) {
+                return redirect()->back()->with('error', 'يرجى اختيار الخطة.');
+            }
+
+            if ($user->dollar_balance < $data['total_price']) {
+                return redirect()->back()->with('error', 'رصيدك الحالي لا يكفي لإضافة الرصيد للخطة.');
+            }
+
+            $plan = Plan::find($data['plan_id']);
+            if (!$plan) {
+                return redirect()->back()->with('error', 'الخطة المختارة غير موجودة.');
+            }
+
+            $public_setting = PublicSetting::first();
+            if (!$public_setting) {
+                return redirect()->back()->with('error', 'إعدادات السوق غير موجودة.');
+            }
+
+            $market_price = $public_setting->market_price;
+            $bin_amount = $data['total_price'] / $market_price;
+
             DB::beginTransaction();
 
-//            for ($i = 0; $i < $quantity; $i++) {
-                $orderId = uniqid();
+            $remaining_bin = $bin_amount;
 
-                // إنشاء سجل جديد في جدول الفواتير لكل اشتراك
-                Invoice::create([
-                    'user_id' => Auth::id(),
-                    'plan_id' => $plan['id'],
-                    'plan_price' => $current_price,
-                    'order_id' => $orderId,
-                    'order_description' => "Payment for order #" . $orderId,
-                    'payment_status' => 'confirmed',
-                ]);
+            // شراء العملات من الصفقات المفتوحة
+            $open_sales = SalesOrder::where('status', 0)
+                ->where('selling_currency_rate', '<=', $market_price)
+                ->orderBy('selling_currency_rate', 'asc')
+                ->get();
 
-//                // تحديث السعر بعد كل اشتراك
-//                $current_price += $plan_step;
-//            }
+            foreach ($open_sales as $sale) {
+                if ($remaining_bin <= 0) break;
 
-            // تحديث سعر الخطة في النهاية
-//            $plan->update([
-//                'current_price' => $current_price
-//            ]);
+                $available_bin = $sale->bin_amount - $sale->bin_sold;
+                $seller = User::find($sale->user_id);
+
+                if ($available_bin >= $remaining_bin) {
+                    $sale->bin_sold += $remaining_bin;
+
+                    if ($seller) {
+                        $seller->dollar_balance += $remaining_bin * $sale->selling_currency_rate;
+                        $seller->save();
+                    }
+
+                    if ($sale->bin_sold == $sale->bin_amount) {
+                        $sale->status = 1;
+                    }
+
+                    $sale->received_user_id = $user->id;
+                    $sale->save();
+
+                    $remaining_bin = 0;
+                } else {
+                    $sale->bin_sold += $available_bin;
+
+                    if ($seller) {
+                        $seller->dollar_balance += $available_bin * $sale->selling_currency_rate;
+                        $seller->save();
+                    }
+
+                    $sale->status = 1;
+                    $sale->received_user_id = $user->id;
+                    $sale->save();
+
+                    $remaining_bin -= $available_bin;
+                }
+            }
+
+            // شراء العملات المتبقية من الشركة
+            if ($remaining_bin > 0) {
+                if ($public_setting->currency_number < $remaining_bin) {
+                    DB::rollBack();
+                    return redirect()->back()->with('error', 'لا توجد عملات كافية لإتمام العملية.');
+                }
+
+                $public_setting->currency_number -= $remaining_bin;
+                $public_setting->total_capital += $remaining_bin * $market_price;
+                $public_setting->save();
+
+                $user->bin_balance += $remaining_bin;
+                $user->dollar_balance -= $remaining_bin * $market_price;
+                $user->save();
+            }
+
+            $orderId = uniqid();
+            Invoice::create([
+                'user_id' => $user->id,
+                'plan_id' => $plan->id,
+                'plan_price' => $data['total_price'],
+                'bin_amount' => $bin_amount,
+                'order_id' => $orderId,
+                'order_description' => "Payment for order #" . $orderId,
+                'payment_status' => 'confirmed',
+            ]);
+
+            $user->dollar_balance -= $data['total_price'];
+            $user->bin_balance += $bin_amount;
+            $user->save();
 
             DB::commit();
 
-            return Redirect::route('user_plans')->with('success_message', ' تم الاشتراك بنجاح في الخطة ');
-
+            return redirect()->route('user_plans')->with('success_message', 'تم الاشتراك بنجاح في الخطة.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->exception_message($e);
+            return redirect()->back()->with('error', 'حدث خطأ: ' . $e->getMessage());
         }
     }
 
@@ -192,5 +275,4 @@ class PlanController extends Controller
             'daily_percentage' => number_format($dailyPercentage, 2),
         ]);
     }
-
 }

@@ -4,7 +4,10 @@ namespace App\Http\Controllers\front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
+use App\Models\admin\PublicSetting;
 use App\Models\Admin\WithDraw;
+use App\Models\front\SalesOrder;
+use App\Models\front\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,71 +22,122 @@ class WithDrawController extends Controller
     {
         $user = Auth::user();
         $total_balance = $user['total_balance'];
-        $withdraws = WithDraw::where('user_id',Auth::id())->orderBy('id','desc')->get();
+        $withdraws = WithDraw::where('user_id', Auth::id())->orderBy('id', 'desc')->get();
         // WithDrawSum Under Revision
-        $withdrawSum = WithDraw::where('user_id',Auth::id())->where('status',0)->sum('amount');
+        $withdrawSum = WithDraw::where('user_id', Auth::id())->where('status', 0)->sum('amount');
         ////// WithDrawSum Compeleted
-        $withdrawSumCompeleted = WithDraw::where('user_id',Auth::id())->where('status',1)->sum('amount');
-        return view('front.WithDraws.index',compact('withdraws','total_balance','withdrawSum','withdrawSumCompeleted'));
+        $withdrawSumCompeleted = WithDraw::where('user_id', Auth::id())->where('status', 1)->sum('amount');
+        return view('front.WithDraws.index', compact('withdraws', 'total_balance', 'withdrawSum', 'withdrawSumCompeleted'));
     }
 
     public function store(Request $request)
     {
-        $user = Auth::user();
-        $total_balance = $user['total_balance'];
+        // $user = Auth::user();
+        $user = User::where('id', Auth::id())->first();
+        $total_balance = $user['dollar_balance'];
 
-        ////// WithDrawSum Compeleted
-        $withdrawSumCompeleted = WithDraw::where('user_id',Auth::id())->where('status',1)->sum('amount');
-        $withdrawSumPending = WithDraw::where('user_id',Auth::id())->where('status',0)->sum('amount');
-        //dd($withdrawSumPending);
+        // إجمالي السحب المكتمل والمعلق
+        $withdrawSumCompeleted = WithDraw::where('user_id', Auth::id())->where('status', 1)->sum('amount');
+        $withdrawSumPending = WithDraw::where('user_id', Auth::id())->where('status', 0)->sum('amount');
+
         $last_total_balance = $total_balance - ($withdrawSumPending + $withdrawSumCompeleted);
+
         try {
+            // التحقق من البيانات المدخلة
             $data = $request->all();
             $rules = [
-                'amount' => 'required',
+                'amount' => 'required|numeric|min:1',
                 'withdraw_method' => 'required',
-                'usdt_link'=>'required'
+                'usdt_link' => 'required',
             ];
+
             $messages = [
-                'amount.required' => ' من فضلك حدد المبلغ ',
-                'withdraw_method.required' => ' من فضلك حدد طريقة السحب ',
-                'usdt_link.required'=>' من فضلك ادخل عنوان المحفظة  '
+                'amount.required' => 'من فضلك حدد المبلغ',
+                'amount.numeric' => 'المبلغ يجب أن يكون رقمًا صحيحًا',
+                'amount.min' => 'المبلغ يجب أن يكون أكبر من صفر',
+                'withdraw_method.required' => 'من فضلك حدد طريقة السحب',
+                'usdt_link.required' => 'من فضلك أدخل عنوان المحفظة',
             ];
+
             $validator = Validator::make($data, $rules, $messages);
             if ($validator->fails()) {
                 return Redirect::back()->withInput()->withErrors($validator);
             }
+
             if ($last_total_balance < $data['amount']) {
-                return Redirect::back()->withInput()->withErrors('رصيدك الحالي لا يكفي لاجراء طلب السحب ');
+                return Redirect::back()->withInput()->withErrors('رصيدك الحالي لا يكفي لإجراء طلب السحب.');
             }
 
+            // حساب النسبة المطلوبة من المستخدم
+            $withdraw_percentage = $data['amount'] / $total_balance;
+
+            // حساب الكمية المطلوبة من العملات (Crypto Balance)
+            $crypto_balance = $user['bin_balance']; // افترض أن لديك حقل في جدول المستخدمين يحمل رصيد العملات الرقمية
+            $crypto_to_withdraw = $crypto_balance * $withdraw_percentage;
+
+            if ($crypto_balance < $crypto_to_withdraw) {
+                return Redirect::back()->withInput()->withErrors('رصيد العملات الرقمية غير كافٍ لتغطية السحب المطلوب.');
+            }
+            $public_setting = PublicSetting::first();
+            // سعر السوق الحالي للعملة (يمكنك جلبه من API خارجي)
+            $market_price = $public_setting['market_price']; // افترض أن هذه دالة تجلب سعر السوق الحالي
+
+            // حساب قيمة البيع بالدولار
+            //  $sale_amount = $crypto_to_withdraw * $market_price;
+
             DB::beginTransaction();
+
+            // إنشاء طلب سحب
             $withdraw = new WithDraw();
             $withdraw->user_id = Auth::id();
             $withdraw->amount = $data['amount'];
             $withdraw->withdraw_method = $data['withdraw_method'];
             $withdraw->usdt_link = $data['usdt_link'];
             $withdraw->save();
-            DB::commit();
-            return $this->success_message(' تم اضافة طلب سحب بنجاح  ');
 
+            // // إنشاء طلب بيع (Sale Order)
+            // $saleOrder = new SalesOrder();
+            // $saleOrder->user_id = Auth::id();
+            // $saleOrder->crypto_amount = $crypto_to_withdraw;
+            // $saleOrder->sale_price = $market_price;
+            // $saleOrder->total_sale_value = $sale_amount;
+            // $saleOrder->status = 'pending'; // حالة الطلب يمكن أن تكون "معلق" أو "مكتمل"
+            // $saleOrder->save();
+
+
+            $sales = new SalesOrder();
+            $sales->user_id = 1;
+            $sales->currency_rate = $market_price;
+            $sales->enter_currency_rate = $market_price;
+            $sales->selling_currency_rate = $market_price;
+            $sales->currency_amount = 1;
+            $sales->bin_amount = $crypto_to_withdraw;
+            $sales->bin_sold = 0;
+            $sales->save();
+            // تحديث رصيد العملات الرقمية
+            $user->bin_balance -= $crypto_to_withdraw;
+            $user->Save();
+            DB::commit();
+            return $this->success_message('تم إضافة طلب السحب بنجاح.');
         } catch (\Exception $e) {
+            DB::rollBack();
             return $this->exception_message($e);
         }
     }
 
+
     public function delete($id)
     {
         $withdraw = WithDraw::findOrFail($id);
-        if ($withdraw['status'] == 1){
+        if ($withdraw['status'] == 1) {
             return Redirect::back()->withInput()->withErrors(' لا يمكن حذف تلك العملية  ');
         }
         /////////// Update User Balance
-//        $withdraw_amount = $withdraw['amount'];
-//        $user = Auth::user();
-//        $main_balance = $user['total_balance'] + $withdraw_amount;
-//        $user->total_balance = $main_balance;
-//        $user->save();
+        //        $withdraw_amount = $withdraw['amount'];
+        //        $user = Auth::user();
+        //        $main_balance = $user['total_balance'] + $withdraw_amount;
+        //        $user->total_balance = $main_balance;
+        //        $user->save();
         $withdraw->delete();
         return $this->success_message(' تم حذف طلب السحب   ');
     }

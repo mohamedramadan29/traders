@@ -25,9 +25,8 @@ class StorageInvestmentController extends Controller
 
     public function store(Request $request)
     {
-
         // $user = Auth::user();
-        $user = User::where('id',Auth::id())->first();
+        $user = User::where('id', Auth::id())->first();
         $user_dollar_balance = $user->dollar_balance;
         $public_setting = PublicSetting::first();
         if (!$public_setting) {
@@ -58,14 +57,18 @@ class StorageInvestmentController extends Controller
             if ($data['amount'] > $user_dollar_balance) {
                 return Redirect::back()->withErrors('رصيدك الحالي لا يسمح بإجراء هذه العملية.');
             }
+
             // تحديد نسبة الفائدة بناءً على المدة
             $interest_rate = $data['interest_rate'];
+
             // تحديد تاريخ البدء والانتهاء
             $start_date = $data['start_date'];
             $end_date = $data['end_date'];
+
             // حساب عدد العملات التي سيتم شراؤها
             $bin_amount = $data['amount'] / $public_setting->market_price;
             DB::beginTransaction();
+
             // شراء العملات
             $remaining_bin = $bin_amount;
 
@@ -74,26 +77,24 @@ class StorageInvestmentController extends Controller
                 ->where('selling_currency_rate', '<=', $public_setting->market_price)
                 ->orderBy('selling_currency_rate', 'asc')
                 ->get();
+
             foreach ($open_sales as $sale) {
                 if ($remaining_bin <= 0) break;
                 $available_bin = $sale->bin_amount - $sale->bin_sold;
-                // استرجاع المستخدم البائع
                 $seller = User::find($sale->user_id);
 
                 if ($available_bin >= $remaining_bin) {
                     $sale->bin_sold += $remaining_bin;
 
-                    // تحديث رصيد البائع بالدولار
                     if ($seller) {
                         $seller->dollar_balance += $remaining_bin * $sale->selling_currency_rate;
                         $seller->save();
                     }
 
                     if ($sale->bin_sold == $sale->bin_amount) {
-                        $sale->status = 1; // تحديث الحالة إلى مكتملة
+                        $sale->status = 1;
                     }
 
-                    // تحديث صاحب الصفقة إلى المستخدم الذي اشتراها
                     $sale->received_user_id = $user->id;
                     $sale->save();
 
@@ -101,21 +102,25 @@ class StorageInvestmentController extends Controller
                 } else {
                     $sale->bin_sold += $available_bin;
 
-                    // تحديث رصيد البائع بالدولار
                     if ($seller) {
                         $seller->dollar_balance += $available_bin * $sale->selling_currency_rate;
                         $seller->save();
                     }
 
                     $sale->status = 1;
-
-                    // تحديث صاحب الصفقة إلى المستخدم الذي اشتراها
                     $sale->received_user_id = $user->id;
                     $sale->save();
 
                     $remaining_bin -= $available_bin;
                 }
             }
+
+            // تحقق إذا كانت الكمية المتبقية صفرًا بعد معالجة العمليات السابقة
+            if ($remaining_bin <= 0) {
+                DB::commit();
+                return $this->success_message('تم تخزين العملة بنجاح دون الحاجة إلى الشراء من الشركة.');
+            }
+
             // إذا كانت هناك عملات متبقية، نشتريها من الشركة
             if ($remaining_bin > 0) {
                 if ($public_setting->currency_number < $remaining_bin) {
@@ -131,11 +136,8 @@ class StorageInvestmentController extends Controller
                 $user->bin_balance += $remaining_bin;
                 $user->dollar_balance -= $remaining_bin * $public_setting->market_price;
                 $user->save();
-
-                // هنا يجب تحديث معرّف المستخدم الذي اشتريت منه العملات
-                //$public_setting->received_user_id = $user->id;
-                //   $public_setting->save();
             }
+
             // إنشاء عملية الاستثمار
             $investment = new StorageInvestment();
             $investment->user_id = $user->id;
@@ -146,8 +148,9 @@ class StorageInvestmentController extends Controller
             $investment->start_date = $data['start_date'];
             $investment->end_date = $data['end_date'];
             $investment->save();
+
             DB::commit();
-            return $this->success_message(' تم تخزين العملة بنجاح  ');
+            return $this->success_message('تم تخزين العملة بنجاح.');
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->exception_message($e);
