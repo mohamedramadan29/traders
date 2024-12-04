@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\front\UserController;
 use App\Http\Controllers\front\WithDrawController;
 use Illuminate\Support\Facades\Route;
@@ -41,13 +42,15 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('/update_forget_password', 'update_forget_password');
         // User  Dashboard
         Route::group(['middleware' => 'auth'], function () {
-            Route::get('dashboard', 'index');
+            Route::get('dashboard', 'index')->name('dashboard');
             // update User  password
             Route::match(['post', 'get'], 'update_user_password', 'update_user_password');
+            Route::match(['post', 'get'], 'update_profile_image', 'updateProfileImage');
             // check User  Password
             Route::post('check_user_password', 'check_user_password');
+            Route::get('profile','profile');
             // Update User  Details
-            Route::match(['post', 'get'], 'update_user_details', 'update_user_details');
+            Route::post( 'update_user_details', 'update_user_details');
             Route::get('logout', 'logout')->name('user_logout');
             Route::post('update-trader-id','update_trader_id');
         });
@@ -97,6 +100,9 @@ Route::group(['prefix' => 'user'], function () {
     });
 });
 
+
+Route::get('auth/{provider}/redirect',[SocialLoginController::class,'redirect'])->name('auth.google.redirect');
+Route::get('auth/{provider}/callback',[SocialLoginController::class,'callback'])->name('auth.google.callback');
 
 
 

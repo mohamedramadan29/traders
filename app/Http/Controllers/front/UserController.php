@@ -4,8 +4,10 @@ namespace App\Http\Controllers\front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
+use App\Http\Traits\Upload_Images;
 use App\Models\admin\Plan;
 use App\Models\front\User;
+use App\Models\front\UserPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,17 +19,20 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     use Message_Trait;
+    use Upload_Images;
 
     public function index()
     {
         $user = Auth::user();
-        $plans = Plan::where('status', 1)->with('platform')->get();
-        return view('front.dashboard',compact('plans'));
+        //$userplanstotal = UserPlan::with('user','plan')->get();
+        // dd($userplanstotal);
+        $plans = Plan::where('status', 1)->with('platform', 'total_plans')->get();
+        // dd($plans);
+        return view('front.dashboard', compact('plans'));
     }
 
     public function register(Request $request)
     {
-
         if ($request->isMethod('post')) {
             try {
                 // dd($referring_user->id );
@@ -64,7 +69,7 @@ class UserController extends Controller
                     'name' => $data['name'],
                     'email' => $data['email'],
                     'password' => Hash::make($data['password']),
-                    'status'=> 1
+                    'status' => 1
                 ]);
                 ////////////////////// Send Confirmation Email ///////////////////////////////
                 ///
@@ -108,7 +113,6 @@ class UserController extends Controller
         } else {
             abort(404);
         }
-
     }
 
     public function login(Request $request)
@@ -130,15 +134,14 @@ class UserController extends Controller
                     return redirect()->back()->withErrors($validator)->withInput();
                 }
                 if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
-//                    if (Auth::user()->status == 0) {
-//                        Auth::logout();
-//                        return Redirect::back()->withInput()->withErrors('  من فضلك يجب تفعيل الحساب الخاص بك اولا  ');
-//                    }
+                    //                    if (Auth::user()->status == 0) {
+                    //                        Auth::logout();
+                    //                        return Redirect::back()->withInput()->withErrors('  من فضلك يجب تفعيل الحساب الخاص بك اولا  ');
+                    //                    }
                     return \redirect('user/dashboard');
                 } else {
                     return Redirect::back()->withInput()->withErrors('لا يوجد حساب بهذه البيانات  ');
                 }
-
             } catch (\Exception $e) {
                 return $this->exception_message($e);
             }
@@ -151,8 +154,7 @@ class UserController extends Controller
 
     public function forget_password(Request $request)
     {
-        if
-        ($request->isMethod('post')) {
+        if ($request->isMethod('post')) {
             $data = $request->all();
             // dd($data);
             $email = $data['email'];
@@ -240,54 +242,96 @@ class UserController extends Controller
             if (Hash::check($request_data['old_password'], Auth::user()->password)) {
                 // check if the new password == confirm password
                 if ($request_data['new_password'] == $request_data['confirm_password']) {
-                    $admin_user = User::where('id', Auth::user()->id)->first();
-                    $admin_user->update([
+                    $user = User::where('id', Auth::user()->id)->first();
+                    $user->update([
                         'password' => bcrypt($request_data['new_password'])
                     ]);
-                    $this->success_message('تم تعديل كلمة المرور بنجاح');
+                    return $this->success_message('تم تعديل كلمة المرور بنجاح ');
                 } else {
-                    $this->Error_message('يجب تأكيد كلمة المرور بشكل صحيح');
+                    return  $this->Error_message('يجب تأكيد كلمة المرور بشكل صحيح');
                 }
             } else {
-                $this->Error_message('كلمة المرو القديمة غير صحيحة');
+                return   $this->Error_message('كلمة المرو القديمة غير صحيحة');
             }
         }
-        $admin_data = User::where('email', Auth::user()->email)->first();
-        return view('front.AdminSetting.update_user_password', compact('admin_data'));
     }
+
+    public function updateProfileImage(Request $request)
+    {
+       // $user = Auth::user();
+        $user = User::where('id', Auth::id())->first();
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = $this->saveImage($file,public_path('assets/uploads/users/'));
+           // $filename = time() . '.' . $file->getClientOriginalExtension();
+          //  $file->move(public_path('assets/uploads/users'), $filename);
+
+            // حذف الصورة القديمة إذا وجدت
+            if ($user->image && file_exists(public_path('assets/uploads/users/' . $user->image))) {
+              $oldimage =public_path('assets/uploads/users/' . $user->image);
+                @unlink($oldimage);
+            }
+            // تحديث صورة المستخدم
+            $user->image = $filename;
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'imageUrl' => asset('assets/uploads/users/' . $filename)
+            ]);
+        }
+
+        return response()->json(['success' => false]);
+    }
+
 
     ///////////////// Update Admin Details  //////////
     public function update_user_details(Request $request)
     {
-        $admin_data = User::where('id', Auth::id())->first();
-        $id = $admin_data['id'];
+        $user = User::where('id', Auth::id())->first();
+
         if ($request->isMethod('post')) {
+            $data = $request->all();
+            // dd($data);
             $all_update_data = $request->all();
             ////////////////////// Make Validation //////////////
             $rules = [
                 'name' => 'required|regex:/^[\pL\s\-]+$/u',
-                'email' => 'required|email|unique:users,email,' . $id,
+                //'email' => 'required|email|unique:users,email,' . Auth::user()->id,
+                'country' => 'required|regex:/^[\pL\s\-]+$/u',
+                'city' => 'required|regex:/^[\pL\s\-]+$/u',
+
             ];
             $customeMessage = [
                 'name.required' => 'من فضلك ادخل الأسم',
                 'name.regex' => 'من فضلك ادخل الأسم بشكل صحيح ',
-                'email.required' => 'من فضلك ادخل البريد الألكتروني',
-                'email.email' => 'من فضلك ادخل البريد الألكتروني بشكل صحيح',
-                'email.unique' => 'هذا البريد الألكتروني موجود من قبل من فضلك ادخل بريد الكتروني جديد',
+                // 'email.required' => 'من فضلك ادخل البريد الألكتروني',
+                //  'email.email' => 'من فضلك ادخل البريد الألكتروني بشكل صحيح',
+                //  'email.unique' => 'هذا البريد الألكتروني موجود من قبل من فضلك ادخل بريد الكتروني جديد',
+                'country.required' => ' من فضلك ادخل الدولة  ',
+                'country.regex' => ' من فضلك ادخل الدولة بشكل صحيح  ',
+                'city.required' => ' من فضلك ادخل المدينة   ',
+                'city.regex' => ' من فضلك ادخل المدينة بشكل صحيح  ',
 
             ];
             $this->validate($request, $rules, $customeMessage);
-            $admin_data->update([
+            $user->update([
                 'name' => $all_update_data['name'],
-                'email' => $all_update_data['email'],
                 'country' => $all_update_data['country'],
+                'city' => $all_update_data['city'],
             ]);
-            $this->success_message('تم تحديث البيانات بنجاح');
+            return  $this->success_message('تم تحديث البيانات بنجاح');
             //            return redirect()->back()->with(['Success_message'=>'']);
         }
-        return view('front.AdminSetting.update_user_data', compact('admin_data'));
     }
 
+    ////////////// User Profile
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('front.user.profile', compact('user'));
+    }
     /////////////////// Logout Admin /////////////////////
     ///
     public function logout()
@@ -295,5 +339,4 @@ class UserController extends Controller
         Auth::logout();
         return redirect('/');
     }
-
 }

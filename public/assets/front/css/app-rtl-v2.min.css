@@ -17462,7 +17462,7 @@ textarea.form-control-lg {
     transition: all 0.3s ease-in-out;
     height: var(--bs-topbar-height);
     background-color: var(--bs-topbar-bg);
-    padding-right: var(--bs-main-nav-width);
+    /* padding-right: var(--bs-main-nav-width); */
 }
 
 .topbar .navbar-header {
@@ -17795,7 +17795,7 @@ html[data-menu-size=hidden] .topbar {
     transition: all 0.3s ease-in-out;
     min-height: calc(100vh - var(--bs-topbar-height));
     padding-bottom: var(--bs-footer-height);
-    margin-right: var(--bs-main-nav-width);
+    /* margin-right: var(--bs-main-nav-width); */
 }
 
 html[data-topbar-color=dark]:not([data-bs-theme=dark]) .page-content {
@@ -24834,15 +24834,17 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
 }
 
 .main_footer .data a img {
-    width: 20px;
+    width: 30px;
+    position: relative;
+    top: 4px;
 }
 
 .main_footer .data .active_link {
-    border: 1px solid #9F002A;
+    border: 1px solid #d2d6d4;
 }
 
 .main_footer .data .active_link i {
-    color: #9F002A;
+    color: #fff;
 }
 
 
@@ -24957,7 +24959,9 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     color: #fff;
     border-radius: 10px;
     padding: 10px;
+    margin-left: 30px;
 }
+
 
 .plans_total_report .total_report h4 {
     background: #2A3040;
@@ -25035,6 +25039,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     min-width: 120px;
 }
 
+
 .plans_total_report .plans .plan1:nth-of-type(1) {
     border-radius: 0 10px 10px 0;
     margin-right: 0px;
@@ -25075,7 +25080,14 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     flex-direction: column;
     position: relative;
 }
-
+.plans_total_report .plans .plan1 .investment_return_data{
+    display: flex;
+    justify-content: space-between;
+}
+.plans_total_report .plans .plan1 .investment_return_data h4{
+    margin-right: 5px;
+    margin-left: 5px;
+}
 .button_sections {
     display: flex;
     margin-right: 10px
@@ -25157,6 +25169,9 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     color: #fff;
     text-align: center !important;
     outline: none;
+    text-align: center;
+     width: 100px;
+      margin: 0 10px;
 }
 
 .increment_section .total_price {
@@ -25425,6 +25440,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
         overflow: scroll;
         margin-bottom: 30px;
         border-radius: 5px;
+        justify-content: space-evenly;
     }
 
     .plans_total_report .total_report {
@@ -25471,14 +25487,15 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     }
 
     .plans_total_report .plans .plan1 img {
-        width: 65px;
-        height: 65px;
+        width: 80px;
+        height: 80px;
+        margin-top: 15px;
     }
 
     .plans_total_report .total_report .withdraw_button {
         font-size: 13px;
         padding: 5px;
-        margin-top: 5px !important;
+        margin-top: 25px !important;
     }
 
     .plans_total_report .total_report .analytics_button {
@@ -25634,7 +25651,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     align-items: center;
     border-radius: 8px;
     margin: 0;
-    margin-right: 6px;
+    margin-right: 0px;
     padding: 3px;
     margin-top: -6px;
 }
@@ -25813,6 +25830,10 @@ background-color:#28292a;
 .open_trader{
     color: #fff;
     padding-top: 25px;
+    background: #2a2a3c;
+    padding: 10px;
+    border-radius: 12px;
+    margin-top: 20px;
 }
 .open_trader h6{
     color: #fff;
@@ -25914,4 +25935,22 @@ background-color:#28292a;
 
 .modal-backdrop.show{
     display:none;
+}
+
+
+@media(max-width:991px){
+    .plans_total_report .total_report{
+        margin-left: 10px;
+    }
+    .button_footer{
+        margin-right:0px;
+    }
+    .plans_total_report .plans .plan1 .investment_return_data{
+        display: flex;
+        flex-direction: column;
+    }
+    .plans_total_report .plans .plan1 .investment_return_data h4{
+        margin-right: 0px;
+        margin-left: 0px;
+    }
 }

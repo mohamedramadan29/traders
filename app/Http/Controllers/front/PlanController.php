@@ -11,6 +11,7 @@ use App\Models\admin\UserPlatformEarning;
 use App\Models\front\Invoice;
 use App\Models\front\SalesOrder;
 use App\Models\front\User;
+use App\Models\front\UserPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,20 +32,21 @@ class PlanController extends Controller
     {
         $user = Auth::user();
         // الحصول على عدد الاشتراكات لكل منصة
-        $Plans = Plan::withCount(['invoices' => function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        }])->get();
+        // $Plans = Plan::withCount(['invoices' => function ($query) use ($user) {
+        //     $query->where('user_id', $user->id);
+        // }])->get();
+        $Plans = UserPlan::where('user_id',Auth::id())->with('plan')->get();
 
         $totalPlansCount = Invoice::where('user_id', $user->id)->count();
-        $totalbalance = Invoice::where('user_id', $user->id)->sum('plan_price');
+       // $totalbalance = Invoice::where('user_id', $user->id)->sum('plan_price');
         $investment_earning = UserPlatformEarning::where('user_id', $user->id)->sum('investment_return');
         $daily_earning = UserPlatformEarning::where('user_id', $user->id)->sum('daily_earning');
 
+        $totalbalance = UserPlan::where('user_id', $user->id)->sum('total_investment');
         // تأكد من أن إجمالي رأس المال أكبر من صفر لتجنب القسمة على الصفر
         if ($totalbalance > 0) {
             // جلب العوائد من كل منصة للمستخدم
             $userPlatforms = UserPlatformEarning::where('user_id', $user->id)->get();
-
             // متغير لتجميع النسب الموزونة
             $weightedProfitPercentage = 0;
 
@@ -91,7 +93,7 @@ class PlanController extends Controller
             }
 
             $data = $request->all();
-           // dd($data);
+            // dd($data);
 
             // التحقق من إدخال السعر والخطة
             if (!isset($data['total_price']) || $data['total_price'] <= 0) {
@@ -131,7 +133,6 @@ class PlanController extends Controller
 
             foreach ($open_sales as $sale) {
                 if ($remaining_bin <= 0) break;
-
                 $available_bin = $sale->bin_amount - $sale->bin_sold;
                 $seller = User::find($sale->user_id);
 
@@ -193,6 +194,20 @@ class PlanController extends Controller
                 'order_description' => "Payment for order #" . $orderId,
                 'payment_status' => 'confirmed',
             ]);
+            /////////////// Add Investment Price To user_plans Total tabel
+            $userplanscount = UserPlan::where('user_id', $user->id)->where('plan_id', $plan->id)->count();
+            if ($userplanscount > 0) {
+                $planrecord = UserPlan::where('user_id', $user->id)->where('plan_id', $plan->id)->first();
+                $planrecord->total_investment +=  $data['total_price'];
+                $planrecord->save();
+            } else {
+                $userplans = new UserPlan();
+                $userplans->user_id = $user->id;
+                $userplans->plan_id = $plan->id;
+                $userplans->total_investment = $data['total_price'];
+                $userplans->save();
+            }
+
 
             $user->dollar_balance -= $data['total_price'];
             $user->bin_balance += $bin_amount;

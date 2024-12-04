@@ -34,7 +34,7 @@
 {{--                            <h4 class="card-title flex-grow-1"> الرصيد والمعاملات المالية </h4>--}}
 {{--                        </div>--}}
 {{--                    </div>--}}
-                    <div class="user_plans_page_info my_new_container balance_page_section" style="background-color:#52546e">
+                    <div class="user_plans_page_info my_new_container balance_page_section" style="">
                         <div class="section1">
                             <div class="info">
                                 <h5>  اجمالي الرصيد  </h5>

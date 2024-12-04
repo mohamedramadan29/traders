@@ -1,6 +1,6 @@
 @extends('front.layouts.master_dashboard')
 @section('title')
-    الخطط المتاحة
+    الرئيسية
 @endsection
 @section('css')
     {{--    <!-- DataTables CSS --> --}}
@@ -26,16 +26,15 @@
                     @endforeach
                 @endif
                 <div class="col-xl-12">
-                    <div class="card info_card">
+                    {{-- <div class="card info_card">
                         <h4 class="card-title flex-grow-1"> الخطط المتاحة </h4>
-                    </div>
+                    </div> --}}
                     <div>
                         <div class="table-responsive my_new_container">
                             @foreach ($plans as $plan)
                                 <div class="plans_total_report plan_report_section">
                                     <div class="total_report increment_section">
                                         <p>{{ $plan['name'] }}
-                                            {{--                                            <br> {{ $plan['current_price'] }} $ --}}
                                         </p>
                                         <!-- Subscription form -->
                                         <form method="post" action="{{ url('user/invoice_create') }}">
@@ -46,9 +45,8 @@
                                                     onclick="decrementQuantity({{ $plan['id'] }})"
                                                     style="width: 30px; height: 30px; font-size: 18px;">-
                                                 </button>
-                                                <input class="quantity" type="number" id="quantity_{{ $plan['id'] }}"
-                                                    name="total_price" value="1" min="1"
-                                                    style="text-align: center; width: 60px; margin: 0 10px;"
+                                                <input required class="quantity" type="number" id="quantity_{{ $plan['id'] }}"
+                                                    name="total_price"  min="1" placeholder="سعر الاشتراك "
                                                     data-plan-price="{{ $plan['current_price'] }}"
                                                     data-plan-step="{{ $plan['step_price'] }}"
                                                     oninput="calculateTotal({{ $plan['id'] }})">
@@ -57,13 +55,7 @@
                                                     style="width: 30px; height: 30px; font-size: 18px;">+
                                                 </button>
                                             </div>
-                                            {{--                                            <p style="margin-top: 10px;" class="total_price"> <span --}}
-                                            {{--                                                    id="totalPrice_{{ $plan['id'] }}">{{ $plan['current_price'] }}</span> --}}
-                                            {{--                                                $</p> --}}
                                             <input type="hidden" name="plan_id" value="{{ $plan['id'] }}">
-                                            {{--                                            <input type="hidden" name="total_price" --}}
-                                            {{--                                                   id="total_price_input_{{ $plan['id'] }}" --}}
-                                            {{--                                                   value="{{ $plan['current_price'] }}"> --}}
                                             <button style="display: block; width: 100%; margin-top: 20px;" type="submit"
                                                 class="btn withdraw_button">
                                                 اشتراك
@@ -73,24 +65,23 @@
                                     </div>
                                     <div class="plans ">
                                         <div class="plans_details">
-                                            <div class="plan1 hide_mobile">
-                                                <h4>سعر الشراء </h4>
-                                                <h4 style="color:#10AE59"> {{ $plan['current_price'] }} $ </h4>
-                                            </div>
                                             <div class="plan1 investment_return">
                                                 <h4> عائد الاستثمار </h4>
-                                                <h4> 24 H
-                                                    <br>
-                                                    <span style="color:#10AE59"> 10 $</span>
-                                                </h4>
-                                                <h4> 7 D
-                                                    <br>
-                                                    <span style="color:#10AE59"> 20 $</span>
-                                                </h4>
-                                                <h4> 30 D
-                                                    <br>
-                                                    <span style="color:#10AE59"> 200.20$</span>
-                                                </h4>
+                                                <div class="investment_return_data">
+                                                    <h4> 24 H
+                                                        <br>
+                                                        <span style="color:#10AE59"> 10 $</span>
+                                                    </h4>
+                                                    <h4> 7 D
+                                                        <br>
+                                                        <span style="color:#10AE59"> 20 $</span>
+                                                    </h4>
+                                                    <h4> 30 D
+                                                        <br>
+                                                        <span style="color:#10AE59"> 200.20$</span>
+                                                    </h4>
+                                                </div>
+
                                             </div>
                                             <div class="plan1 platform_info">
                                                 <h4 data-bs-toggle="modal"
@@ -105,12 +96,13 @@
                                         <div class="button_footer">
                                             <div class="statics">
                                                 <i class="bi bi-people-fill"></i>
-                                                <span style="color:#10AE59"> 20 </span>
+
+                                                <span>   {{ $plan->total_plans ? $plan->total_plans->count() : 0 }}  </span>
 
                                             </div>
                                             <div class="statics">
-                                                <i class="bi bi-wallet-fill"></i>
-                                                <span style="color:#10AE59"> 4000.300 $ </span>
+                                                <i class="bi bi-currency-dollar"></i>
+                                                <span> {{ $plan->total_plans ? number_format($plan->total_plans->sum('total_investment') , 2) : 0 }} $ </span>
 
                                             </div>
                                         </div>

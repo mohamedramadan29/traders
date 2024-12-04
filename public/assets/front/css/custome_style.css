@@ -1,103 +1,119 @@
-.top_bar_data .topbar-item{
+.top_bar_data .topbar-item {
     height: auto;
 }
-.topbar{
+
+.topbar {
     height: auto;
 }
-.top_bar_data{
+
+.top_bar_data {
     padding-top: 6px;
     padding-bottom: 6px;
 }
-.user_plans_page_info{
+
+.user_plans_page_info {
     display: flex;
     color: #fff;
     justify-content: space-between;
     background: #2a3040;
     border-radius: 13px;
     margin-bottom: 20px;
-    margin-right: -5px;
-    margin-left: -5px;
-    padding: 5px;
+    padding: 15px;
 
 }
-.user_plans_page_info .info{
+
+.user_plans_page_info .info {
     position: relative;
+    text-align: center;
 }
-.user_plans_page_info .info .buttons{
+
+.user_plans_page_info .info .buttons {
     display: flex;
     margin-top: 40px;
 }
-.user_plans_page_info .info .public_button{
+
+.user_plans_page_info .info .public_button {
     background-color: #11af59;
     color: #fff;
-    font-size: 12px;
+    font-size: 16px;
     padding: 10px 10px;
     border-radius: 30px;
     min-width: 60px;
     text-align: center;
 }
-.user_plans_page_info .info .stat{
-    font-size: 12px;
+
+.user_plans_page_info .info .stat {
+    font-size: 16px;
     padding: 10px 15px;
     border-radius: 30px;
     color: #fff;
     background: #383c48;
-    margin-right: 5px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
-.user_plans_page_info .info .total_investment{
+
+.user_plans_page_info .info .total_investment {
     color: #fff;
     text-align: center;
 }
-.user_plans_page_info .info h5{
+
+.user_plans_page_info .info h5 {
     background: #383c48;
     color: #fff;
-    font-size: 12px;
-    padding: 4px;
+    font-size: 16px;
+    padding: 10px;
     border-radius: 20px;
     text-align: center;
 }
-.user_plans_page_info .info .percentage{
+
+.user_plans_page_info .info .percentage {
     color: #11af59;
     position: absolute;
     left: 0;
-    top: 55px;
+    top: 80px;
     font-size: 12px;
     font-weight: bold;
 }
-.user_plans_page_info .info .percentage span{
+
+.user_plans_page_info .info .percentage span {
     color: #fff;
     margin-right: 5px;
 }
-.user_plans_page_info .info .profit_balance{
+
+.user_plans_page_info .info .profit_balance {
     color: #11af59;
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 30px;
     margin-top: 27px;
 }
-.user_plans_page_info .info img{
+
+.user_plans_page_info .info img {
     width: 65px;
     height: 65px;
     background: #383c48;
     border-radius: 15px;
     margin-top: 20px;
 }
+
 /****************** Start Transaction ////////////////////  */
 .transactions {
-    background-color: #52546e;
+    background-color: #2a3040;
     border-radius: 13px;
     margin-bottom: 20px;
     margin-right: -5px;
     margin-left: -5px;
     padding: 5px;
 }
-.transactions .top_buttons{
+
+.transactions .top_buttons {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 10px;
 }
-.transactions .top_buttons .trans_button{
+
+.transactions .top_buttons .trans_button {
     font-size: 11px;
     padding: 5px;
     border-radius: 30px;
@@ -106,31 +122,37 @@
     margin-right: 5px;
     border: none;
 }
-.transactions .trans_info{
+
+.transactions .trans_info {
     height: 200px;
     overflow: scroll;
 }
-.transactions .trans_info ul{
+
+.transactions .trans_info ul {
     padding-top: 10px;
     border-top: 1px solid #383a4c;
 }
-.transactions .trans_info ul li{
+
+.transactions .trans_info ul li {
     color: #fff;
     padding: 8px;
     border-bottom: 1px solid #8d8d8d;
 }
+
 .transactions .trans_info ul li span {
     font-weight: bold;
     color: #d4d4d4;
     margin-right: 5px;
 }
-.transactions .trans_info .increase{
+
+.transactions .trans_info .increase {
     color: #11af59;
     font-size: 15px;
     margin-left: 5px;
     margin-right: 0;
 }
-.transactions .trans_info .decrease{
+
+.transactions .trans_info .decrease {
     color: #f51010;
     font-size: 15px;
     margin-left: 5px;
@@ -139,36 +161,48 @@
 
 /**************** Start Balance Page **************/
 
-.balance_page_section{
+.balance_page_section {
     display: flex;
     flex-direction: column;
 }
+
 .balance_page_section .info {
     width: 50%;
     margin-left: 5px;
     margin-right: 5px;
 }
-.balance_page_section .info .buttons{
+
+.balance_page_section .info .buttons {
     margin-top: 5px;
 }
-.balance_page_section .section1{
+
+.balance_page_section .section1 {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-.balance_page_section .section2{
+
+.balance_page_section .section2 {
     display: flex;
     flex-direction: row;
     margin-top: 25px;
 }
+
 .balance_page_section .info .percentage {
     top: 61px;
     font-size: 11px;
     border-bottom: 1px dashed #ccc;
 }
+
 /*************************** Balance Info Section *******************/
-.balance_public_info {}
-.balance_public_info h4{
+.balance_public_info {
+    background: #2a3040;
+    padding: 10px;
+    border-radius: 12px;
+
+}
+
+.balance_public_info h4 {
     color: #fff;
     background: #52546e;
     font-size: 13px;
@@ -178,52 +212,59 @@
     padding-right: 15px;
     margin-bottom: 20px;
 }
-.balance_public_info h3{
+
+.balance_public_info h3 {
     color: #fff;
     font-size: 25px;
     margin-right: 20px;
 }
-.balance_public_info .percentage{
+
+.balance_public_info .percentage {
     color: #11af59;
     border-bottom: 1px dashed #ccc;
     width: 65%;
 }
-.balance_public_info .percentage span{
+
+.balance_public_info .percentage span {
     color: #fff;
 }
 
 /***************** Start Edit Balance Tap ******************/
-.edit_balance_tab{
+.edit_balance_tab {}
 
-}
-.edit_balance_tab .modal-content{
+.edit_balance_tab .modal-content {
     background-color: #2a3040;
 
 }
 
-.edit_balance_tab .modal-title{
+.edit_balance_tab .modal-title {
     color: #fff;
 }
 
-.edit_balance_tab .modal-header{
+.edit_balance_tab .modal-header {
     border: none;
 }
 
-.edit_balance_tab .nav-tabs .nav-link.active,.edit_balance_tab .nav-tabs .nav-item.show .nav-link {
+.edit_balance_tab .nav-tabs .nav-link.active, .edit_balance_tab .nav-tabs .nav-item.show .nav-link {
     color: var(--bs-nav-tabs-link-active-color);
     background-color: #11af59;
     border-color: #11af59;
 }
 
-.edit_balance_tab .nav-tabs .nav-link{color:#fff}
-.edit_balance_tab .modal-footer{
+.edit_balance_tab .nav-tabs .nav-link {
+    color: #fff
+}
+
+.edit_balance_tab .modal-footer {
     border: none;
     justify-content: flex-start;
 
 }
-.edit_balance_tab .modal-footer p{
+
+.edit_balance_tab .modal-footer p {
     font-size: 12px;
 }
+
 .exchange_third_section .form-group .input_data {
     background-color: #383a4c;
     padding: 0px;
@@ -232,6 +273,7 @@
     align-items: center;
     justify-content: space-around;
 }
+
 .exchange_third_section .form-group .input_data input {
     background: transparent;
     border: none;
@@ -239,24 +281,127 @@
     outline: none;
     color: #fff;
 }
+
 .exchange_third_section .form-group .input_data span {
     color: #fff;
     font-size: 20px;
 }
+
 .exchange_third_section .form-group .input_data button {
     background: transparent;
     color: #fff;
     border: none;
     font-size: 12px;
 }
-.exchange_third_section .available{
+
+.exchange_third_section .available {
     text-align: left;
     font-size: 12px;
     margin: 0;
     padding-top: 10px;
 }
-.withdraw_form .form-control{
+
+.withdraw_form .form-control {
     background-color: #383a4c;
     border-radius: 10px;
     border-color: #383a4c;
+}
+
+/*********************** Start Profile Page ********************/
+
+.profile_page {}
+
+.profile_page .profile_main_section {
+    background-color: #2a3040;
+    padding: 20px;
+    border-radius: 13px;
+    text-align: center;
+}
+
+.profile_page .profile_main_section .logo_section {
+    position: relative;
+}
+
+.profile_page .profile_main_section img {
+    width: 80px;
+    height: 80px;
+    border: 1px dashed #ccc;
+    border-radius: 50%;
+}
+
+.profile_page .profile_main_section .bi-pencil-square {
+    color: #e7e6e6;
+    font-size: 18px;
+    display: inline-block;
+    position: absolute;
+    bottom: 0px;
+    cursor: pointer;
+}
+
+.profile_page .profile_main_section .email p {
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.profile_tabs .nav-pills{
+    background-color: transparent;
+    justify-content: center;
+}
+.profile_tabs .nav-pills .nav-link{
+    color: #fff;
+}
+.profile_tabs .nav-pills .nav-link.active, .nav-pills .show > .nav-link{
+    background-color: #2a3040;
+}
+.profile_tabs form{
+    background: #2a3040;
+    padding: 10px;
+    border-radius: 13px;
+}
+.profile_tabs form .form-label{
+    color:#fff;
+}
+.profile_tabs form input{
+    background-color: #383a4c;
+    color: #fff;
+    font-size: 16px;
+    border: 1px solid #383a4c;
+}
+.profile_tabs .form-control:disabled{
+    background-color: #383a4c;
+}
+.profile_tabs form button{
+    background-color: #11af59;
+    color: #fff;
+    text-align: center;
+    margin: auto;
+    display: block;
+    width: 100%;
+}
+@media(max-width:991px) {
+    .user_plans_page_info {
+        margin-right: -5px;
+        margin-left: -5px;
+        padding: 5px
+    }
+
+    .user_plans_page_info .info h5 {
+        font-size: 12px;
+        padding: 4px;
+    }
+
+    .user_plans_page_info .info .percentage {
+        top: 55px;
+    }
+
+    .user_plans_page_info .info .stat {
+        margin-right: 5px;
+        font-size: 12px;
+    }
+
+    .user_plans_page_info .info .public_button {
+        font-size: 12px;
+    }
 }
