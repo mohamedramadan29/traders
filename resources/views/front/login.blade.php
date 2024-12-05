@@ -1,4 +1,4 @@
-@extends('front.layouts.login_master')
+@extends('front.layouts.master')
 @section('title')
     تسجيل الدخول
 @endsection

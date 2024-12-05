@@ -1,4 +1,41 @@
-.main_page {}
+.main_page {
+    /* margin-top: -100px; */
+}
+
+
+/*##############  Start Navbar  ##########*/
+.navbar{
+    background: linear-gradient(275deg, #26126b, #272674) !important;
+}
+.navbar .navbar-brand{}
+.navbar .navbar-brand img{
+    width: 60px;
+}
+.navbar .nav_buttons{
+
+}
+.navbar .nav_buttons a{
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.navbar .nav_buttons .login{
+    background-color: #1c1f2e;
+    padding: 10px;
+    border-radius: 5px;
+    color: #fff;
+}
+.navbar .nav_buttons .register{
+    background-color: #0faf59;
+    padding: 10px;
+    border-radius: 5px;
+    color: #fff;
+}
+@media(max-width:991px){
+    .navbar .navbar-brand img{
+        width: 35px;
+    }
+}
+/*############# End Navbar ###############*/
 
 .main_page .hero_section {
     background-size: cover;
@@ -243,6 +280,7 @@
 
 .login_form {
     color: #fff;
+    padding-top: 50px;
 }
 
 .login_form h2 {
@@ -336,5 +374,14 @@
 
     .certificate .data .info .icon_head i {
         font-size: 25px;
+    }
+    .main_page .hero_section .data .hero_title1{
+        font-size: 35px;
+    }
+    .main_page .hero_section .data .hero_title2{
+        font-size: 25px;
+    }
+    .main_page .hero_section .data .hero_desc{
+        font-size: 18px;
     }
 }

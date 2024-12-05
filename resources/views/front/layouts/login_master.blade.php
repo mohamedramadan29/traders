@@ -16,8 +16,8 @@
 
     <!-- App css (Require in all Page) -->
     <link href="{{asset('assets/front/css/app.min.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{asset('assets/front/css/app-rtl-v2.min.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{asset('assets/front/css/custome.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{asset('assets/front/css/app-rtl-v3.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{asset('assets/front/css/custome-v3.css')}}" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Theme Config js (Require in all Page) -->
     <script src="{{asset('assets/front/js/config.js')}}"></script>

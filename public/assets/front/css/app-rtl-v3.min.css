@@ -25667,11 +25667,13 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
 
 /******************************************************* Start Save Exchange *****************/
 .save_exchange_data{
-
+margin: 0;
+padding: 5px;
 }
 .save_exchange_data .modal-body {
-background-color:#28292a;
-    padding:0px;
+    background-color: #2a3040;
+    padding: 10px;
+    border-radius: 13px;
 }
 .save_exchange_data .exchange_first_section{
     background: #383a4c;
@@ -25681,7 +25683,7 @@ background-color:#28292a;
 }
 .save_exchange_data .exchange_second_section{
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     padding-top: 20px;
     border-top: 2px solid #383a4c;
@@ -25697,13 +25699,35 @@ background-color:#28292a;
     flex-direction: column;
     min-width: 55px;
 }
-.save_exchange_data .exchange_second_section h4 span {}
-.save_exchange_data .exchange_second_section h4 span:last-child {
-    color: #11af59;
+.save_exchange_data .exchange_second_section .option {
+    transition: border-color 0.3s, background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    background: #383a4c;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    min-width: 55px;
+    margin: 5px;
 }
-.save_exchange_data .exchange_second_section .active {
-    border: 3px solid #11af59;
+.save_exchange_data .exchange_second_section .option .days{
+    font-size: 15px;
 }
+
+.save_exchange_data .exchange_second_section .option:hover {
+    border-color: #ddd;
+}
+
+.save_exchange_data .exchange_second_section .option.selected {
+    background-color: #11af59
+}
+
+.save_exchange_data .exchange_second_section .hidden-radio {
+    display: none;
+}
+
 .save_exchange_data .exchange_third_section{
     padding-top: 5px;
     padding-bottom: 5px;
