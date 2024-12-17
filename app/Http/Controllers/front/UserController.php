@@ -133,7 +133,7 @@ class UserController extends Controller
                 if ($validator->fails()) {
                     return redirect()->back()->withErrors($validator)->withInput();
                 }
-                if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
+                if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']],$request['remeber'])) {
                     //                    if (Auth::user()->status == 0) {
                     //                        Auth::logout();
                     //                        return Redirect::back()->withInput()->withErrors('  من فضلك يجب تفعيل الحساب الخاص بك اولا  ');
@@ -248,28 +248,28 @@ class UserController extends Controller
                     ]);
                     return $this->success_message('تم تعديل كلمة المرور بنجاح ');
                 } else {
-                    return  $this->Error_message('يجب تأكيد كلمة المرور بشكل صحيح');
+                    return $this->Error_message('يجب تأكيد كلمة المرور بشكل صحيح');
                 }
             } else {
-                return   $this->Error_message('كلمة المرو القديمة غير صحيحة');
+                return $this->Error_message('كلمة المرو القديمة غير صحيحة');
             }
         }
     }
 
     public function updateProfileImage(Request $request)
     {
-       // $user = Auth::user();
+        // $user = Auth::user();
         $user = User::where('id', Auth::id())->first();
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $filename = $this->saveImage($file,public_path('assets/uploads/users/'));
-           // $filename = time() . '.' . $file->getClientOriginalExtension();
-          //  $file->move(public_path('assets/uploads/users'), $filename);
+            $filename = $this->saveImage($file, public_path('assets/uploads/users/'));
+            // $filename = time() . '.' . $file->getClientOriginalExtension();
+            //  $file->move(public_path('assets/uploads/users'), $filename);
 
             // حذف الصورة القديمة إذا وجدت
             if ($user->image && file_exists(public_path('assets/uploads/users/' . $user->image))) {
-              $oldimage =public_path('assets/uploads/users/' . $user->image);
+                $oldimage = public_path('assets/uploads/users/' . $user->image);
                 @unlink($oldimage);
             }
             // تحديث صورة المستخدم
@@ -321,7 +321,7 @@ class UserController extends Controller
                 'country' => $all_update_data['country'],
                 'city' => $all_update_data['city'],
             ]);
-            return  $this->success_message('تم تحديث البيانات بنجاح');
+            return $this->success_message('تم تحديث البيانات بنجاح');
             //            return redirect()->back()->with(['Success_message'=>'']);
         }
     }
