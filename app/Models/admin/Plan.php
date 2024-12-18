@@ -25,4 +25,8 @@ class Plan extends Model
         return $this->hasMany(UserPlan::class, 'plan_id');
     }
 
+    public function investmentReturns(){
+        return $this->hasMany(PlatformInvestmentReturn::class,'plan_id');
+    }
+
 }

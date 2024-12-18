@@ -8,13 +8,11 @@
                 <img src="{{ asset('assets/front/images/1.png') }}" alt="">
             </a>
         </div>
-        <div>
+        {{-- <div>
             <a href="{{url('user/plans')}}"  class="{{ Request::is('user/plans') ? 'active_link' : '' }}">
-                {{-- <i class="bi bi-file-spreadsheet-fill"></i> --}}
-
                 <img src="{{ asset('assets/front/images/2.png') }}" alt="">
             </a>
-        </div>
+        </div> --}}
         <div>
             <a href="{{url('user/user_plans')}}"  class="{{ Request::is('user/user_plans') ? 'active_link' : '' }}">
                 {{-- <i class="bi bi-substack"></i> --}}

@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-
+use Carbon\Carbon;
 class UserController extends Controller
 {
     use Message_Trait;
@@ -24,12 +24,57 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user();
-        //$userplanstotal = UserPlan::with('user','plan')->get();
-        // dd($userplanstotal);
-        $plans = Plan::where('status', 1)->with('platform', 'total_plans')->get();
-        // dd($plans);
-        return view('front.dashboard', compact('plans'));
+
+        $plans = Plan::where('status', 1)->with('platform', 'total_plans', 'investmentReturns')->get();
+
+        ################## Plan With Returns #################
+        $plansWithReturns = $plans->map(function ($plan) {
+            $returns = $plan->investmentReturns;
+
+            // الحصول على تاريخ آخر إدخال
+            $lastEntryDate = $returns->max('return_date');
+
+            // إذا لم يتم إدخال عوائد اليوم، استخدم آخر إدخال متاح
+            $todayReturns = $returns->where('return_date', Carbon::today())->sum('return_amount');
+            if ($todayReturns == 0 && $lastEntryDate) {
+                $todayReturns = $returns->where('return_date', $lastEntryDate)->sum('return_amount');
+            }
+
+            // عوائد آخر 7 أيام (حتى اليوم أو آخر إدخال متاح)
+            $last7DaysReturns = $returns->whereBetween('return_date', [
+                Carbon::now()->subDays(7),
+                $lastEntryDate ?? Carbon::now()
+            ])->sum('return_amount');
+
+            // عوائد آخر 30 يومًا (حتى اليوم أو آخر إدخال متاح)
+            $last30DaysReturns = $returns->whereBetween('return_date', [
+                Carbon::now()->subDays(30),
+                $lastEntryDate ?? Carbon::now()
+            ])->sum('return_amount');
+
+            // إجمالي الاستثمار في الخطة
+            $totalInvestmentPlan = $plan->total_plans->sum('total_investment');
+            $total_subscriptions =  $plan->total_plans ? $plan->total_plans->count() : 0 ;
+
+            return [
+                'plan_id' => $plan->id,
+                'plan_name' => $plan->name,
+                'current_price'=>$plan->current_price,
+                'step_price'=>$plan->step_price,
+                'logo'=>$plan->logo,
+                'total_subscriptions'=>$total_subscriptions,
+                'totalinvestment'=>$totalInvestmentPlan,
+                'platform_name'=>$plan->platform_name,
+                'platform_link'=>$plan->platform_link,
+                'today_returns_percentage' => $totalInvestmentPlan > 0 ? ($todayReturns / $totalInvestmentPlan) * 100 : 0,
+                'last_7_days_percentage' => $totalInvestmentPlan > 0 ? ($last7DaysReturns / $totalInvestmentPlan) * 100 : 0,
+                'last_30_days_percentage' => $totalInvestmentPlan > 0 ? ($last30DaysReturns / $totalInvestmentPlan) * 100 : 0,
+            ];
+        });
+
+        return view('front.dashboard', compact('plansWithReturns','plans'));
     }
+
 
     public function register(Request $request)
     {
@@ -133,7 +178,7 @@ class UserController extends Controller
                 if ($validator->fails()) {
                     return redirect()->back()->withErrors($validator)->withInput();
                 }
-                if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']],$request['remeber'])) {
+                if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']], $request['remeber'])) {
                     //                    if (Auth::user()->status == 0) {
                     //                        Auth::logout();
                     //                        return Redirect::back()->withInput()->withErrors('  من فضلك يجب تفعيل الحساب الخاص بك اولا  ');

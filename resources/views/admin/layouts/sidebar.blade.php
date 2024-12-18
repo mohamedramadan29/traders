@@ -37,7 +37,7 @@
                     <span class="nav-icon">
                         <iconify-icon icon="solar:tuning-2-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text">  خطط التداول   </span>
+                    <span class="nav-text"> خطط التداول </span>
                 </a>
             </li>
             <li class="nav-item">
@@ -45,10 +45,10 @@
                     <span class="nav-icon">
                         <iconify-icon icon="solar:document-text-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> منصات التدوال   </span>
+                    <span class="nav-text"> منصات التدوال </span>
                 </a>
             </li>
-             <li class="menu-title mt-2"> اعدادات الموقع </li>
+            <li class="menu-title mt-2"> اعدادات الموقع </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('admin/public-setting/update') }}">
                     <span class="nav-icon">
@@ -57,13 +57,13 @@
                     <span class="nav-text"> الاعدادات العامة </span>
                 </a>
             </li>
-            <li class="menu-title mt-2"> طلبات السحب  </li>
+            <li class="menu-title mt-2"> طلبات السحب </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('admin/withdraws') }}">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:document-text-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text">  طلبات السحب   </span>
+                    <span class="nav-text"> طلبات السحب </span>
                 </a>
             </li>
 
@@ -104,7 +104,7 @@
                     <ul class="nav sub-navbar-nav">
 
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{url('admin/users')}}"> جميع العملاء </a>
+                            <a class="sub-nav-link" href="{{ url('admin/users') }}"> جميع العملاء </a>
                         </li>
                     </ul>
                 </div>
