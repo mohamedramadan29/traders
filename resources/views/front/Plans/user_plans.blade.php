@@ -30,13 +30,10 @@
                     @endphp
                 @endif
                 <div class="col-xl-12">
-                    {{-- <div class="card info_card ">
-                        <h4 class="card-title flex-grow-1"> خططي </h4>
-                    </div> --}}
                     <div class="user_plans_page_info my_new_container">
                         <div class="info">
                             <h5> اجمالي الاسثمارات </h5>
-                            <h4 class="total_investment"> {{ number_format($totalbalance, 2) }} $ </h4>
+                            <h4 class="total_investment"> {{ number_format($totalbalance, 2) }} دولار </h4>
                             <p class="percentage"> +3.5(3%) <span> اليوم <i class="bi bi-arrow-down-short"></i> </span> </p>
                             <div class="buttons">
                                 <a href="#" class="public_button"> ايداع </a>
@@ -45,39 +42,39 @@
                         </div>
                         <div class="info">
                             <h5> الربح </h5>
-                            <h4 class="profit_balance"> 50.90 $ </h4>
+                            <h4 class="profit_balance"> {{ number_format($investment_earning, 2) }} دولار </h4>
                             <a class="stat"> سحب </a>
                         </div>
                         <div class="info">
-                            <h5> id 5544554458 </h5>
-                            <img src="{{ asset('assets/uploads/plans/1730789542_6729c0a640f27.png') }}">
+                            <h5> {{ Auth::user()->id }} </h5>
+                            <img src="{{ asset('assets/uploads/users/' . Auth::user()->image) }}">
                         </div>
                     </div>
                     <hr>
-                    @foreach ($Plans  as $plan_details )
-                    <div class="user_plans_page_info my_new_container">
-                        <div class="info">
-                            <h5> {{ $plan_details['plan']['name'] }} </h5>
-                            <h4 class="total_investment"> {{ number_format($plan_details['total_investment'], 2) }} $ </h4>
-                            <p class="percentage"> +3.5(3%) <span> اليوم <i class="bi bi-arrow-down-short"></i> </span> </p>
-                            <div class="buttons">
-                                <a href="#" class="public_button" data-bs-toggle="modal"
-                                    data-bs-target="#edit_balance"> تعديل الرصيد </a>
-                                <a href="#" class="stat"> المعاملات </a>
+                    @foreach ($Plans as $plan_details)
+                        <div class="user_plans_page_info my_new_container">
+                            <div class="info">
+                                <h5> {{ $plan_details['plan']['name'] }} </h5>
+                                <h4 class="total_investment"> {{ number_format($plan_details['total_investment'], 2) }} $
+                                </h4>
+                                <p class="percentage"> +3.5(3%) <span> اليوم <i class="bi bi-arrow-down-short"></i> </span>
+                                </p>
+                                <div class="buttons">
+                                    <a href="#" class="public_button" data-bs-toggle="modal"
+                                        data-bs-target="#edit_balance"> تعديل الرصيد </a>
+                                    <a href="#" class="stat"> المعاملات </a>
+                                </div>
+                            </div>
+                            @include('front.Plans.edit_balance')
+                            <div class="info">
+                                <h5> الربح </h5>
+                                <h4 class="profit_balance"> {{ number_format($plan_details->plan_profit, 2) }}  دولار  </h4>
+                            </div>
+                            <div class="info">
+                                <h5> {{ $plan_details['plan']['name'] }} </h5>
+                                <img src="{{ asset('assets/uploads/plans/' . $plan_details['plan']['logo']) }}">
                             </div>
                         </div>
-                        @include('front.Plans.edit_balance')
-
-                        <div class="info">
-                            <h5> الربح </h5>
-                            <h4 class="profit_balance"> 50.90 $ </h4>
-                            <a class="stat"> سحب </a>
-                        </div>
-                        <div class="info">
-                            <h5> {{ $plan_details['plan']['name'] }} </h5>
-                            <img src="{{ asset('assets/uploads/plans/'.$plan_details['plan']['logo']) }}">
-                        </div>
-                    </div>
                     @endforeach
 
                     <div class="my_new_container transactions">

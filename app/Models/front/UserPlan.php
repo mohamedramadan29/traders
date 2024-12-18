@@ -3,6 +3,7 @@
 namespace App\Models\front;
 
 use App\Models\admin\Plan;
+use App\Models\admin\UserPlatformEarning;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,5 +17,8 @@ class UserPlan extends Model
     }
     public function plan(){
         return $this->belongsTo(Plan::class,'plan_id');
+    }
+    public function planinvestment(){
+        return $this->belongsTo(UserPlatformEarning::class,'plan_id');
     }
 }

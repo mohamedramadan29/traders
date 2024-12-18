@@ -52,13 +52,15 @@
                                                     onclick="incrementQuantity({{ $plan['plan_id'] }}, '{{ $plan['platform_name'] }}')"
                                                     style="width: 30px; height: 30px; font-size: 18px;">+
                                                 </button>
+                                                <input type="hidden" name="plan_id" value="{{ $plan['plan_id'] }}">
                                             </div>
                                             <button style="display: block; width: 100%; margin-top: 20px;" type="submit"
                                                 class="btn withdraw_button">
                                                 اشتراك
                                             </button>
                                             <!-- مكان عرض الرسالة -->
-                                            <div class="subscription_message" id="subscription_message_{{ $plan['plan_id'] }}">
+                                            <div class="subscription_message"
+                                                id="subscription_message_{{ $plan['plan_id'] }}">
                                             </div>
                                         </form>
                                     </div>

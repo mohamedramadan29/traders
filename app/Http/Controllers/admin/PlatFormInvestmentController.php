@@ -44,12 +44,15 @@ class PlatFormInvestmentController extends Controller
                 return Redirect::back()->withInput()->withErrors($validator);
             }
             DB::beginTransaction();
-
             PlatformInvestmentReturn::create([
                 'plan_id' => $plan->id,
                 'return_amount' => $request->return_amount,
                 'return_date' => now(),
             ]);
+
+            //       جلب جميع الفواتير المتعلقة بالمنصة
+            // جلب جميع الفواتير المتعلقة بالمنصة
+            //  $invoices = Invoice::where('platform_id', $platform->id)->get();
 
             $invoices = Invoice::where('plan_id', $plan->id)->where('status', 1)
                 ->with('user') // لجلب بيانات المستخدم

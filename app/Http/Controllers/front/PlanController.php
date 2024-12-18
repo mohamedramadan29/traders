@@ -31,46 +31,18 @@ class PlanController extends Controller
     public function user_plans()
     {
         $user = Auth::user();
-        // الحصول على عدد الاشتراكات لكل منصة
-        // $Plans = Plan::withCount(['invoices' => function ($query) use ($user) {
-        //     $query->where('user_id', $user->id);
-        // }])->get();
-        $Plans = UserPlan::where('user_id',Auth::id())->with('plan')->get();
 
-        $totalPlansCount = Invoice::where('user_id', $user->id)->count();
-       // $totalbalance = Invoice::where('user_id', $user->id)->sum('plan_price');
+        $Plans = UserPlan::where('user_id', Auth::id())->with('plan')->get();
+        // dd($Plans);
         $investment_earning = UserPlatformEarning::where('user_id', $user->id)->sum('investment_return');
         $daily_earning = UserPlatformEarning::where('user_id', $user->id)->sum('daily_earning');
-
         $totalbalance = UserPlan::where('user_id', $user->id)->sum('total_investment');
-        // تأكد من أن إجمالي رأس المال أكبر من صفر لتجنب القسمة على الصفر
-        if ($totalbalance > 0) {
-            // جلب العوائد من كل منصة للمستخدم
-            $userPlatforms = UserPlatformEarning::where('user_id', $user->id)->get();
-            // متغير لتجميع النسب الموزونة
-            $weightedProfitPercentage = 0;
-
-            foreach ($userPlatforms as $platformEarning) {
-                // رأس المال المستخدم في هذه المنصة (المبلغ المدفوع في خطط هذه المنصة)
-                $platformCapital = Invoice::where('user_id', $user->id)
-                    ->where('platform_id', $platformEarning->platform_id)
-                    ->sum('plan_price');
-
-                // نسبة الربح اليومية لهذه المنصة
-                $platformDailyPercentage = $platformEarning->profit_percentage; // نسبة الربح لكل منصة محفوظة لديك
-
-                // حساب النسبة الموزونة (نسبة رأس المال * نسبة الربح)
-                $weightedProfitPercentage += ($platformCapital / $totalbalance) * $platformDailyPercentage;
-            }
-            // النتيجة هي النسبة الإجمالية الموزونة
-            $totalDailyPercentage = $weightedProfitPercentage;
-        } else {
-            // في حال عدم وجود رأس مال (على سبيل المثال: جميع المنصات لها صفر)
-            $totalDailyPercentage = 0;
-        }
-
-
-        return view('front.Plans.user_plans', compact('Plans', 'totalPlansCount', 'totalbalance', 'investment_earning', 'daily_earning', 'totalDailyPercentage'));
+        $Plans = $Plans->map(function ($plan) {
+            $plan->plan_profit = UserPlatformEarning::where('user_id', Auth::id())
+                ->where('plan_id', $plan['plan']->id)->sum('investment_return');
+            return $plan;
+        });
+        return view('front.Plans.user_plans', compact('Plans', 'totalbalance', 'investment_earning', 'daily_earning'));
     }
 
     public function platformPlans($plan_id)
@@ -86,6 +58,7 @@ class PlanController extends Controller
 
     public function invoice_create(Request $request)
     {
+        //dd($request->all());
         try {
             $user = User::where('id', Auth::id())->first();
             if (!$user) {
@@ -132,7 +105,8 @@ class PlanController extends Controller
                 ->get();
 
             foreach ($open_sales as $sale) {
-                if ($remaining_bin <= 0) break;
+                if ($remaining_bin <= 0)
+                    break;
                 $available_bin = $sale->bin_amount - $sale->bin_sold;
                 $seller = User::find($sale->user_id);
 
@@ -198,7 +172,7 @@ class PlanController extends Controller
             $userplanscount = UserPlan::where('user_id', $user->id)->where('plan_id', $plan->id)->count();
             if ($userplanscount > 0) {
                 $planrecord = UserPlan::where('user_id', $user->id)->where('plan_id', $plan->id)->first();
-                $planrecord->total_investment +=  $data['total_price'];
+                $planrecord->total_investment += $data['total_price'];
                 $planrecord->save();
             } else {
                 $userplans = new UserPlan();

@@ -32,27 +32,27 @@ class PlansController extends Controller
             $data = $request->all();
             $rules = [
                 'name' => 'required',
-               'platform_name' => 'required',
+                'platform_name' => 'required',
                 'main_price' => 'required',
                 'step_price' => 'required',
                 'return_investment' => 'required',
-                'platform_logo'=>'required',
+                'platform_logo' => 'required',
             ];
             $messages = [
                 'name.required' => ' من فضلك ادخل اسم الخطة  ',
-               'platform_name.required' => ' من فضلك  ادخل  منصة التداول  ',
+                'platform_name.required' => ' من فضلك  ادخل  منصة التداول  ',
                 'main_price.required' => ' من فضلك حدد سعر الخطة  ',
                 'step_price.required' => ' من فضلك حدد نسبة الزيادة علي كل اشتراك  ',
                 'return_investment.required' => ' حدد العائد الاستثماري  ',
-                'platform_logo.required'=>' من فضلك ادخل لوجو المنصة  ',
+                'platform_logo.required' => ' من فضلك ادخل لوجو المنصة  ',
             ];
             $validator = Validator::make($data, $rules, $messages);
             if ($validator->fails()) {
                 return Redirect::back()->withInput()->withErrors($validator);
             }
             // معالجة الصورة وحفظها
-            if ($request->hasFile('platform_logo')){
-                $filename = $this->saveImage($request->file('platform_logo'),public_path('assets/uploads/plans/'));
+            if ($request->hasFile('platform_logo')) {
+                $filename = $this->saveImage($request->file('platform_logo'), public_path('assets/uploads/plans/'));
             } else {
                 return Redirect::back()->withInput()->withErrors(['platform_logo' => 'حدث خطأ في رفع الصورة.']);
             }
@@ -101,14 +101,14 @@ class PlansController extends Controller
                 return Redirect::back()->withInput()->withErrors($validator);
             }
             // معالجة الصورة وحفظها
-            if ($request->hasFile('platform_logo')){
-                $old_image = public_path('assets/uploads/plans/'.$plan['logo']);
-                if (file_exists($old_image)){
+            if ($request->hasFile('platform_logo')) {
+                $old_image = public_path('assets/uploads/plans/' . $plan['logo']);
+                if (file_exists($old_image)) {
                     @unlink($old_image);
                 }
-                $filename = $this->saveImage($request->file('platform_logo'),public_path('assets/uploads/plans/'));
+                $filename = $this->saveImage($request->file('platform_logo'), public_path('assets/uploads/plans/'));
                 $plan->update([
-                    'logo'=>$filename,
+                    'logo' => $filename,
                 ]);
             } else {
                 return Redirect::back()->withInput()->withErrors(['platform_logo' => 'حدث خطأ في رفع الصورة.']);
@@ -120,9 +120,9 @@ class PlansController extends Controller
                 //'current_price' => $data['current_price'],
                 'step_price' => $data['step_price'],
                 'return_investment' => $data['return_investment'],
-//                'daily_percentage' => $data['daily_percentage'],
-                'withdraw_discount'=>$data['withdraw_discount'],
-                'platform_link'=>$data['platform_link'],
+                //                'daily_percentage' => $data['daily_percentage'],
+                'withdraw_discount' => $data['withdraw_discount'],
+                'platform_link' => $data['platform_link'],
             ]);
             if ($data['main_price'] > $plan['current_price']) {
                 $plan->update([
@@ -137,14 +137,14 @@ class PlansController extends Controller
     }
 
 
-    public function lock(Request $request,$id)
+    public function lock(Request $request, $id)
     {
         $plan = Plan::findOrFail($id);
-       ///////// Get All Active invoice
+        ///////// Get All Active invoice
         ///
-        $invoices = Invoice::where('plan_id',$plan['id'])->where('status',1)->get();
-       // dd($invoices);
-        foreach ($invoices as $invoice){
+        $invoices = Invoice::where('plan_id', $plan['id'])->where('status', 1)->get();
+        // dd($invoices);
+        foreach ($invoices as $invoice) {
             $user = \App\Models\front\User::findOrFail($invoice['user_id']);
             $user_old_balance = $user['total_balance'];
             $new_user_balance = $user_old_balance + $invoice['plan_price'];
@@ -161,16 +161,16 @@ class PlansController extends Controller
     public function report($id)
     {
         $plan = Plan::findORFail($id);
-        $allinvoices = Invoice::where('plan_id',$id)->count();
-        $active_invoice = Invoice::where('plan_id',$id)->where('status',1)->count();
-        $active_invoice_sum = Invoice::where('plan_id',$id)->where('status',1)->sum('plan_price');
+        $allinvoices = Invoice::where('plan_id', $id)->count();
+        $active_invoice = Invoice::where('plan_id', $id)->where('status', 1)->count();
+        $active_invoice_sum = Invoice::where('plan_id', $id)->where('status', 1)->sum('plan_price');
         // تجميع الاشتراكات اليومية
         $dailyReport = Invoice::selectRaw('DATE(created_at) as date, COUNT(*) as daily_count, SUM(plan_price) as daily_sum, MIN(plan_price) as min_price, MAX(plan_price) as max_price')
             ->where('plan_id', $id)
             ->groupBy('date')
             ->orderBy('date', 'desc')
             ->get();
-        return view('admin.Plans.report',compact('allinvoices','active_invoice','active_invoice_sum','dailyReport'));
+        return view('admin.Plans.report', compact('allinvoices', 'active_invoice', 'active_invoice_sum', 'dailyReport'));
     }
 
     public function delete($id)
