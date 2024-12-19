@@ -32,6 +32,7 @@ class WithDrawController extends Controller
 
     public function store(Request $request)
     {
+       // dd($request->all());
         // $user = Auth::user();
         $user = User::where('id', Auth::id())->first();
         $total_balance = $user['dollar_balance'];
@@ -68,23 +69,6 @@ class WithDrawController extends Controller
                 return Redirect::back()->withInput()->withErrors('رصيدك الحالي لا يكفي لإجراء طلب السحب.');
             }
 
-            // حساب النسبة المطلوبة من المستخدم
-            $withdraw_percentage = $data['amount'] / $total_balance;
-
-            // حساب الكمية المطلوبة من العملات (Crypto Balance)
-            $crypto_balance = $user['bin_balance']; // افترض أن لديك حقل في جدول المستخدمين يحمل رصيد العملات الرقمية
-            $crypto_to_withdraw = $crypto_balance * $withdraw_percentage;
-
-            if ($crypto_balance < $crypto_to_withdraw) {
-                return Redirect::back()->withInput()->withErrors('رصيد العملات الرقمية غير كافٍ لتغطية السحب المطلوب.');
-            }
-            $public_setting = PublicSetting::first();
-            // سعر السوق الحالي للعملة (يمكنك جلبه من API خارجي)
-            $market_price = $public_setting['market_price']; // افترض أن هذه دالة تجلب سعر السوق الحالي
-
-            // حساب قيمة البيع بالدولار
-            //  $sale_amount = $crypto_to_withdraw * $market_price;
-
             DB::beginTransaction();
 
             // إنشاء طلب سحب
@@ -95,27 +79,8 @@ class WithDrawController extends Controller
             $withdraw->usdt_link = $data['usdt_link'];
             $withdraw->save();
 
-            // // إنشاء طلب بيع (Sale Order)
-            // $saleOrder = new SalesOrder();
-            // $saleOrder->user_id = Auth::id();
-            // $saleOrder->crypto_amount = $crypto_to_withdraw;
-            // $saleOrder->sale_price = $market_price;
-            // $saleOrder->total_sale_value = $sale_amount;
-            // $saleOrder->status = 'pending'; // حالة الطلب يمكن أن تكون "معلق" أو "مكتمل"
-            // $saleOrder->save();
-
-
-            $sales = new SalesOrder();
-            $sales->user_id = 1;
-            $sales->currency_rate = $market_price;
-            $sales->enter_currency_rate = $market_price;
-            $sales->selling_currency_rate = $market_price;
-            $sales->currency_amount = 1;
-            $sales->bin_amount = $crypto_to_withdraw;
-            $sales->bin_sold = 0;
-            $sales->save();
             // تحديث رصيد العملات الرقمية
-            $user->bin_balance -= $crypto_to_withdraw;
+            $user->dollar_balance = $last_total_balance;
             $user->Save();
             DB::commit();
             return $this->success_message('تم إضافة طلب السحب بنجاح.');

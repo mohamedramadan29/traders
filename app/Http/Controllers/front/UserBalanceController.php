@@ -55,6 +55,6 @@ class UserBalanceController extends Controller
             }
         }
         abort(404);
-
     }
+
 }

@@ -30,7 +30,6 @@ class UserController extends Controller
         ################## Plan With Returns #################
         $plansWithReturns = $plans->map(function ($plan) {
             $returns = $plan->investmentReturns;
-
             // الحصول على تاريخ آخر إدخال
             $lastEntryDate = $returns->max('return_date');
 

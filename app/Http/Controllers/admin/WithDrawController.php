@@ -17,7 +17,7 @@ class WithDrawController extends Controller
 
     public function index()
     {
-        $withdraws = WithDraw::with('user')->orderBy('id','desc')->get();
+        $withdraws = WithDraw::with('user')->orderBy('id', 'desc')->get();
         $users = User::all();
         return view('admin.WithDraws.index', compact('withdraws', 'users'));
     }
@@ -72,18 +72,25 @@ class WithDrawController extends Controller
                 $amount = $withdraw['amount'];
                 $user_id = $withdraw['user_id'];
                 $user = User::findOrFail($user_id);
-                $user_balance = $user['total_balance'];
+                $user_balance = $user['dollar_balance'];
 
-                if ($data['status'] == 1){
-                    if ($amount > $user_balance){
+                if ($data['status'] == 1) {
+                    if ($amount > $user_balance) {
                         return Redirect::back()->withInput()->withErrors(' لا يمكن اتمام هذا الطلب رصيد العميل اقل من المطلوب  ');
                     }
                     ////////// Update User Balance
-                    $new_user_balance = $user_balance - $amount;
+                    // $new_user_balance = $user_balance - $amount;
 
-                    $user-> total_balance = $new_user_balance;
+                    // $user-> total_balance = $new_user_balance;
+                    // $user->save();
+                } elseif ($data['status'] == 2) {
+                    ////////// Update User Balance
+                    $new_user_balance = $user_balance + $amount;
+                    $user->dollar_balance = $new_user_balance;
                     $user->save();
+
                 }
+
                 $withdraw->update([
                     'status' => $data['status']
                 ]);
@@ -97,7 +104,7 @@ class WithDrawController extends Controller
     public function delete($id)
     {
         $withdraw = WithDraw::findOrFail($id);
-        if ($withdraw['status'] == 1){
+        if ($withdraw['status'] == 1) {
             return Redirect::back()->withInput()->withErrors(' لا يمكن حذف تلك العملية  ');
         }
         $withdraw->delete();

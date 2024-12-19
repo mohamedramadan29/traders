@@ -57,12 +57,12 @@ Route::group(['prefix' => 'user'], function () {
     });
     Route::group(['middleware' => 'auth'], function () {
        ///////// Start Plans
-        Route::controller( PlanController::class)->group(function (){
+        Route::controller(  PlanController::class)->group(function (){
             Route::get('plans','index');
             Route::get('user_plans','user_plans')->name('user_plans');
            // Route::post('invoice_create','invoice_create');
             Route::match(['post','get'],'invoice_create','invoice_create');
-            Route::match(['post','get'],'invoice_withdraw','invoice_withdraw');
+            Route::post('invoice_withdraw','invoice_withdraw');
             Route::get('plans/{plan_id}', 'platformPlans')->name('user.plans.details');
             Route::get('/plans/report/{platformId}/{period}','getPlanReport');
         });

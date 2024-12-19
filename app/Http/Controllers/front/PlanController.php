@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers\front;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\Message_Trait;
+use Carbon\Carbon;
 use App\Models\admin\Plan;
-use App\Models\admin\Platform;
-use App\Models\admin\PublicSetting;
-use App\Models\admin\UserPlatformEarning;
-use App\Models\front\Invoice;
-use App\Models\front\SalesOrder;
 use App\Models\front\User;
-use App\Models\front\UserPlan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\front\Invoice;
+use App\Models\admin\Platform;
+use App\Models\front\UserPlan;
+use App\Models\front\SalesOrder;
+use App\Http\Traits\Message_Trait;
+use App\Models\front\UserStatment;
 use Illuminate\Support\Facades\DB;
+use App\Models\admin\PublicSetting;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\admin\UserPlatformEarning;
+use Illuminate\Support\Facades\Validator;
+use App\Models\admin\UserDailyInvestmentReturn;
 
 class PlanController extends Controller
 {
@@ -31,18 +35,54 @@ class PlanController extends Controller
     public function user_plans()
     {
         $user = Auth::user();
-
-        $Plans = UserPlan::where('user_id', Auth::id())->with('plan')->get();
+        $Plans = UserPlan::where('user_id', Auth::id())->where('status', 1)->with('plan')->get();
         // dd($Plans);
         $investment_earning = UserPlatformEarning::where('user_id', $user->id)->sum('investment_return');
         $daily_earning = UserPlatformEarning::where('user_id', $user->id)->sum('daily_earning');
+        $daily_earning_percentage = UserPlatformEarning::where('user_id', $user->id)->sum('profit_percentage');
         $totalbalance = UserPlan::where('user_id', $user->id)->sum('total_investment');
         $Plans = $Plans->map(function ($plan) {
+            $plan_id = $plan['plan']->id;
+
+            // إجمالي الأرباح للخطة
             $plan->plan_profit = UserPlatformEarning::where('user_id', Auth::id())
-                ->where('plan_id', $plan['plan']->id)->sum('investment_return');
+                ->where('plan_id', $plan_id)
+                ->sum('investment_return');
+
+            // أرباح آخر يوم
+            $last_return = UserDailyInvestmentReturn::where('user_id', Auth::id())
+                ->where('plan_id', $plan_id)
+                ->latest()
+                ->first();
+
+            $plan->plan_last_dayearning = $last_return ? $last_return->daily_return : 0;
+            $plan->plan_last_daypercentage = $last_return ? $last_return->profit_percentage : 0;
+
+            // حساب آخر 7 أيام
+            $last7Days = [now()->subDays(7)->startOfDay(), now()->endOfDay()];
+            $plan->last_7_days_earning = UserDailyInvestmentReturn::where('user_id', Auth::id())
+                ->where('plan_id', $plan_id)
+                ->whereBetween('created_at', $last7Days)
+                ->sum('daily_return');
+            $plan->last_7_days_percentage = UserDailyInvestmentReturn::where('user_id', Auth::id())
+                ->where('plan_id', $plan_id)
+                ->whereBetween('created_at', $last7Days)
+                ->sum('profit_percentage');
+            // حساب آخر 30 يومًا
+            $last30Days = [now()->subDays(30)->startOfDay(), now()->endOfDay()];
+            $plan->last_30_days_earning = UserDailyInvestmentReturn::where('user_id', Auth::id())
+                ->where('plan_id', $plan_id)
+                ->whereBetween('created_at', $last30Days)
+                ->sum('daily_return');
+            $plan->last_30_days_percentage = UserDailyInvestmentReturn::where('user_id', Auth::id())
+                ->where('plan_id', $plan_id)
+                ->whereBetween('created_at', $last30Days)
+                ->sum('profit_percentage');
+
             return $plan;
         });
-        return view('front.Plans.user_plans', compact('Plans', 'totalbalance', 'investment_earning', 'daily_earning'));
+
+        return view('front.Plans.user_plans', compact('Plans', 'totalbalance', 'investment_earning', 'daily_earning', 'daily_earning_percentage'));
     }
 
     public function platformPlans($plan_id)
@@ -182,10 +222,17 @@ class PlanController extends Controller
                 $userplans->save();
             }
 
-
             $user->dollar_balance -= $data['total_price'];
             $user->bin_balance += $bin_amount;
             $user->save();
+
+            //////////// Add Statment To User Statments
+            $statment = new UserStatment();
+            $statment->user_id = Auth::id();
+            $statment->plan_id = $plan->id;
+            $statment->transaction_type = 'addbalance';
+            $statment->amount = $data['total_price'];
+            $statment->save();
 
             DB::commit();
 
@@ -196,43 +243,87 @@ class PlanController extends Controller
         }
     }
 
-
-    //////////////// انسحاب المستخدم من الخظة
     public function invoice_withdraw(Request $request)
     {
-        try {
-            $data = $request->all();
-            $invoice_id = $data['invoice_id'];
-            $invoice = Invoice::findOrFail($invoice_id);
-            $invoice_price = $invoice['plan_price'];
-            $plan_id = $invoice['plan_id'];
-            $user_id = $invoice['user_id'];
-            $plan_data = Plan::findOrFail($plan_id);
-            $discount_percentage = $plan_data['withdraw_discount'];
-            $user_data = User::findOrFail($user_id);
-            // dd($user_data);
-            $user_old_balance = $user_data['total_balance'];
-            if ($discount_percentage > 0) {
-                $total_discount = $invoice_price * ($discount_percentage / 100);
-            } else {
-                $total_discount = 0;
-            }
-            $invoice_after_discount = $invoice_price - $total_discount;
-            $user_new_balance = $invoice_after_discount + $user_old_balance;
-            DB::beginTransaction();
-            $user_data->total_balance = $user_new_balance;
-            $user_data->save();
+        $data = $request->all();
+        // $user = Auth::user();
+        $user = User::where('id', Auth::id())->first();
+        $userplan = UserPlan::where('user_id', $user->id)->where('plan_id', $data['plan_id'])->first();
+        //dd($userplan);
+        $planinvestment = $userplan->total_investment;
+        $total_balance = $user['dollar_balance'];
 
-            //////// Update Invoice Status
-            ///
-            $invoice->status = 3;
-            $invoice->save();
+        try {
+            // التحقق من البيانات المدخلة
+
+            $rules = [
+                'plan_id' => 'required',
+                'total_price' => 'required|min:1',
+            ];
+
+            $messages = [
+                'plan_id.required' => 'من فضلك حدد الخطة ',
+                'total_price.required' => ' من فضلك ادخل المبلغ  ',
+                'total_price.min' => 'المبلغ يجب أن يكون أكبر من صفر',
+            ];
+
+            $validator = Validator::make($data, $rules, $messages);
+            if ($validator->fails()) {
+                return Redirect::back()->withInput()->withErrors($validator);
+            }
+
+            if ($planinvestment < $data['total_price']) {
+                return Redirect::back()->withInput()->withErrors(' مبلغ الاستثمار في الخطا لا يكفي لهذا الطلب  ');
+            }
+
+            // حساب النسبة المطلوبة من المستخدم
+            $withdraw_percentage = $data['total_price'] / $planinvestment;
+
+            // حساب الكمية المطلوبة من العملات (Crypto Balance)
+            $crypto_balance = $user['bin_balance']; // افترض أن لديك حقل في جدول المستخدمين يحمل رصيد العملات الرقمية
+            $crypto_to_withdraw = $crypto_balance * $withdraw_percentage;
+
+            if ($crypto_balance < $crypto_to_withdraw) {
+                return Redirect::back()->withInput()->withErrors('رصيد العملات الرقمية غير كافٍ لتغطية السحب المطلوب.');
+            }
+            $public_setting = PublicSetting::first();
+            // سعر السوق الحالي للعملة (يمكنك جلبه من API خارجي)
+            $market_price = $public_setting['market_price']; // افترض أن هذه دالة تجلب سعر السوق الحالي
+
+            // حساب قيمة البيع بالدولار
+            //  $sale_amount = $crypto_to_withdraw * $market_price;
+
+            DB::beginTransaction();
+
+            $sales = new SalesOrder();
+            $sales->user_id = 1;
+            $sales->currency_rate = $market_price;
+            $sales->enter_currency_rate = $market_price;
+            $sales->selling_currency_rate = $market_price;
+            $sales->currency_amount = 1;
+            $sales->bin_amount = $crypto_to_withdraw;
+            $sales->bin_sold = 0;
+            $sales->save();
+            // تحديث رصيد العملات الرقمية
+            $user->bin_balance -= $crypto_to_withdraw;
+            $user->Save();
+            #################### Add Statments
+            $statment = new UserStatment();
+            $statment->user_id = Auth::id();
+            $statment->plan_id = $data['plan_id'];
+            $statment->transaction_type = 'withdrawbalance';
+            $statment->amount = $data['total_price'];
+            $statment->save();
+
             DB::commit();
-            return $this->success_message('تم الانسحاب من الخطة بنجاح ');
+            return $this->success_message('  تم تعديل مبلغ الاستثمار في الخطة بنجاح  ');
         } catch (\Exception $e) {
+            DB::rollBack();
             return $this->exception_message($e);
         }
     }
+
+
 
     // PlanController.php
     public function getPlanReport($platformId, $period)

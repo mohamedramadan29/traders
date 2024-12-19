@@ -25993,3 +25993,15 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
         margin-left: 0px;
     }
 }
+
+.withdraw_main_section .form-group .input_data input{
+    width: 90%;
+}
+
+
+
+@media(max-width:991px){
+    .user_plans_page_info .info .profit_balance{
+        font-size: 16px !important;
+    }
+}
