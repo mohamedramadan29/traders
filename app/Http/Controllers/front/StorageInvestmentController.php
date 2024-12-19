@@ -20,7 +20,8 @@ class StorageInvestmentController extends Controller
 
     public function index()
     {
-        return view('front.storage.index');
+        $storages = StorageInvestment::where("user_id", Auth::user()->id)->get();
+        return view('front.storage.index',compact('storages'));
     }
 
     public function store(Request $request)

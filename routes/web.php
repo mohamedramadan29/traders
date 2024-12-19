@@ -21,7 +21,7 @@ use \App\Http\Controllers\front\StorageInvestmentController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/',[\App\Http\Controllers\front\FrontController::class,'index'])->name('index');
+Route::get('/', [\App\Http\Controllers\front\FrontController::class, 'index'])->name('index');
 //Route::get('/', function () {
 //    return view('front.index');
 //})->name('index');
@@ -30,11 +30,12 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::group(['prefix' => 'user'], function () {
-// user Login
+    // user Login
     Route::controller(UserController::class)->group(function () {
         Route::match(['post', 'get'], '/', 'login')->name('user_login');
         Route::match(['post', 'get'], '/register', 'register')->name('user_register');
         Route::get('/confirm/{code}', 'UserConfirm');
+        Route::post('send_confirm_email','send_confirm_email');
         /////// Forget Password
         ///
         Route::match(['post', 'get'], 'forget-password', 'forget_password');
@@ -48,23 +49,23 @@ Route::group(['prefix' => 'user'], function () {
             Route::match(['post', 'get'], 'update_profile_image', 'updateProfileImage');
             // check User  Password
             Route::post('check_user_password', 'check_user_password');
-            Route::get('profile','profile');
+            Route::get('profile', 'profile')->name('profile');
             // Update User  Details
-            Route::post( 'update_user_details', 'update_user_details');
+            Route::post('update_user_details', 'update_user_details');
             Route::get('logout', 'logout')->name('user_logout');
-            Route::post('update-trader-id','update_trader_id');
+            Route::post('update-trader-id', 'update_trader_id');
         });
     });
     Route::group(['middleware' => 'auth'], function () {
-       ///////// Start Plans
-        Route::controller(  PlanController::class)->group(function (){
-            Route::get('plans','index');
-            Route::get('user_plans','user_plans')->name('user_plans');
-           // Route::post('invoice_create','invoice_create');
-            Route::match(['post','get'],'invoice_create','invoice_create');
-            Route::post('invoice_withdraw','invoice_withdraw');
+        ///////// Start Plans
+        Route::controller(PlanController::class)->group(function () {
+            Route::get('plans', 'index');
+            Route::get('user_plans', 'user_plans')->name('user_plans');
+            // Route::post('invoice_create','invoice_create');
+            Route::match(['post', 'get'], 'invoice_create', 'invoice_create');
+            Route::post('invoice_withdraw', 'invoice_withdraw');
             Route::get('plans/{plan_id}', 'platformPlans')->name('user.plans.details');
-            Route::get('/plans/report/{platformId}/{period}','getPlanReport');
+            Route::get('/plans/report/{platformId}/{period}', 'getPlanReport');
         });
 
         /////////////// Start WithDraws ///////////////
@@ -77,32 +78,32 @@ Route::group(['prefix' => 'user'], function () {
         });
         ///////////////// Start Exchange Controller  ////////////////
         ///
-         Route::controller(ExchangeController::class)->group(function (){
-             Route::get('exchange','index');
-         });
+        Route::controller(ExchangeController::class)->group(function () {
+            Route::get('exchange', 'index');
+        });
 
-         ///////////////////// Start Currency Sales Orders /////////
+        ///////////////////// Start Currency Sales Orders /////////
 
-        Route::controller(SalesOrderController::class)->group(function (){
-            Route::post('sales/create','create');
+        Route::controller(SalesOrderController::class)->group(function () {
+            Route::post('sales/create', 'create');
         });
         //////////////////////////////// Start User Make Deposit And WithDraw //////////
-        Route::controller(UserBalanceController::class)->group(function (){
-            Route::match(['post','get'],'deposit','deposit');
+        Route::controller(UserBalanceController::class)->group(function () {
+            Route::match(['post', 'get'], 'deposit', 'deposit');
         });
 
         ///////////////////////// Storage InvestMent ///// تخزين الغملات
         ///
-        Route::controller(StorageInvestmentController::class)->group(function (){
-            Route::get('storage','index');
-            Route::post('storage/add','store');
+        Route::controller(StorageInvestmentController::class)->group(function () {
+            Route::get('storage', 'index');
+            Route::post('storage/add', 'store');
         });
     });
 });
 
 
-Route::get('auth/{provider}/redirect',[SocialLoginController::class,'redirect'])->name('auth.google.redirect');
-Route::get('auth/{provider}/callback',[SocialLoginController::class,'callback'])->name('auth.google.callback');
+Route::get('auth/{provider}/redirect', [SocialLoginController::class, 'redirect'])->name('auth.google.redirect');
+Route::get('auth/{provider}/callback', [SocialLoginController::class, 'callback'])->name('auth.google.callback');
 
 
 

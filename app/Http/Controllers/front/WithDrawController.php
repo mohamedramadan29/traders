@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\front;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\Message_Trait;
-use App\Models\admin\PublicSetting;
-use App\Models\Admin\WithDraw;
-use App\Models\front\SalesOrder;
 use App\Models\front\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Admin\WithDraw;
+use App\Models\front\UserPlan;
+use App\Models\front\SalesOrder;
+use App\Http\Traits\Message_Trait;
 use Illuminate\Support\Facades\DB;
+use App\Models\admin\PublicSetting;
+use App\Http\Controllers\Controller;
+use App\Models\front\StorageInvestment;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,18 +23,22 @@ class WithDrawController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $total_balance = $user['total_balance'];
+        $totalinvestments = UserPlan::where('user_id', $user->id)->sum('total_investment');
+        /////// رصيد التداول
+        $trading_balance = SalesOrder::where('user_id', $user->id)->where('status', 0)->sum('currency_amount');
+        ////////////رصيد الاستثمار
+        $storage_investment = StorageInvestment::where('user_id', $user->id)->where('status', 1)->sum('amount_invested');
         $withdraws = WithDraw::where('user_id', Auth::id())->orderBy('id', 'desc')->get();
         // WithDrawSum Under Revision
         $withdrawSum = WithDraw::where('user_id', Auth::id())->where('status', 0)->sum('amount');
         ////// WithDrawSum Compeleted
         $withdrawSumCompeleted = WithDraw::where('user_id', Auth::id())->where('status', 1)->sum('amount');
-        return view('front.WithDraws.index', compact('withdraws', 'total_balance', 'withdrawSum', 'withdrawSumCompeleted'));
+        return view('front.WithDraws.index', compact('withdraws','storage_investment', 'trading_balance', 'totalinvestments', 'withdrawSum', 'withdrawSumCompeleted'));
     }
 
     public function store(Request $request)
     {
-       // dd($request->all());
+        // dd($request->all());
         // $user = Auth::user();
         $user = User::where('id', Auth::id())->first();
         $total_balance = $user['dollar_balance'];

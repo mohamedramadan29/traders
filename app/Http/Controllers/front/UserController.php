@@ -53,25 +53,25 @@ class UserController extends Controller
 
             // إجمالي الاستثمار في الخطة
             $totalInvestmentPlan = $plan->total_plans->sum('total_investment');
-            $total_subscriptions =  $plan->total_plans ? $plan->total_plans->count() : 0 ;
+            $total_subscriptions = $plan->total_plans ? $plan->total_plans->count() : 0;
 
             return [
                 'plan_id' => $plan->id,
                 'plan_name' => $plan->name,
-                'current_price'=>$plan->current_price,
-                'step_price'=>$plan->step_price,
-                'logo'=>$plan->logo,
-                'total_subscriptions'=>$total_subscriptions,
-                'totalinvestment'=>$totalInvestmentPlan,
-                'platform_name'=>$plan->platform_name,
-                'platform_link'=>$plan->platform_link,
+                'current_price' => $plan->current_price,
+                'step_price' => $plan->step_price,
+                'logo' => $plan->logo,
+                'total_subscriptions' => $total_subscriptions,
+                'totalinvestment' => $totalInvestmentPlan,
+                'platform_name' => $plan->platform_name,
+                'platform_link' => $plan->platform_link,
                 'today_returns_percentage' => $totalInvestmentPlan > 0 ? ($todayReturns / $totalInvestmentPlan) * 100 : 0,
                 'last_7_days_percentage' => $totalInvestmentPlan > 0 ? ($last7DaysReturns / $totalInvestmentPlan) * 100 : 0,
                 'last_30_days_percentage' => $totalInvestmentPlan > 0 ? ($last30DaysReturns / $totalInvestmentPlan) * 100 : 0,
             ];
         });
 
-        return view('front.dashboard', compact('plansWithReturns','plans'));
+        return view('front.dashboard', compact('plansWithReturns', 'plans'));
     }
 
 
@@ -135,6 +135,20 @@ class UserController extends Controller
         return view('front.sign-up');
     }
 
+    public function send_confirm_email(Request $request)
+    {
+        $email = Auth::user()->email;
+        $MessageDate = [
+            'name' => Auth::user()->name,
+            "email" => Auth::user()->email,
+            'code' => base64_encode($email)
+        ];
+        Mail::send('front.mails.UserActivationEmail', $MessageDate, function ($message) use ($email) {
+            $message->to($email)->subject(' تفعيل الحساب الخاص بك  ');
+        });
+        return $this->success_message('  تم ارسال رابط التفعيل الخاص بك علي البريد الالكتروني المسجل  ⚡️');
+    }
+
     // Active User Email
     public function UserConfirm($email)
     {
@@ -143,16 +157,16 @@ class UserController extends Controller
         $user_details = User::where('email', $email)->first();
         $userCount = User::where('email', $email)->count();
         if ($userCount > 0) {
-            if ($user_details->status == 1) {
+            if ($user_details->account_status == 1) {
                 //$message = 'تم تفعيل البريد الالكتروني بالفعل ! سجل دخولك الان ';
                 // return redirect('login')->with('Error_Message', $message);
-                return redirect('/login')->withErrors([' تم تفعيل البريد الالكتروني بالفعل ! سجل دخولك الان  '])->withInput();
+                return redirect()->route('profile')->withErrors([' تم تفعيل الحساب الخاص بك من قبل !! '])->withInput();
             } else {
                 // Update User Status
-                User::where('email', $email)->update(['status' => 1]);
+                User::where('email', $email)->update(['account_status' => 1]);
                 // Redirect User To Login/ Regitser Page With Message
-                $message = 'تم تفعيل البريد الالكتروني الخاص بك يمكنك تسجيل الدخول الان ';
-                return redirect('/login')->with('Success_message', $message);
+                $message = ' تم تفعيل الحساب الخاص بك بنجاح  ';
+                return redirect()->route('profile')->with('Success_message', $message);
             }
         } else {
             abort(404);

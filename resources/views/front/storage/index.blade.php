@@ -168,6 +168,50 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="table-responsive my_new_container">
+                    <div class="open_trader">
+                        <h6>  الاستثمارت الحالية  </h6>
+                        <h3> BIN / USD </h3>
+                        @foreach ($storages as $storage)
+                            <div class="open_trader_details">
+                                <div class="details">
+                                    <div class="first_details">
+                                        <p> مبلغ الاستثمار  (دولار) </p>
+                                        <span class="sp_span"> {{ number_format($storage['amount_invested'], 2) }} </span>
+                                    </div>
+                                    <div class="first_details">
+                                        <p> فترة التخزين  (يوم ) </p>
+                                        <span> {{ $storage['interest_date'] }} يوم </span>
+                                    </div>
+                                </div>
+                                <div class="details">
+                                    <div class="first_details">
+                                        <p> النسبة    </p>
+                                        <span> {{ $storage['interest_rate'] }} % </span>
+                                    </div>
+                                    <div class="first_details">
+                                        <p> تاريخ البداية  </p>
+                                        <span> {{ $storage['start_date'] }} </span>
+                                    </div>
+                                </div>
+                                <div class="details">
+                                    <div class="first_details">
+                                        <p> تاريخ الانتهاء </p>
+
+                                        <span> {{ $storage['end_date'] }}
+                                        </span>
+                                    </div>
+                                    <div class="first_details">
+                                        <p> --- </p>
+                                        <span>  </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        @endforeach
+                    </div>
+                </div>
             </div>
 
         </div>

@@ -67,6 +67,7 @@
                                         data-bs-target="#pills-home" type="button" role="tab"
                                         aria-controls="pills-home" aria-selected="true"> الصفحة الرئيسية </button>
                                 </li>
+
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-profile" type="button" role="tab"
@@ -77,17 +78,35 @@
                                         data-bs-target="#pills-contact" type="button" role="tab"
                                         aria-controls="pills-contact" aria-selected="false"> اعدادات الامان </button>
                                 </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-notification" type="button" role="tab"
+                                        aria-controls="pills-notification" aria-selected="false"> الاشعارات </button>
+                                </li>
                             </ul>
                             <div class="tab-content" id="pills-tabContent">
                                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                                     aria-labelledby="pills-home-tab" tabindex="0">
-                                    <form>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="example-email"> حالة الحساب
+
+                                    <form method="POST" action="{{ url('user/send_confirm_email') }}">
+                                        @csrf
+                                        <div class="mb-1">
+                                            <label style="margin-left: 15px" class="form-label ml-4" for="example-email">
+                                                حالة الحساب
                                             </label>
-                                            <input readonly disabled type="email" id="example-email"
-                                                class="form-control bg-" placeholder="  حالة الحساب   "
-                                                value="{{ Auth::user()->name }}">
+                                            @if (Auth::user()->account_status == 1)
+                                                <span class="badge badge-success bg-success"> مفعل <i
+                                                        class="bi bi-patch-check-fill"></i> </span>
+                                            @else
+                                                <span class="badge badge-danger bg-danger"> غير مفعل <i
+                                                        class="bi bi-x-octagon-fill"></i> </span>
+                                                <br>
+                                                <br>
+                                                <button type="submit" class="btn btn-sm active_account_button"> تفعيل
+                                                    الحساب <i class="bi bi-check"></i></button>
+                                                <br>
+                                                <br>
+                                            @endif
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="example-email"> الاسم
@@ -99,14 +118,16 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="example-email"> البريد الالكتروني
                                             </label>
-                                            <input readonly disabled type="email" id="example-email" class="form-control"
-                                                placeholder=" البريد الالكتروني  " value="{{ Auth::user()->email }}">
+                                            <input readonly disabled type="email" id="example-email"
+                                                class="form-control" placeholder=" البريد الالكتروني  "
+                                                value="{{ Auth::user()->email }}">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="example-email"> الدولة
                                             </label>
-                                            <input readonly disabled type="email" id="example-email" class="form-control"
-                                                placeholder=" ---  " value="{{ Auth::user()->country }}">
+                                            <input readonly disabled type="email" id="example-email"
+                                                class="form-control" placeholder=" ---  "
+                                                value="{{ Auth::user()->country }}">
                                         </div>
 
                                         <div class="mb-3">
@@ -116,20 +137,13 @@
                                                 class="form-control" placeholder=" --- "
                                                 value="{{ Auth::user()->city }}">
                                         </div>
-
                                     </form>
                                 </div>
                                 <div class="tab-pane fade" id="pills-profile" role="tabpanel"
                                     aria-labelledby="pills-profile-tab" tabindex="0">
                                     <form method="POST" action="{{ url('user/update_user_details') }}">
                                         @csrf
-                                        <div class="mb-3">
-                                            <label class="form-label" for="account_status"> حالة الحساب
-                                            </label>
-                                            <input type="text" name="account_status" id="account_status"
-                                                class="form-control" placeholder="  حالة الحساب   "
-                                                value="{{ Auth::user()->name }}">
-                                        </div>
+                                       
                                         <div class="mb-3">
                                             <label class="form-label" for="example-name"> الاسم
                                             </label>
@@ -206,6 +220,11 @@
                                     </form>
 
                                 </div>
+                                <div class="tab-pane fade" id="pills-contact" role="tabpanel"
+                                    aria-labelledby="pills-notification-tab" tabindex="0">
+
+                                    <h2> جميع اشعاارت المستخدم هنا </h2>
+                                </div>
                             </div>
                         </div>
 
@@ -225,31 +244,31 @@
 
 
 @section('js')
-<script>
-    document.getElementById('profileImageInput').addEventListener('change', function() {
-        const form = document.getElementById('updateProfileImageForm');
-        const formData = new FormData(form);
-        fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // تحديث صورة المستخدم
-                    document.getElementById('userImage').src = data.imageUrl;
-                   // alert('تم تحديث الصورة بنجاح!');
-                } else {
-                    alert('حدث خطأ أثناء التحديث.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('تعذر تحديث الصورة.');
-            });
-    });
-</script>
+    <script>
+        document.getElementById('profileImageInput').addEventListener('change', function() {
+            const form = document.getElementById('updateProfileImageForm');
+            const formData = new FormData(form);
+            fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // تحديث صورة المستخدم
+                        document.getElementById('userImage').src = data.imageUrl;
+                        // alert('تم تحديث الصورة بنجاح!');
+                    } else {
+                        alert('حدث خطأ أثناء التحديث.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('تعذر تحديث الصورة.');
+                });
+        });
+    </script>
 @endsection

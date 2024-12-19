@@ -25994,14 +25994,31 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     }
 }
 
-.withdraw_main_section .form-group .input_data input{
+.withdraw_main_section .form-group .input_data input {
     width: 90%;
 }
 
 
 
-@media(max-width:991px){
-    .user_plans_page_info .info .profit_balance{
+@media(max-width:991px) {
+    .user_plans_page_info .info .profit_balance {
         font-size: 16px !important;
     }
+}
+
+
+.profile_tabs form .active_account_button {
+    width: 120px !important;
+    display: inline !important;
+}
+
+.profile_tabs form .active_account_button i {
+    font-size: 17px;
+    position: relative;
+    top: 2px;
+}
+
+.profile_tabs form .active_account_button:hover {
+    background-color: #0faf59;
+    color: #fff;
 }

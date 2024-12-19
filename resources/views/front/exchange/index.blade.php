@@ -3,8 +3,7 @@
     واجهة تغير العملة
 @endsection
 @section('css')
-
-    {{--    <!-- DataTables CSS -->--}}
+    {{--    <!-- DataTables CSS --> --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 @endsection
 @section('content')
@@ -35,11 +34,7 @@
                     <button class="open_button">
                         فتح صفقة
                     </button>
-                    <h4> {{$market_price}} <span> +1 % </span></h4>
-                    <button class="save_exchange" >
-                        <a href="{{url('user/storage')}}">  تخرين العملة </a>
-
-                    </button>
+                    <h4> {{ $market_price }} <span> +1 % </span></h4>
 
                 </div>
                 <div class="col-xl-12">
@@ -47,12 +42,13 @@
                         <div class="table-responsive my_new_container">
                             <div class="main_data">
                                 <div class="right_data">
-                                    <form action="{{url('user/sales/create')}}" method="post">
+                                    <form action="{{ url('user/sales/create') }}" method="post">
                                         @csrf
                                         <div class="section">
                                             <p>سعر الدخول</p>
                                             <div class="buttons" style="margin-bottom: 10px;">
-                                                <input type="number" id="entryPrice" name="entryPrice" value="{{$market_price}}" readonly>
+                                                <input type="number" id="entryPrice" name="entryPrice"
+                                                    value="{{ $market_price }}" readonly>
                                             </div>
                                         </div>
 
@@ -60,8 +56,9 @@
                                             <p>سعر البيع</p>
                                             <div class="buttons" style="margin-bottom: 10px;">
                                                 <button onclick="decrement('sellPrice', event)">-</button>
-                                                <input readonly type="number" min="{{$minimum_selling_price}}" name="selling_currency_rate" id="sellPrice"
-                                                       value="{{$minimum_selling_price}}" step="0.01">
+                                                <input readonly type="number" min="{{ $minimum_selling_price }}"
+                                                    name="selling_currency_rate" id="sellPrice"
+                                                    value="{{ $minimum_selling_price }}" step="0.01">
                                                 <button onclick="increment('sellPrice', event)">+</button>
                                             </div>
                                         </div>
@@ -71,13 +68,13 @@
                                             <div class="buttons" style="margin-bottom: 10px;">
                                                 <button onclick="decrement('dealAmount', event)">-</button>
                                                 <input type="number" name="deal_amount" id="dealAmount" value="100"
-                                                       step="10" min="0" onchange="updateDealAmount(this.value)">
+                                                    step="10" min="0" onchange="updateDealAmount(this.value)">
                                                 <button onclick="increment('dealAmount', event)">+</button>
                                             </div>
                                         </div>
 
                                         <div class="section">
-                                            <h6> هل تريد شراء <span> 500 </span> مقابل <span> 150 </span> دولار </h6>
+                                            {{-- <h6> هل تريد شراء <span> 500 </span> مقابل <span> 150 </span> دولار </h6> --}}
                                         </div>
                                         <button class="submit-btn" type="submit">دخول الصفقة</button>
                                     </form>
@@ -87,19 +84,19 @@
                                     <button> معلومات الصفقة</button>
                                     <div class="data_info">
                                         <h4> سعر الدخول </h4>
-                                        <span> 10.5 $ </span>
+                                        <span> {{ $market_price }} دولار </span>
                                     </div>
                                     <div class="data_info">
                                         <h4> سعر البيع </h4>
-                                        <span> 11.5 $ </span>
+                                        <span id="salePriceDisplay">{{ $minimum_selling_price }} </span>
                                     </div>
                                     <div class="data_info">
                                         <h4> مبلغ الصفقة </h4>
-                                        <span> 115.00 $ </span>
+                                        <span id="dealAmountDisplay"> 100 </span>
                                     </div>
                                     <div class="data_info">
-                                        <h4> الربح المتوقع </h4>
-                                        <span class="profit" id="profit">+4.00 $</span>
+                                        <h4> الربح </h4>
+                                        <span class="profit" id="profit"> </span>
                                     </div>
                                 </div>
                             </div>
@@ -111,36 +108,46 @@
                         <div class="open_trader">
                             <h6> الصفقات المفتوحة </h6>
                             <h3> BIN / USD </h3>
-                            @foreach($open_deals as $open_deal)
+                            @foreach ($open_deals as $open_deal)
                                 <div class="open_trader_details">
                                     <div class="details">
+                                        @php
+                                            // عائد الاستثمار
+                                            $return_percentage =
+                                                ($open_deal['selling_currency_rate'] -
+                                                    $open_deal['enter_currency_rate']) *
+                                                100;
+                                            $profit_lose = $return_percentage * $open_deal['currency_amount'];
+                                        @endphp
                                         <div class="first_details">
-                                            <p> الربح والخسارة (usdt) </p>
-                                            <span class="sp_span"> 15.88 </span>
+                                            <p> الربح والخسارة (دولار) </p>
+                                            <span class="sp_span"> {{ number_format($profit_lose, 2) }} </span>
                                         </div>
                                         <div class="first_details">
-                                            <p> سعر الدخول (usdt) </p>
-                                            <span>  {{$open_deal['enter_currency_rate']}} </span>
+                                            <p> سعر الدخول (دولار) </p>
+                                            <span> {{ $open_deal['enter_currency_rate'] }} </span>
                                         </div>
                                     </div>
                                     <div class="details">
                                         <div class="first_details">
-                                            <p> الحجم (usdt) </p>
-                                            <span> 15.88 </span>
+                                            <p> الحجم (دولار) </p>
+                                            <span> {{ number_format($open_deal['currency_amount'], 2) }} </span>
                                         </div>
                                         <div class="first_details">
-                                            <p> سعر الحالي (usdt) </p>
-                                            <span> {{$open_deal['currency_rate']}}  </span>
+                                            <p> سعر الحالي (دولار) </p>
+                                            <span> {{ $open_deal['currency_rate'] }} </span>
                                         </div>
                                     </div>
                                     <div class="details">
                                         <div class="first_details">
                                             <p> عائد الاستثمار </p>
-                                            <span class="sp_span"> {{ number_format($open_deal['currency_amount'],2)}} </span>
+
+                                            <span class="sp_span"> {{ number_format($return_percentage, 4) }} %
+                                            </span>
                                         </div>
                                         <div class="first_details">
-                                            <p> سعر البيع (usdt) </p>
-                                            <span> {{$open_deal['selling_currency_rate']}} </span>
+                                            <p> سعر البيع (دولار) </p>
+                                            <span> {{ $open_deal['selling_currency_rate'] }} </span>
                                         </div>
                                     </div>
                                 </div>
@@ -155,9 +162,15 @@
                                 </div>
                                 <div class="second_main">
                                     <div class="first">
-                                        <div><p> الربح </p> <span class="sp_span"> 10  </span></div>
-                                        <div><p> الحجم </p> <span> 300  </span></div>
-                                        <div><p> العائد </p>  <span class="sp_span"> + 1%  </span></div>
+                                        <div>
+                                            <p> الربح </p> <span class="sp_span"> 10 </span>
+                                        </div>
+                                        <div>
+                                            <p> الحجم </p> <span> 300 </span>
+                                        </div>
+                                        <div>
+                                            <p> العائد </p> <span class="sp_span"> + 1% </span>
+                                        </div>
                                     </div>
                                     <div class="second">
                                         <div style="margin-left: 8px">
@@ -165,7 +178,7 @@
                                             <span> 1.00 </span>
                                         </div>
                                         <div>
-                                            <p> سعر البيع (usdt) </p>
+                                            <p> سعر البيع (دولار) </p>
                                             <span> 1.00 </span>
                                         </div>
                                     </div>
@@ -189,78 +202,103 @@
     <script>
         function increment(id, event) {
             event.preventDefault();
-            let inputElement = document.getElementById(id);
+            const inputElement = document.getElementById(id);
+            const marketPrice = parseFloat(document.getElementById('entryPrice').value);
 
-            if (!inputElement) {
-                console.error(`Element with id '${id}' not found.`);
+            if (!inputElement || isNaN(marketPrice)) {
+                console.error(`Element with id '${id}' not found or market price is invalid.`);
                 return;
             }
 
-            let value = parseFloat(inputElement.value);
-            let marketPrice = parseFloat(document.getElementById('entryPrice').value);
-
-            // زيادة 1% من سعر السوق
-            let incrementValue = marketPrice * 0.01;
+            let value = parseFloat(inputElement.value) || 0;
+            const incrementValue = marketPrice * 0.01; // زيادة 1% من سعر السوق
             value += incrementValue;
 
-            // التحقق من الحد الأدنى لسعر البيع
             if (id === 'sellPrice') {
-                let minimumSellingPrice = parseFloat("{{$minimum_selling_price}}");
-                if (value < minimumSellingPrice) {
-                    value = minimumSellingPrice;
-                }
+                const minimumSellingPrice = parseFloat("{{ $minimum_selling_price }}");
+                value = Math.max(value, minimumSellingPrice); // التحقق من الحد الأدنى لسعر البيع
             }
 
             inputElement.value = value.toFixed(7);
+            updateDisplay(id, value); // تحديث النصوص المعروضة
             calculateProfit(); // تحديث الربح
         }
 
         function decrement(id, event) {
             event.preventDefault();
-            let inputElement = document.getElementById(id);
+            const inputElement = document.getElementById(id);
+            const marketPrice = parseFloat(document.getElementById('entryPrice').value);
 
-            if (!inputElement) {
-                console.error(`Element with id '${id}' not found.`);
+            if (!inputElement || isNaN(marketPrice)) {
+                console.error(`Element with id '${id}' not found or market price is invalid.`);
                 return;
             }
 
-            let value = parseFloat(inputElement.value);
-            let marketPrice = parseFloat(document.getElementById('entryPrice').value);
-
-            // تقليل 1% من سعر السوق
-            let decrementValue = marketPrice * 0.01;
+            let value = parseFloat(inputElement.value) || 0;
+            const decrementValue = marketPrice * 0.01; // تقليل 1% من سعر السوق
             value -= decrementValue;
 
-            // التحقق من الحد الأدنى لسعر البيع
             if (id === 'sellPrice') {
-                let minimumSellingPrice = parseFloat("{{$minimum_selling_price}}");
-                if (value < minimumSellingPrice) {
-                    value = minimumSellingPrice;
-                }
+                const minimumSellingPrice = parseFloat("{{ $minimum_selling_price }}");
+                value = Math.max(value, minimumSellingPrice); // التحقق من الحد الأدنى لسعر البيع
             }
 
-            // التأكد من عدم وجود قيم سالبة
-            if (value < 0) value = 0;
+            value = Math.max(value, 0); // التأكد من عدم وجود قيم سالبة
 
             inputElement.value = value.toFixed(7);
+            updateDisplay(id, value); // تحديث النصوص المعروضة
             calculateProfit(); // تحديث الربح
         }
 
+        function updateDisplay(id, value) {
+            if (id === 'sellPrice') {
+                const salePriceDisplay = document.getElementById('salePriceDisplay');
+                if (salePriceDisplay) {
+                    salePriceDisplay.textContent = `${value.toFixed(7)} $`;
+                }
+            }
+
+            if (id === 'dealAmount') {
+                const dealAmountDisplay = document.getElementById('dealAmountDisplay');
+                if (dealAmountDisplay) {
+                    dealAmountDisplay.textContent = `${value.toFixed(7)} $`;
+                }
+            }
+        }
+
         function calculateProfit() {
-            let entryPrice = parseFloat(document.getElementById('entryPrice').value);
-            let sellPrice = parseFloat(document.getElementById('sellPrice').value);
-            let dealAmount = parseFloat(document.getElementById('dealAmount').value);
-            let profit = (sellPrice - entryPrice) * (dealAmount / entryPrice);
-            console.log(`Profit: +${profit.toFixed(2)} $`);
+            const entryPrice = parseFloat(document.getElementById('entryPrice').value) || 0;
+            const sellPrice = parseFloat(document.getElementById('sellPrice').value) || 0;
+            const dealAmount = parseFloat(document.getElementById('dealAmount').value) || 0;
+
+            if (entryPrice <= 0) {
+                console.error("Entry price must be greater than zero.");
+                return;
+            }
+
+            const profit = (sellPrice - entryPrice) * (dealAmount / entryPrice);
+
+            // تحديث الربح في العرض
+            const profitElement = document.getElementById('profit');
+            if (profitElement) {
+                profitElement.textContent = `${profit >= 0 ? '+' : ''}${profit.toFixed(7)} $`;
+            }
         }
 
         function updateDealAmount(value) {
-            if (value < 0) {
-                document.getElementById('dealAmount').value = 0;
+            const dealAmountInput = document.getElementById('dealAmount');
+            if (!dealAmountInput) {
+                console.error("Deal amount input not found.");
+                return;
             }
+
+            const dealAmount = parseFloat(value) || 0;
+            if (dealAmount < 0) {
+                dealAmountInput.value = 0; // منع القيم السالبة
+            }
+
+            updateDisplay('dealAmount', dealAmount); // تحديث النصوص المعروضة
             calculateProfit(); // تحديث الربح عند تعديل مبلغ الصفقة
         }
-
     </script>
-
 @endsection
