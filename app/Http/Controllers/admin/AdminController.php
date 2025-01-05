@@ -5,6 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
 use App\Models\admin\Admin;
+use App\Models\front\StorageInvestment;
+use App\Models\front\UserPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -17,7 +19,21 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        return view('admin.dashboard');
+        ############### Plans Reports #############
+        $countuserinvestments = UserPlan::count();
+        $totalplaninvestments = UserPlan::sum('total_investment');
+        ################# InvestMentStorage ##########
+        $totalcountinvestmentstorage = StorageInvestment::count();
+        $totalcountinvestmentstorageactive = StorageInvestment::where('status', 1)->count();
+        $totalcountinvestmentstoragedisactive = $totalcountinvestmentstorageactive - $totalcountinvestmentstorage;
+        $suminvestmentstorage = StorageInvestment::sum('amount_invested');
+        $suminvestmentstorageactive = StorageInvestment::where('status', 1)->sum('amount_invested');
+        $suminvestmentstoragedisactive = $suminvestmentstorage - $suminvestmentstorageactive;
+        ####################################################
+        return view('admin.dashboard', compact('countuserinvestments', 'totalplaninvestments',
+    'totalcountinvestmentstorage','totalcountinvestmentstorageactive','totalcountinvestmentstoragedisactive',
+    'suminvestmentstorage','suminvestmentstorageactive','suminvestmentstoragedisactive'
+    ));
     }
 
     ////////////////////// Login Admin //////////////

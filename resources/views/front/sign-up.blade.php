@@ -59,6 +59,15 @@
                                             <input required name="confirm-password" type="password" id="example-password"
                                                 class="form-control" placeholder="تأكيد كلمة المرور">
                                         </div>
+                                        <div class="col-12">
+                                            {!! NoCaptcha::display() !!}
+                                            @if ($errors->has('g-recaptcha-response'))
+                                                <span class="help-block">
+                                                    <strong
+                                                        class="text-danger">{{ $errors->first('g-recaptcha-response') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
                                         <div class="mb-3">
                                             <div class="form-check">
                                                 <input type="checkbox" class="form-check-input" id="checkbox-signin">
@@ -80,9 +89,6 @@
                                     <div class="social_login">
                                         <a href="{{ route('auth.google.redirect', 'google') }}" class="google">
                                             <i class="bi bi-google"></i>
-                                        </a>
-                                        <a href="{{ route('auth.google.redirect', 'facebook') }}" class="facebook">
-                                            <i class="bi bi-facebook"></i>
                                         </a>
                                     </div>
                                 </div>

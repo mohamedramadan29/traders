@@ -14,8 +14,8 @@
                             <div class="exchange_third_section">
                                 <div class="form-group">
                                     <div class="input_data">
-                                        <input type="number" name="deposit" step="0.01" placeholder="الحد الادني 0.01">
-                                        <span>usdt</span>
+                                        <input min="1" style="width: 100%" type="number" name="deposit" step="0.01" placeholder="الحد الادني 0.01">
+                                        <span style="margin-left: 10px"> دولار  </span>
                                     </div>
                                 </div>
                             </div>

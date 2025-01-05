@@ -20,8 +20,14 @@ class PlansController extends Controller
 
     public function index()
     {
-        $plans = Plan::with('platform')->get();
-        //dd($plans);
+        $plans = Plan::with('platform', 'UserPlans')->get();
+        // حساب مجموع الاستثمار لكل خطة
+        foreach ($plans as $plan) {
+            $plan->total_investment = $plan->UserPlans->sum('total_investment');
+            $plan->investment_count = $plan->UserPlans->count();
+
+        }
+        //  dd($plans);
         $platforms = Platform::all();
         return view('admin.Plans.index', compact('plans', 'platforms'));
     }

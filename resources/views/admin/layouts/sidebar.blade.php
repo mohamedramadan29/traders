@@ -40,12 +40,21 @@
                     <span class="nav-text"> خطط التداول </span>
                 </a>
             </li>
+            <li class="menu-title mt-2"> معاملات تخزين العملة </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('admin/platforms') }}">
+                <a class="nav-link" href="{{ url('admin/storages') }}">
                     <span class="nav-icon">
-                        <iconify-icon icon="solar:document-text-bold-duotone"></iconify-icon>
+                        <iconify-icon icon="solar:settings-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> منصات التدوال </span>
+                    <span class="nav-text"> جميع المعاملات </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('admin/storage/plans') }}">
+                    <span class="nav-icon">
+                        <iconify-icon icon="solar:settings-bold-duotone"></iconify-icon>
+                    </span>
+                    <span class="nav-text"> العوائد اليومية </span>
                 </a>
             </li>
             <li class="menu-title mt-2"> اعدادات الموقع </li>

@@ -67,5 +67,6 @@
 <script src="{{asset('assets/front/js/pages/dashboard.js')}}"></script>
 @toastifyJs
 @yield('js')
+{!! NoCaptcha::renderJs() !!}
 </body>
 </html>

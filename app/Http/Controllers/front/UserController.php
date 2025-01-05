@@ -113,21 +113,25 @@ class UserController extends Controller
                     'name' => $data['name'],
                     'email' => $data['email'],
                     'password' => Hash::make($data['password']),
-                    'status' => 1
+                    'account_status' => 0,
                 ]);
+                ////////// Login User To Dashboard #################
+
                 ////////////////////// Send Confirmation Email ///////////////////////////////
                 ///
-                $email = $data['email'];
-                $MessageDate = [
-                    'name' => $data['name'],
-                    "email" => $data['email'],
-                    'code' => base64_encode($email)
-                ];
-                Mail::send('front.mails.UserActivationEmail', $MessageDate, function ($message) use ($email) {
-                    $message->to($email)->subject(' تفعيل الحساب الخاص بك  ');
-                });
+                // $email = $data['email'];
+                // $MessageDate = [
+                //     'name' => $data['name'],
+                //     "email" => $data['email'],
+                //     'code' => base64_encode($email)
+                // ];
+                // Mail::send('front.mails.UserActivationEmail', $MessageDate, function ($message) use ($email) {
+                //     $message->to($email)->subject(' تفعيل الحساب الخاص بك  ');
+                // });
                 DB::commit();
-                return $this->success_message('تم انشاء الحساب بنجاح من فضلك فعل حسابك من خلال البريد المرسل  ⚡️');
+                Auth::login($user);
+                return redirect()->route('dashboard');
+                //return $this->success_message('تم انشاء الحساب بنجاح من فضلك فعل حسابك من خلال البريد المرسل  ⚡️');
             } catch (\Exception $e) {
                 return $this->exception_message($e);
             }

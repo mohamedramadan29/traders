@@ -49,9 +49,73 @@
                         </div>
                         <div class="topbar-item">
                             <div class="noti_section">
+                                @php
+                                    $unreadNotifications = Auth::user()->unreadNotifications; // جميع الإشعارات غير المقروءة
+                                    $recentNotifications = Auth::user()->notifications()->latest()->take(5)->get(); // آخر 5 إشعارات
+                                @endphp
                                 <div class="notification">
-                                    <i class="bi bi-bell-fill"></i>
+                                    <button type="button"
+                                        class="topbar-button alert_notification position-relative show"
+                                        id="page-header-notifications-dropdown" data-bs-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="true">
+                                        <i class="bi bi-bell-fill"></i>
+                                        @if ($unreadNotifications->count() > 0)
+                                            <span
+                                                class="position-absolute topbar-badge fs-10 translate-middle badge bg-danger rounded-pill">{{ $unreadNotifications->count() }}</span>
+                                        @endif
+                                    </button>
+                                    <div class="dropdown-menu py-0 dropdown-lg dropdown-menu-end"
+                                        aria-labelledby="page-header-notifications-dropdown"
+                                        style="max-height: 300px; overflow-y: auto;">
+                                        <div class="p-3">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="m-0">الإشعارات</h6>
+                                                <a href="{{ route('notifications.markAllAsRead') }}"
+                                                    class="text-dark text-decoration-underline">
+                                                    <small>تعيين الكل كمقروءة</small>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <!-- الإشعارات غير المقروءة -->
+                                        {{-- <div class="notification-content">
+                                            <h6 class="dropdown-header">الإشعارات غير المقروءة</h6>
+                                            @forelse ($unreadNotifications as $notification)
+                                                <a href=""
+                                                    class="dropdown-item py-2 border-bottom d-flex align-items-center">
+                                                    <div>
+                                                        <p class="mb-0 fw-medium">
+                                                            {{ $notification->data['title'] ?? 'إشعار' }}
+                                                        </p>
+                                                        <small
+                                                            class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                                    </div>
+                                                </a>
+                                            @empty
+                                                <p class="dropdown-item py-2 text-center">لا يوجد إشعارات جديدة</p>
+                                            @endforelse
+                                        </div> --}}
+
+                                        <!-- آخر 5 إشعارات -->
+                                        <div class="notification-content">
+                                            <h6 class="dropdown-header">آخر 5 إشعارات</h6>
+                                            @foreach ($recentNotifications as $notification)
+                                                <a href=""
+                                                    class="dropdown-item py-2 border-bottom d-flex align-items-center">
+                                                    <div>
+                                                        <p class="mb-0 fw-medium">
+                                                            {{ $notification->data['title'] ?? 'إشعار' }}
+                                                        </p>
+                                                        <small
+                                                            class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                                    </div>
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    </div>
                                 </div>
+
+
                                 <div>
                                     <button> <span class="total_balance">
                                             @php

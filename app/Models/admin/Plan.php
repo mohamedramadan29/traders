@@ -45,4 +45,8 @@ class Plan extends Model
             ->where('user_id', Auth::id());
     }
 
+    public function UserPlans(){
+        return $this->hasMany(UserPlan::class,'plan_id');
+    }
+
 }

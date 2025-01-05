@@ -39,7 +39,7 @@
 
 .user_plans_page_info .info .buttons {
     display: flex;
-    margin-top: 40px;
+    margin-top: 10px;
 }
 
 .user_plans_page_info .info .public_button {
@@ -74,6 +74,18 @@
     padding: 10px;
     border-radius: 20px;
     text-align: center;
+}
+
+.user_plans_page_info .info .select_h5{
+    padding: 0;
+}
+.user_plans_page_info .info h5 select{
+    background-color: transparent;
+    color: #fff;
+    border-color: transparent;
+    --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    padding: 0px 24px;
+    font-size: 12px;
 }
 .user_plans_page_info .info .profit_percentages{
 display: flex;
@@ -118,8 +130,8 @@ display: flex;
     color: #11af59;
     font-size: 20px;
     font-weight: bold;
-    margin-bottom: 30px;
-    margin-top: 27px;
+    margin-bottom: 42px;
+    margin-top: 14px;
 }
 
 .user_plans_page_info .info img {
@@ -127,7 +139,7 @@ display: flex;
     height: 65px;
     background: #383c48;
     border-radius: 15px;
-    margin-top: 20px;
+    margin-top: 0px;
 }
 
 /****************** Start Transaction ////////////////////  */
@@ -447,3 +459,80 @@ display: flex;
         font-size: 12px;
     }
 }
+
+.storage_button_details{
+    background-color: #383a4c;
+    color: #fff;
+}
+.storage_button_details i{
+    position: relative;
+    top: 2px;
+}
+
+
+/* إخفاء خانة الاختيار الأصلية */
+.save_exchange_data .exchange_six_section .form-check{
+    padding-right: 0;
+}
+.custom-checkbox .form-check-input {
+    display: none;
+}
+
+/* تصميم مخصص لخانة الاختيار */
+.custom-checkbox .form-check-label {
+    position: relative;
+    padding-right: 35px; /* مسافة إضافية لرمز الاختيار */
+    cursor: pointer;
+    font-size: 14px;
+    color: #dadada;
+}
+
+.custom-checkbox .form-check-label a {
+    color: #11af59;
+    text-decoration: none;
+}
+
+.custom-checkbox .form-check-label a:hover {
+    text-decoration: underline;
+}
+
+/* المربع المخصص لخانة الاختيار */
+.custom-checkbox .form-check-label::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #aaa5a5;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* علامة التحقق */
+.custom-checkbox .form-check-label::after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    right: 6px;
+    width: 8px;
+    height: 14px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    opacity: 0;
+    transform: rotate(45deg) scale(0);
+    transition: all 0.3s ease;
+}
+
+/* عند التحقق */
+.custom-checkbox .form-check-input:checked + .form-check-label::before {
+    border-color: #11af59;
+    background-color: #11af59;
+}
+
+.custom-checkbox .form-check-input:checked + .form-check-label::after {
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+}
+</style>

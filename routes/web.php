@@ -1,16 +1,19 @@
 <?php
 
 
-use App\Http\Controllers\Auth\SocialLoginController;
-use App\Http\Controllers\front\UserController;
-use App\Http\Controllers\front\WithDrawController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\front\UserController;
 use \App\Http\Controllers\front\PlanController;
+use App\Http\Controllers\front\TermsController;
+use \App\Http\Controllers\front\StorageInvestment;
+use App\Http\Controllers\front\WithDrawController;
 use \App\Http\Controllers\front\ExchangeController;
+use App\Http\Controllers\Auth\SocialLoginController;
 use \App\Http\Controllers\front\SalesOrderController;
 use \App\Http\Controllers\front\UserBalanceController;
-use \App\Http\Controllers\front\StorageInvestment;
+use App\Http\Controllers\front\NotificationController;
 use \App\Http\Controllers\front\StorageInvestmentController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -101,11 +104,13 @@ Route::group(['prefix' => 'user'], function () {
     });
 });
 
-
+Route::controller(TermsController::class)->group(function () {
+    Route::get('terms','terms');
+});
 Route::get('auth/{provider}/redirect', [SocialLoginController::class, 'redirect'])->name('auth.google.redirect');
 Route::get('auth/{provider}/callback', [SocialLoginController::class, 'callback'])->name('auth.google.callback');
 
 
-
-
+Route::get('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])
+    ->name('notifications.markAllAsRead');
 include 'admin.php';

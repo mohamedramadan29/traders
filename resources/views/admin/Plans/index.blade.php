@@ -3,8 +3,7 @@
     خطط التداول
 @endsection
 @section('css')
-
-    {{--    <!-- DataTables CSS -->--}}
+    {{--    <!-- DataTables CSS --> --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 @endsection
 @section('content')
@@ -31,7 +30,7 @@
                         <div class="card-header d-flex justify-content-between align-items-center gap-1">
                             <h4 class="card-title flex-grow-1"> خطط التداول </h4>
                             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#add_attribute">
+                                data-bs-target="#add_attribute">
                                 اضافة خطة
                                 <i class="ti ti-plus"></i>
                             </button>
@@ -40,91 +39,92 @@
                         <div>
                             <div class="table-responsive">
                                 <table id="table-search"
-                                       class="table table-bordered gridjs-table align-middle mb-0 table-hover table-centered">
+                                    class="table table-bordered gridjs-table align-middle mb-0 table-hover table-centered">
                                     <thead class="bg-light-subtle">
-                                    <tr>
-                                        <th style="width: 20px;">
-                                        </th>
-                                        <th> الاسم</th>
-                                        <th> اسم المنصة  </th>
-                                        <th> اللوجو   </th>
-                                        <th> السعر الاساسي</th>
-                                        <th> السعر الحالي</th>
-                                        <th> العائد الاستثماري</th>
-                                        <th> راس المال الكلي</th>
-                                        <th> عدد الاشتراكات الكلي</th>
-                                        <th> عدد الاشتراكات الفعال</th>
-                                        <th> حالة الخطة</th>
-                                        <th> العمليات</th>
-                                    </tr>
+                                        <tr>
+                                            <th style="width: 20px;">
+                                            </th>
+                                            <th> الاسم</th>
+                                            <th> اسم المنصة </th>
+                                            <th> اللوجو </th>
+                                            <th> قيمة الاستثمارات الكلي </th>
+                                            <th> عدد الاشتراكات الكلي</th>
+                                            <th> حالة الخطة</th>
+                                            <th> العمليات</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    @php
-                                        $i = 1;
-                                    @endphp
-                                    @foreach($plans  as $plan)
-                                        <tr>
-                                            <td>
-                                                {{$i++}}
-                                            </td>
-                                            <td>{{$plan['name']}}</td>
-                                            <td>{{$plan['platform_name']}}</td>
-                                            <td><img width="40px" height="40px" src="{{asset('assets/uploads/plans/'.$plan['logo'])}}" alt=""></td>
-                                            <td>{{$plan['main_price']}} $</td>
+                                        @php
+                                            $i = 1;
+                                        @endphp
+                                        @foreach ($plans as $plan)
+                                            <tr>
+                                                <td>
+                                                    {{ $i++ }}
+                                                </td>
+                                                <td>{{ $plan['name'] }}</td>
+                                                <td>{{ $plan['platform_name'] }}</td>
+                                                <td><img width="40px" height="40px"
+                                                        src="{{ asset('assets/uploads/plans/' . $plan['logo']) }}"
+                                                        alt=""></td>
+                                                <td>
+                                                    {{ number_format($plan->total_investment , 4) }} دولار
+                                                </td>
+                                                <td> {{ $plan->investment_count }} </td>
+                                                {{-- <td>{{$plan['main_price']}} $</td>
                                             <td>{{$plan['current_price']}} $</td>
-                                            <td>{{$plan['return_investment']}} $</td>
-                                            <td>
+                                            <td>{{$plan['return_investment']}} $</td> --}}
+                                                {{-- <td>
                                                 @php
                                                     echo   \App\Models\front\Invoice::where('plan_id',$plan['id'])->where('status',1)->sum('plan_price');
                                                 @endphp
                                                 $
-                                            </td>
-                                            <td> @php echo  count(\App\Models\front\Invoice::where('plan_id',$plan['id'])->get()) @endphp </td>
-                                            <td> @php echo  count(\App\Models\front\Invoice::where('status',1)->where('plan_id',$plan['id'])->get()) @endphp </td>
+                                            </td> --}}
+                                              
 
-                                            <td>
-                                                @if($plan['status'] == 1)
-                                                    <span class="badge badge-outline-success"> فعالة  </span>
-                                                @else
-                                                    <span class="badge badge-outline-danger"> مغلقة  </span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <div class="d-flex gap-2">
-                                                    <button type="button" class="btn btn-soft-danger btn-sm"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edit_withdraw_{{$plan['id']}}">
-                                                        <iconify-icon icon="solar:pen-2-broken"
-                                                                      class="align-middle fs-18"></iconify-icon>
-                                                    </button>
-
-                                                    @if($plan->status !=2)
-                                                        <button type="button" class="btn btn-soft-danger btn-sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#lock_plan_{{$plan['id']}}">
-                                                            <iconify-icon icon="solar:lock-broken"
-                                                                          class="align-middle fs-18"></iconify-icon>
-                                                        </button>
+                                                <td>
+                                                    @if ($plan['status'] == 1)
+                                                        <span class="badge badge-outline-success"> فعالة </span>
+                                                    @else
+                                                        <span class="badge badge-outline-danger"> مغلقة </span>
                                                     @endif
-                                                    <a href="{{url('admin/investments/'.$plan['id'])}}"
-                                                       class="btn btn-success"> عوائد الاستثمار </a>
-                                                    <a href="{{url('admin/plan_report/'.$plan['id'])}}"
-                                                       class="btn btn-success"> تقرير الخطة </a>
-                                                    <button type="button" class="btn btn-soft-danger btn-sm"
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-2">
+                                                        <button type="button" class="btn btn-soft-danger btn-sm"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#delete_withdraw_{{$plan['id']}}">
-                                                        <iconify-icon icon="solar:trash-bin-minimalistic-2-broken"
-                                                                      class="align-middle fs-18"></iconify-icon>
-                                                    </button>
+                                                            data-bs-target="#edit_withdraw_{{ $plan['id'] }}">
+                                                            <iconify-icon icon="solar:pen-2-broken"
+                                                                class="align-middle fs-18"></iconify-icon>
+                                                        </button>
 
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <!-- Modal -->
-                                        @include('admin.Plans.update')
-                                        @include('admin.Plans.delete')
-                                        @include('admin.Plans.lock_plan')
-                                    @endforeach
+                                                        @if ($plan->status != 2)
+                                                            <button type="button" class="btn btn-soft-danger btn-sm"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#lock_plan_{{ $plan['id'] }}">
+                                                                <iconify-icon icon="solar:lock-broken"
+                                                                    class="align-middle fs-18"></iconify-icon>
+                                                            </button>
+                                                        @endif
+                                                        <a href="{{ url('admin/investments/' . $plan['id']) }}"
+                                                            class="btn btn-success"> عوائد الاستثمار </a>
+                                                        <a href="{{ url('admin/plan_report/' . $plan['id']) }}"
+                                                            class="btn btn-success"> تقرير الخطة </a>
+                                                        <button type="button" class="btn btn-soft-danger btn-sm"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#delete_withdraw_{{ $plan['id'] }}">
+                                                            <iconify-icon icon="solar:trash-bin-minimalistic-2-broken"
+                                                                class="align-middle fs-18"></iconify-icon>
+                                                        </button>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <!-- Modal -->
+                                            @include('admin.Plans.update')
+                                            @include('admin.Plans.delete')
+                                            @include('admin.Plans.lock_plan')
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -146,11 +146,11 @@
 
 @section('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {{--    <!-- DataTables JS -->--}}
+    {{--    <!-- DataTables JS --> --}}
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // تحقق ما إذا كان الجدول قد تم تهيئته من قبل
             if ($.fn.DataTable.isDataTable('#table-search')) {
                 $('#table-search').DataTable().destroy(); // تدمير التهيئة السابقة

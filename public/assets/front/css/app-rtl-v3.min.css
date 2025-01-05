@@ -24848,11 +24848,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     border-radius: 5px;
 }
 
-.top_bar_data .topbar-item .noti_section button i {
-    color: #0efe7d;
-    margin-right: 10px;
-    font-size: 16px;
-}
+
 
 .top_bar_data .topbar-item .noti_section button .total_balance {
     font-weight: bold;
@@ -24860,7 +24856,16 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     font-size: 18px;
     margin-left: 20px;
 }
-
+.top_bar_data .topbar-item .noti_section .notification .alert_notification{
+    background-color: transparent;
+    color: #fff;
+    padding: 0;
+}
+.top_bar_data .topbar-item .noti_section .notification .alert_notification i{
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+}
 @media (max-width: 991px) {
     .top_bar_data .topbar-item .deposit_button {
         font-size: 13px;
@@ -25215,7 +25220,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
 .exchange_page .main_data {
     display: flex;
     justify-content: center;
-    max-width: 65%;
+    max-width: 98%;
     margin: auto;
     margin-top: 30px;
 }
@@ -25527,7 +25532,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     }
 
     .exchange_page .main_data .right_data .buttons {
-        max-width: 100%;
+        max-width: 90%;
     }
 
     .exchange_page .main_data .left_data .data_info {
@@ -25548,7 +25553,8 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     }
 
     .exchange_page .main_data .left_data button {
-        margin-top: 30px;
+        margin-top: 13px;
+        width: 100%;
     }
 
     .expert_report .plans_total_report .plans .plan1 {
@@ -25651,7 +25657,6 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     padding-top: 20px;
     border-top: 2px solid #383a4c;
     margin-top: 20px;
-    flex-wrap: wrap;
 }
 
 .save_exchange_data .exchange_second_section h4 {
@@ -25670,7 +25675,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     cursor: pointer;
     background: #383a4c;
     color: #fff;
-    padding: 5px;
+    padding: 2px;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -25726,6 +25731,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     padding: 15px;
     outline: none;
     color: #fff;
+    width: 50%;
 }
 
 .save_exchange_data .exchange_third_section .form-group .input_data span {
@@ -25847,7 +25853,7 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     background: #2a2a3c;
     padding: 10px;
     border-radius: 12px;
-    margin-top: 20px;
+    margin:10px;
 }
 
 .open_trader h6 {
@@ -25864,16 +25870,19 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
 }
 
 .open_trader .open_trader_details {
+    /* display: flex;
+    justify-content: space-between;
+    align-items: center; */
+}
+
+.open_trader .open_trader_details .details {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.open_trader .open_trader_details .details {}
-
 .open_trader .open_trader_details .details .first_details {
     text-align: center;
-    margin-bottom: 15px;
 }
 
 .open_trader .open_trader_details .details .first_details p {
@@ -26021,4 +26030,35 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
 .profile_tabs form .active_account_button:hover {
     background-color: #0faf59;
     color: #fff;
+}
+
+
+@media (max-width:991px) {
+    .exchange_page .main_data .left_data .data_info{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .exchange_page .main_data .right_data .section{
+        margin-bottom: 6px;
+    }
+    .exchange_page .main_data .right_data{
+        height: auto;
+    }
+    .exchange_page .main_data .left_data{
+        height: auto;
+    }
+    .exchange_page .main_data .left_data .data_info span{
+        font-size: 13px;
+    }
+    .exchange_page .main_data .right_data .buttons button{
+        width: 30px;
+    height: 26px;
+    font-size: 18px;
+    color: #ffffff;
+    background-color: #33334a;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0px -11px;
+    }
 }

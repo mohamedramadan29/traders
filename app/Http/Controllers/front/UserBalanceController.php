@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
 use App\Models\front\User;
 use App\Models\front\UserStatment;
+use App\Notifications\ChargeBalance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
@@ -40,7 +42,6 @@ class UserBalanceController extends Controller
                 DB::beginTransaction();
                 $user->dollar_balance = $new_balance;
                 $user->save();
-
                 /////////// Add New User Transaction
                 ///
                 $statement = new UserStatment();
@@ -48,6 +49,8 @@ class UserBalanceController extends Controller
                 $statement->transaction_type = 'deposit';
                 $statement->amount = $data['deposit'];
                 $statement->save();
+                ################### Send Notification To User ###########################
+                Notification::send($user, new ChargeBalance($user, Auth::id(), $data['deposit'], date('Y-m-d H:i:s')));
                 DB::commit();
                 return $this->success_message(' تم ايداع المبلغ بنجاح  ');
             } catch (\Exception $e) {

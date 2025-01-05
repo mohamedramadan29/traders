@@ -29,7 +29,7 @@
                     <!-- Modal structure  -->
                     <div class="platform_data" id="save_exchange_click">
 
-                        <div class="modal-body text-center">
+                        <div class="modal-body text-center" style="padding: 1px">
                             {{-- <div class="exchange_first_section">
                                         empty div
                                     </div> --}}
@@ -38,20 +38,20 @@
 
                                 <div class="exchange_second_section">
                                     <div class="option" data-value="30" data-rate="1" onclick="selectOption(this)">
-                                        <span class="days">30 d</span> <span>1%</span>
+                                        <span class="days">30 d</span> <span>( 1 - 5 )%</span>
                                     </div>
                                     <div class="option" data-value="60" data-rate="2.5" onclick="selectOption(this)">
-                                        <span class="days">60 d</span> <span>2.5%</span>
+                                        <span class="days">60 d</span> <span>(2.5 - 12)%</span>
                                     </div>
                                     <div class="option" data-value="90" data-rate="4.5" onclick="selectOption(this)">
-                                        <span class="days">90 d</span> <span>4.5%</span>
+                                        <span class="days">90 d</span> <span> (4.5 - 22) %</span>
                                     </div>
                                     <div class="option" data-value="180" data-rate="9" onclick="selectOption(this)">
-                                        <span class="days">180 d</span> <span>9%</span>
+                                        <span class="days">180 d</span> <span>( 10 - 50 ) %</span>
                                     </div>
                                     <div class="option selected" data-value="360" data-rate="12"
                                         onclick="selectOption(this)">
-                                        <span class="days">360 d</span> <span>12%</span>
+                                        <span class="days">360 d</span> <span> ( 25 - 125 ) %</span>
                                     </div>
                                     <!-- Hidden inputs -->
                                     <input type="radio" name="duration" value="30" data-rate="1"
@@ -65,17 +65,14 @@
                                     <input type="radio" name="duration" value="360" data-rate="12" class="hidden-radio"
                                         checked>
                                 </div>
-                                <style>
-
-                                </style>
-
                                 <div class="exchange_third_section">
                                     <div class="form-group">
                                         <label> المبلغ </label>
                                         <div class="input_data">
                                             <input type="number" name="amount" id="amount" step="0.01"
-                                                placeholder="الحد الادني 5000 bin" oninput="updateSummary()">
-                                            <span>BIN</span>
+                                                max="5000" min="1" placeholder="الحد الادني 5000 دولار "
+                                                oninput="updateSummary()">
+                                            <span>دولار </span>
                                             <button type="button" onclick="setMax()"> الحد الاقصي</button>
                                         </div>
                                     </div>
@@ -85,11 +82,11 @@
                                     <div class="summary">
                                         <div>
                                             <h4> مبلغ الاستثمار </h4>
-                                            <span id="investmentAmount">5000 BIN</span>
+                                            <span id="investmentAmount">5000 دولار</span>
                                         </div>
                                         <div>
                                             <h4> المكافئات المالية المقدرة </h4>
-                                            <span id="expectedRewards" style="color: #11af59"> +2.5 BIN </span>
+                                            <span id="expectedRewards" style="color: #11af59"> +2.5 دولار </span>
                                         </div>
                                         <div>
                                             <h4> العائد السنوي </h4>
@@ -104,10 +101,11 @@
                                 <div class="exchange_six_section">
                                     <p> تاريخ البدء : <span id="display_start_date">{{ date('d/m/Y') }}</span></p>
                                     <p> تاريخ الانتهاء : <span id="display_end_date"></span></p>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="defaultCheck1">
+                                    <div class="form-check custom-checkbox">
+                                        <input required class="form-check-input" type="checkbox" id="defaultCheck1">
                                         <label class="form-check-label" for="defaultCheck1">
-                                            لقد قرأت ووافقت على <a href="#">اتفاقية خدمة Binviste Staking</a>
+                                            لقد قرأت ووافقت على <a target="_blank" href="{{ url('terms') }}">اتفاقية خدمة
+                                                Binviste Staking</a>
                                         </label>
                                     </div>
                                     <button type="submit" class="btn btn-success"> تأكيد </button>
@@ -126,8 +124,8 @@
                                     endDate.setDate(startDate.getDate() + duration);
 
                                     // تحديث الحقول الظاهرة
-                                    document.getElementById('investmentAmount').textContent = `${amount} BIN`;
-                                    document.getElementById('expectedRewards').textContent = `+${(amount * rate / 100).toFixed(2)} BIN`;
+                                    document.getElementById('investmentAmount').textContent = `${amount} دولار`;
+                                    document.getElementById('expectedRewards').textContent = `+${(amount * rate / 100).toFixed(2)} دولار`;
                                     document.getElementById('annualReturn').textContent = `${rate} %`;
                                     document.getElementById('display_start_date').textContent = startDate.toLocaleDateString('en-GB');
                                     document.getElementById('display_end_date').textContent = endDate.toLocaleDateString('en-GB');
@@ -168,50 +166,160 @@
                         </div>
                     </div>
                 </div>
+                @if (count($storages) > 0)
+                    <div class="table-responsive my_new_container save_exchange_data">
+                        <div class="open_trader">
+                            <h6> الاستثمارت الحالية </h6>
+                            <h3> BIN / USD </h3>
+                            @foreach ($storages as $key => $storage)
+                                <div class="open_trader_details">
+                                    <div class="details">
+                                        <div class="first_details">
+                                            <p> مبلغ الاستثمار (دولار) </p>
+                                        </div>
+                                        <div class="first_details">
+                                            <p> عائد الاستثمار / الربح </p>
+                                        </div>
+                                        <div class="first_details">
+                                            <p> وقت وتاريخ الانتهاء </p>
+                                        </div>
+                                    </div>
+                                    <div class="details">
+                                        <div class="first_details">
+                                            <span class="sp_span"> {{ number_format($storage['amount_invested'], 2) }}
+                                                <small style="color: #aaa5a5"> ( {{ $storage['interest_date'] }} يوم )
+                                                </small>
+                                            </span>
+                                        </div>
+                                        <div class="first_details">
+                                            <span class="sp_span"> 35 % <small style="color: #aaa5a5"> ( 2.5% ) </small>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span style="font-size: 12px; color: #aaa5a5;"
+                                                id="countdown-timer-{{ $key }}"
+                                                data-end-date="{{ $storage['end_date'] }}">
+                                            </span>
+                                        </div>
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                const countdownElement = document.getElementById('countdown-timer-{{ $key }}');
+                                                const endDate = countdownElement.getAttribute('data-end-date');
+                                                const targetDate = new Date(endDate).getTime();
 
-                <div class="table-responsive my_new_container">
-                    <div class="open_trader">
-                        <h6>  الاستثمارت الحالية  </h6>
-                        <h3> BIN / USD </h3>
-                        @foreach ($storages as $storage)
-                            <div class="open_trader_details">
-                                <div class="details">
-                                    <div class="first_details">
-                                        <p> مبلغ الاستثمار  (دولار) </p>
-                                        <span class="sp_span"> {{ number_format($storage['amount_invested'], 2) }} </span>
-                                    </div>
-                                    <div class="first_details">
-                                        <p> فترة التخزين  (يوم ) </p>
-                                        <span> {{ $storage['interest_date'] }} يوم </span>
-                                    </div>
-                                </div>
-                                <div class="details">
-                                    <div class="first_details">
-                                        <p> النسبة    </p>
-                                        <span> {{ $storage['interest_rate'] }} % </span>
-                                    </div>
-                                    <div class="first_details">
-                                        <p> تاريخ البداية  </p>
-                                        <span> {{ $storage['start_date'] }} </span>
-                                    </div>
-                                </div>
-                                <div class="details">
-                                    <div class="first_details">
-                                        <p> تاريخ الانتهاء </p>
+                                                function updateCountdown() {
+                                                    const now = new Date().getTime();
+                                                    const timeDifference = targetDate - now;
 
-                                        <span> {{ $storage['end_date'] }}
-                                        </span>
+                                                    if (timeDifference <= 0) {
+                                                        countdownElement.textContent = "انتهى الوقت";
+                                                        clearInterval(interval);
+                                                        return;
+                                                    }
+
+                                                    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                                                    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                                    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                                                    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                                                    countdownElement.textContent = `${days} ي / ${hours} س / ${minutes} د / ${seconds} ث`;
+                                                }
+
+                                                // تحديث العداد كل ثانية
+                                                const interval = setInterval(updateCountdown, 1000);
+                                                updateCountdown(); // تشغيله مرة عند التحميل
+                                            });
+                                        </script>
                                     </div>
-                                    <div class="first_details">
-                                        <p> --- </p>
-                                        <span>  </span>
+                                    <br>
+                                    <div class="details">
+                                        <div class="first_details">
+                                            <p> معدل الربح اليومي </p>
+                                        </div>
+                                        <div class="first_details">
+                                            <p> من {{ $storage['start_date'] }} </p>
+                                        </div>
+                                        <div class="first_details">
+                                            <p> الي {{ $storage['end_date'] }} </p>
+                                        </div>
+                                    </div>
+                                    <div class="details">
+                                        <div class="first_details">
+                                            <span class="sp_span"> 2.5 $ </span>
+                                        </div>
+                                        <div class="first_details">
+                                            <span
+                                                style="color: #aaa5a5;text-align: center;font-size: 12px;margin-left:-90%">
+                                                المكافئات التالية
+                                                <br>
+                                                <small id="daily-timer-{{ $key }}"></small>
+                                            </span>
+                                        </div>
+                                        <!--#################### Storage To CountDownTimer ##########################-->
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                const timerElement = document.getElementById('daily-timer-{{ $key }}');
+
+                                                function updateDailyCountdown() {
+                                                    const now = new Date();
+                                                    const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0,
+                                                        0); // الساعة 12:00 منتصف الليل
+                                                    const timeDifference = tomorrow - now;
+
+                                                    if (timeDifference <= 0) {
+                                                        timerElement.textContent = "انتهى الوقت!";
+                                                        return;
+                                                    }
+
+                                                    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                                    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                                                    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                                                    timerElement.textContent = `${hours} س / ${minutes} د / ${seconds} ث`;
+                                                }
+                                                // تحديث العد التنازلي كل ثانية
+                                                setInterval(updateDailyCountdown, 1000);
+                                                updateDailyCountdown(); // التحديث عند تحميل الصفحة مباشرةً
+                                            });
+                                        </script>
+                                        <div class="first_details">
+                                            <button href="#multiCollapseExample_{{ $storage['id'] }}" class="btn btn-sm storage_button_details toggle-transactions"
+                                            data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"> المعاملات <i
+                                                    class="bi bi-eye"></i> </button>
+                                                   
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <hr>
-                        @endforeach
+                                @include('front.storage.storage_daily_investment')
+                                <hr>
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        document.querySelectorAll('.toggle-transactions').forEach(button => {
+                                            button.addEventListener('click', function() {
+                                                const storageId = this.getAttribute('data-storage-id'); // احصل على ID التخزين
+                                                const transactionsContainer = document.getElementById(
+                                                    `transactions-${storageId}`);
+                                                // تحقق من وجود العنصر
+                                                if (transactionsContainer) {
+                                                    // تبديل العرض
+                                                    if (transactionsContainer.style.display === 'none' || transactionsContainer
+                                                        .style.display === '') {
+                                                        transactionsContainer.style.display = 'block';
+                                                    } else {
+                                                        transactionsContainer.style.display = 'none';
+                                                    }
+                                                } else {
+                                                    console.error(`Container with ID transactions-${storageId} not found.`);
+                                                }
+                                            });
+                                        });
+                                    });
+                                </script>
+                            @endforeach
+                        </div>
                     </div>
-                </div>
+                @endif
+
             </div>
 
         </div>
@@ -221,5 +329,9 @@
     <!-- ==================================================== -->
     <!-- End Page Content -->
     <!-- ==================================================== -->
+@endsection
+
+@section('js')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 @endsection

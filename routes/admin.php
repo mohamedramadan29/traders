@@ -6,6 +6,8 @@ use \App\Http\Controllers\admin\AdminController;
 use \App\Http\Controllers\admin\PlansController;
 use \App\Http\Controllers\admin\PlatformController;
 use \App\Http\Controllers\admin\PlatFormInvestmentController;
+use App\Http\Controllers\admin\StorageInvestmentController;
+use App\Http\Controllers\admin\StoragePlanController;
 use \App\Http\Controllers\Admin\UserController;
 Route::group(['prefix' => 'admin'], function () {
     // Admin Login
@@ -28,40 +30,49 @@ Route::group(['prefix' => 'admin'], function () {
     });
 
     Route::group(['middleware' => 'admin'], function () {
-        Route::controller(PlatformController::class)->group(function (){
-            Route::get('platforms','index');
-            Route::match(['post','get'],'platform/store','store');
-            Route::match(['post','get'],'platform/update/{id}','update');
-            Route::post('platform/delete/{id}','delete');
+        Route::controller(PlatformController::class)->group(function () {
+            Route::get('platforms', 'index');
+            Route::match(['post', 'get'], 'platform/store', 'store');
+            Route::match(['post', 'get'], 'platform/update/{id}', 'update');
+            Route::post('platform/delete/{id}', 'delete');
         });
-        Route::controller(PlansController::class)->group(function (){
-            Route::get('plans','index');
-            Route::match(['post','get'],'plan/store','store');
-            Route::match(['post','get'],'plan/update/{id}','update');
-            Route::post('plan/delete/{id}','delete');
-            Route::post('plan/lock/{id}','lock');
-            Route::get('plan_report/{id}','report');
-        });
-
-        Route::controller(PlatFormInvestmentController::class)->group(function (){
-            Route::get('investments/{id}','index');
-            Route::match(['post','get'],'investment/store/{id}','store');
+        Route::controller(PlansController::class)->group(function () {
+            Route::get('plans', 'index');
+            Route::match(['post', 'get'], 'plan/store', 'store');
+            Route::match(['post', 'get'], 'plan/update/{id}', 'update');
+            Route::post('plan/delete/{id}', 'delete');
+            Route::post('plan/lock/{id}', 'lock');
+            Route::get('plan_report/{id}', 'report');
         });
 
-        Route::controller(UserController::class)->group(function (){
-            Route::get('users','index');
-            Route::get('user_report/{id}','report');
+        Route::controller(PlatFormInvestmentController::class)->group(function () {
+            Route::get('investments/{id}', 'index');
+            Route::match(['post', 'get'], 'investment/store/{id}', 'store');
         });
 
+        Route::controller(UserController::class)->group(function () {
+            Route::get('users', 'index');
+            Route::get('user_report/{id}', 'report');
+        });
         /////////////// Start WithDraws ///////////////
         ///
-        Route::controller(WithDrawController::class)->group(function (){
-            Route::get('withdraws','index');
-            Route::post('withdraw/add','store');
-            Route::post('withdraw/update/{id}','update');
-            Route::post('withdraw/delete/{id}','delete');
+        Route::controller(WithDrawController::class)->group(function () {
+            Route::get('withdraws', 'index');
+            Route::post('withdraw/add', 'store');
+            Route::post('withdraw/update/{id}', 'update');
+            Route::post('withdraw/delete/{id}', 'delete');
         });
+        #################### Start Storage InvestMent Controller ##############
+        Route::controller(StorageInvestmentController::class)->group(function () {
+            Route::get('storages', 'index');
+        });
+        ##################### End Storage InvestMent Controller ##############
+        ################## Start StoragePlan Daily Investment ################
+        Route::controller(StoragePlanController::class)->group(function(){
+            Route::get('storage/plans','index');
+            Route::match(['post','get'],'storage_return/{id}','StorageDailyReturn');
 
-
+        });
+        ##################### End Storage Plan Daily Investment ##############
     });
 });
