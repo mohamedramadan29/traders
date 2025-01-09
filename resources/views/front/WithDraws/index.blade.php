@@ -31,7 +31,10 @@
                         <div class="section1">
                             <div class="info">
                                 <h5> اجمالي الرصيد </h5>
-                                <h4 class="total_investment"> {{ number_format(Auth::user()->dollar_balance, 2) }} دولار
+                                @php
+                                    $all_balance = Auth::user()->dollar_balance + $totalinvestments;
+                                @endphp
+                                <h4 class="total_investment"> {{ number_format($all_balance, 2) }} دولار
                                 </h4>
                                 <p class="percentage"> <span> ربح وخسارة اليوم </span> +38989.5(3%) </p>
 
@@ -43,7 +46,7 @@
                                         data-bs-toggle="modal" data-bs-target="#main_withdraw_balance"> سحب </button>
                                     @include('front.Plans.withdraw')
                                     <a href="#" class="stat" data-bs-toggle="modal"
-                                    data-bs-target="#main_add_balance"> إيداع </a>
+                                        data-bs-target="#main_add_balance"> إيداع </a>
                                     @include('front.layouts.add_balance')
                                 </div>
                             </div>
@@ -52,9 +55,9 @@
                             <div class="info">
                                 <h5> اجمالي الرصيد المتاح </h5>
                                 @php
-                                    $total_balance = Auth::user()->dollar_balance + Auth::user()->bin_balance;
+                                    $total_balance = Auth::user()->dollar_balance;
                                 @endphp
-                                <h4 class="total_investment"> {{ number_format($total_balance, 2) }} دولار + bin </h4>
+                                <h4 class="total_investment"> {{ number_format($total_balance, 2) }} دولار </h4>
                             </div>
                             <div class="info">
                                 <h5> الرصيد في الاستثمارات </h5>
@@ -72,15 +75,15 @@
                     <hr>
                     <div class="balance_public_info">
                         <h4> رصيد التداول </h4>
-                        <h4> ----------- </h4>
-                        <h3> {{ number_format($trading_balance,2) }} دولار  </h3>
+                        <h4> اجمالي الرصيد </h4>
+                        <h3> {{ number_format($trading_balance, 2) }} دولار </h3>
                         <p class="percentage"> <span> ربح وخسارة اليوم </span> +38989.5(3%) </p>
                     </div>
                     <hr>
                     <div class="balance_public_info">
                         <h4> رصيد الاستثمار </h4>
-                        <h4> ----------- </h4>
-                        <h3> {{ number_format($storage_investment,2) }} دولار  </h3>
+                        <h4> اجمالي الرصيد </h4>
+                        <h3> {{ number_format($storage_investment, 2) }} دولار </h3>
                         <p class="percentage"> <span> ربح وخسارة اليوم </span> +38989.5(3%) </p>
                     </div>
                     {{--                    <div> --}}

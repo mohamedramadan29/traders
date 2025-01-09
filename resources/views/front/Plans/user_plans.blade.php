@@ -36,7 +36,7 @@
                             <h4 class="total_investment"> {{ number_format($totalbalance, 2) }} دولار </h4>
 
                             <div class="investment_percentages">
-                                <p class="percentage"> +{{ $daily_earning }}({{ $daily_earning_percentage }}%) <span> اليوم
+                                <p class="percentage"> +{{ $daily_earning }}({{ $daily_earning_percentage * 100 }}%) <span> اليوم
                                         <i class="bi bi-arrow-up-short"></i> </span>
                                 </p>
                             </div>

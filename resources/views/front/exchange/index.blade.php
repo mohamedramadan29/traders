@@ -25,15 +25,16 @@
         <div class="container-xxl">
 
             <div class="row">
-                <div class="exchange_header">
+                {{-- <div class="exchange_header">
                     <h4> 148.00 <span> USD </span></h4>
                     <h4> 30.00 <span> BIN </span></h4>
                     <h4 class="exchange"> استبدال <i class="bi bi-arrow-left-right"></i></h4>
-                </div>
+                </div> --}}
                 <div class="open_exchange">
 
                     <button class="open_button" data-bs-toggle="modal" data-bs-target="#open_new_deal"> فتح صفقة </button>
-                    <h4> {{ $market_price }} <span> +1 % </span></h4>
+                    <h4> {{ number_format($market_price, 4)  }} <span> دولار  </span></h4>
+                    <h4>  <span> +1 % ( نسبة الصعود خلال اخر ٢٤ ساعة  ) </span></h4>
                 </div>
 
                 <div class="col-xl-12">

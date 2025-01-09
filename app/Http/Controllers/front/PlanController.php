@@ -35,6 +35,7 @@ class PlanController extends Controller
     public function user_plans()
     {
         $user = Auth::user();
+        //  dd($user);
         $Plans = UserPlan::where('user_id', Auth::id())->where('status', 1)->with('plan')->get();
         // dd($Plans);
         $investment_earning = UserPlatformEarning::where('user_id', $user->id)->sum('investment_return');
@@ -193,9 +194,9 @@ class PlanController extends Controller
                 $public_setting->total_capital += $remaining_bin * $market_price;
                 $public_setting->save();
 
-                $user->bin_balance += $remaining_bin;
-                $user->dollar_balance -= $remaining_bin * $market_price;
-                $user->save();
+                // $user->bin_balance += $remaining_bin;
+                // $user->dollar_balance -= $remaining_bin * $market_price;
+                // $user->save();
             }
 
             $orderId = uniqid();
