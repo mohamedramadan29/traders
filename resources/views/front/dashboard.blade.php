@@ -75,7 +75,7 @@
                                                             <span
                                                                 style="color: {{ $plan['today_returns_percentage'] > 0 ? '#10AE59' : '#FF0000' }}">
                                                                 {{ $plan['today_returns_percentage'] > 0 ? '+' : '' }}
-                                                                {{ number_format($plan['today_returns_percentage'], 2) }} %
+                                                                {{ number_format($plan['today_returns_percentage']*100, 2) }} %
                                                                 <i
                                                                     class="bi {{ $plan['today_returns_percentage'] > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
                                                             </span>
@@ -89,7 +89,7 @@
                                                             <span
                                                                 style="color: {{ $plan['last_7_days_percentage'] > 0 ? '#10AE59' : '#FF0000' }}">
                                                                 {{ $plan['last_7_days_percentage'] > 0 ? '+' : '' }}
-                                                                {{ number_format($plan['last_7_days_percentage'], 2) }} %
+                                                                {{ number_format($plan['last_7_days_percentage']*100, 2) }} %
                                                                 <i
                                                                     class="bi {{ $plan['last_7_days_percentage'] > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
                                                             </span>
@@ -103,7 +103,7 @@
                                                             <span
                                                                 style="color: {{ $plan['last_30_days_percentage'] > 0 ? '#10AE59' : '#FF0000' }}">
                                                                 {{ $plan['last_30_days_percentage'] > 0 ? '+' : '' }}
-                                                                {{ number_format($plan['last_30_days_percentage'], 2) }} %
+                                                                {{ number_format($plan['last_30_days_percentage']*100, 2) }} %
                                                                 <i
                                                                     class="bi {{ $plan['last_30_days_percentage'] > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
                                                             </span>

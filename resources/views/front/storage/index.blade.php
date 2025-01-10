@@ -283,10 +283,12 @@
                                             });
                                         </script>
                                         <div class="first_details">
-                                            <button href="#multiCollapseExample_{{ $storage['id'] }}" class="btn btn-sm storage_button_details toggle-transactions"
-                                            data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"> المعاملات <i
-                                                    class="bi bi-eye"></i> </button>
-                                                   
+                                            <button href="#multiCollapseExample_{{ $storage['id'] }}"
+                                                class="btn btn-sm storage_button_details toggle-transactions"
+                                                data-bs-toggle="collapse" role="button" aria-expanded="false"
+                                                aria-controls="multiCollapseExample1"> المعاملات <i class="bi bi-eye"></i>
+                                            </button>
+
                                         </div>
                                     </div>
                                 </div>
@@ -333,5 +335,4 @@
 
 @section('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 @endsection

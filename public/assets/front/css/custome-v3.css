@@ -4,48 +4,70 @@
 
 
 /*##############  Start Navbar  ##########*/
-.navbar{
+.navbar {
     background: linear-gradient(275deg, #26126b, #272674) !important;
 }
-.navbar .navbar-brand{}
-.navbar .navbar-brand img{
+
+.navbar .navbar-brand {}
+
+.navbar .navbar-brand img {
     width: 60px;
 }
-.navbar .nav_buttons{
 
-}
-.navbar .nav_buttons a{
+.navbar .nav_buttons {}
+
+.navbar .nav_buttons a {
     margin-right: 10px;
     margin-left: 10px;
 }
-.navbar .nav_buttons .login{
+
+.navbar .nav_buttons .login {
     background-color: #1c1f2e;
     padding: 10px;
     border-radius: 5px;
     color: #fff;
 }
-.navbar .nav_buttons .register{
-    background-color: #0faf59;
+
+.navbar .nav_buttons .register {
+    background: linear-gradient(135deg, #48ebdd, #3194b2);
     padding: 10px;
     border-radius: 5px;
     color: #fff;
 }
-@media(max-width:991px){
-    .navbar .navbar-brand img{
-        width: 35px;
+
+@media(max-width:991px) {
+    .navbar .navbar-brand img {
+        width: 50px;
     }
 }
+
 /*############# End Navbar ###############*/
 
 .main_page .hero_section {
-    background-size: cover;
-    background-position: center;
-    padding: 100px;
-    background-repeat: no-repeat;
+    background: linear-gradient(275deg, #26126b, #272674);
+    animation: gradientAnimation 10s ease infinite;
+    background-size: 200% 200%;
     height: 80vh;
     display: flex;
     align-items: center;
+    text-align: center;
 }
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+
+    }
+    50% {
+        background-position: 100% 50%;
+
+    }
+    100% {
+        background-position: 0% 50%;
+
+    }
+}
+
+
 
 .main_page .hero_section .data {
     color: #fff;
@@ -82,6 +104,51 @@
     padding: 11px;
     font-size: 17px;
     margin-top: 20px;
+}
+
+/* تعريف الحركات */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* تطبيق الحركات */
+.animate-fade-in {
+    animation: fadeIn 1.5s ease-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 1.5s ease-out;
+}
+
+/* التأخير في ظهور العناصر */
+.hero_title2 {
+    animation-delay: 0.5s;
+}
+
+.hero_desc {
+    animation-delay: 1s;
+}
+
+.btn-global_button {
+    animation-delay: 1.5s;
 }
 
 /********************* Start How Work **************/
@@ -272,7 +339,15 @@
     font-size: 20px;
     margin-right: 10px;
 }
-
+.last_footer .traders{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.last_footer .traders img{
+    width: 60px;
+    height: 60px;
+}
 /********************* End Footer ******************/
 
 
@@ -281,8 +356,15 @@
 .login_form {
     color: #fff;
     padding-top: 50px;
+    max-width: 70%;
+    margin: auto;
 }
 
+@media(max-width:991px) {
+    .login_form{
+        max-width: 100%;
+    }
+}
 .login_form h2 {
     color: #fff;
 }
@@ -347,6 +429,7 @@
 @media (max-width:991px) {
     .main_page .hero_section {
         padding: 0;
+        height: 50vh;
 
     }
 
@@ -375,13 +458,16 @@
     .certificate .data .info .icon_head i {
         font-size: 25px;
     }
-    .main_page .hero_section .data .hero_title1{
+
+    .main_page .hero_section .data .hero_title1 {
         font-size: 35px;
     }
-    .main_page .hero_section .data .hero_title2{
+
+    .main_page .hero_section .data .hero_title2 {
         font-size: 25px;
     }
-    .main_page .hero_section .data .hero_desc{
+
+    .main_page .hero_section .data .hero_desc {
         font-size: 18px;
     }
 }

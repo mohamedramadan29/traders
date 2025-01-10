@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <div class="website_logo">
-            <a class="navbar-brand" href="{{ url('/') }}"> <img src="https://qxbroker.com/site/img/quotex_logo-white-mobile.svg"
+            <a class="navbar-brand" href="{{ url('/') }}"> <img src="{{ asset('assets/uploads/logo.png') }}"
                     alt=""> </a>
         </div>
         <div class="nav_buttons">

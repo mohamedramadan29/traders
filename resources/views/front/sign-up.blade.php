@@ -16,16 +16,16 @@
         @endforeach
     @endif
     <div class="d-flex flex-column p-3"
-        style="background-image: url({{ asset('assets/uploads/background.jpg') }});background-size: cover;background-position: center;background-repeat: no-repeat;">
+        style="background:linear-gradient(275deg, #26126b, #272674);">
         <div class="d-flex flex-column flex-grow-1">
             <div class="row h-100">
-                <div class="col-xxl-7">
+                <div class="col-xxl-12">
                     @if (\Illuminate\Support\Facades\Session::has('Error_Message'))
                         <div class="alert alert-danger"> {{ \Illuminate\Support\Facades\Session::get('Error_Message') }}
                         </div>
                     @endif
                     <div class="row justify-content-center h-100 login_form">
-                        <div class="col-lg-6 py-lg-5">
+                        <div class="col-lg-12 py-lg-5">
                             <div class="d-flex flex-column h-100 justify-content-center">
                                 <h2 class="fw-bold fs-24"> حساب جديد </h2>
 
@@ -100,13 +100,6 @@
                                     });
                                 </script>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xxl-5 d-none d-xxl-flex">
-                    <div class="card h-100 mb-0 overflow-hidden"
-                        style="padding:0; border: none;border-radius: 0;box-shadow: none">
-                        <div class="d-flex flex-column h-100">
                         </div>
                     </div>
                 </div>

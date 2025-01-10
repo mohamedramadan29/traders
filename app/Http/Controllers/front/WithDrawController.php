@@ -20,21 +20,7 @@ class WithDrawController extends Controller
 {
     use Message_Trait;
 
-    public function index()
-    {
-        $user = Auth::user();
-        $totalinvestments = UserPlan::where('user_id', $user->id)->sum('total_investment');
-        /////// رصيد التداول
-        $trading_balance = SalesOrder::where('user_id', $user->id)->where('status', 0)->sum('currency_amount');
-        ////////////رصيد الاستثمار
-        $storage_investment = StorageInvestment::where('user_id', $user->id)->where('status', 1)->sum('amount_invested');
-        $withdraws = WithDraw::where('user_id', Auth::id())->orderBy('id', 'desc')->get();
-        // WithDrawSum Under Revision
-        $withdrawSum = WithDraw::where('user_id', Auth::id())->where('status', 0)->sum('amount');
-        ////// WithDrawSum Compeleted
-        $withdrawSumCompeleted = WithDraw::where('user_id', Auth::id())->where('status', 1)->sum('amount');
-        return view('front.WithDraws.index', compact('withdraws','storage_investment', 'trading_balance', 'totalinvestments', 'withdrawSum', 'withdrawSumCompeleted'));
-    }
+   
 
     public function store(Request $request)
     {

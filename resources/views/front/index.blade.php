@@ -2,27 +2,49 @@
 @section('title')
     الرئيسية | Binveste
 @endsection
+@section('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+@endsection
 @section('content')
     <div class="page_content main_page">
-        <div class="hero_section" style="background-image: url({{ asset('assets/uploads/background.jpg') }})">
+        <div class="hero_section">
+            <svg class="svg-background" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M0,0 L100,0 Q95,50 100,100 L0,100 Z" fill="#26126b">
+                    <animate attributeName="d" dur="10s" repeatCount="indefinite"
+                        values="M0,0 L100,0 Q95,50 100,100 L0,100 Z;
+                               M0,0 L100,0 Q90,50 100,100 L0,100 Z;
+                               M0,0 L100,0 Q95,50 100,100 L0,100 Z;" />
+                </path>
+            </svg>
             <div class="container">
                 <div class="data">
                     <div class="row">
-                        <div class="col-lg-8 col-12">
-                            <h4 class="hero_title1"> الاستثمار </h4>
-                            <p class="hero_title2"> أصبح أفضل الآن </p>
+                        <div class="col-lg-12 col-12">
+                            <h4 class="hero_title1">الاستثمار</h4>
+                            <p class="hero_title2">أصبح أفضل الآن</p>
                             <p class="hero_desc">
-                                <span> Binveste </span>
-                                فريق من الخبراء يتداولون نيابه عنك لتحقيق اقصى قدر من العائدات.
+                                <span>Binveste</span>
+                                فريق من الخبراء يتداولون نيابة عنك لتحقيق أقصى قدر من العائدات.
                                 <br>
                                 اصول , eo,ex,Qx,px.
                             </p>
-                            <a class="btn btn-global_button" href="#"> تداول الان </a>
+                            <a class="btn btn-global_button" href="{{ url('user/dashboard') }}">تداول الان</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <style>
+            .svg-background {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+            }
+        </style>
+
         <div class="how_work">
             <div class="container">
                 <div class="data">
@@ -154,17 +176,22 @@
                     <div class="row">
                         <div class="col-lg-3 col-12">
                             <div class="info">
-                                <img style="width: 60px" src="https://ar.eobroker.com/img/logos/EOBroker/eo-logo.svg">
+                                <img style="width: 60px" src="{{ asset('assets/uploads/logo.png') }}">
                                 <p> ينطوي التداول والاستثمار على مستوى كبير من المخاطر وهو غير مناسب و/أو مناسب لجميع
                                     العملاء. يرجى التأكد من أنك تدرس بعناية أهدافك الاستثمارية ومستوى خبرتك ورغبتك في
                                     المخاطرة قبل الشراء أو البيع. ينطوي الشراء أو البيع على مخاطر مالية وقد يؤدي إلى خسارة
                                     جزئية أو كاملة لأموالك </p>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-6">
+                        <div class="col-lg-3 col-12">
                             <div class="info">
                                 <h4> منصات التداول </h4>
-                                <img src="{{ asset('assets/uploads/partners.svg') }}">
+                                <div class="traders">
+                                    <img src="{{ asset('assets/uploads/trader1.png') }}" alt="traders">
+                                    <img src="{{ asset('assets/uploads/trader2.png') }}" alt="traders">
+                                    <img src="{{ asset('assets/uploads/trader3.png') }}" alt="traders">
+                                    <img src="{{ asset('assets/uploads/trader4.png') }}" alt="traders">
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-3 col-6">

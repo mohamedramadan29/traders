@@ -13,6 +13,7 @@ use \App\Http\Controllers\front\SalesOrderController;
 use \App\Http\Controllers\front\UserBalanceController;
 use App\Http\Controllers\front\NotificationController;
 use \App\Http\Controllers\front\StorageInvestmentController;
+use App\Http\Controllers\front\WalletController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,11 +75,17 @@ Route::group(['prefix' => 'user'], function () {
         /////////////// Start WithDraws ///////////////
         ///
         Route::controller(WithDrawController::class)->group(function () {
-            Route::get('withdraws', 'index');
+          //  Route::get('wallet', 'index');
             Route::post('withdraw/add', 'store');
             Route::post('withdraw/update/{id}', 'update');
             Route::post('withdraw/delete/{id}', 'delete');
         });
+
+        ####################### Start Wallet Controller ############
+        Route::controller(WalletController::class)->group(function () {
+           Route::get('wallet','index');
+        });
+        ####################### End Wallet Controller ##############
         ///////////////// Start Exchange Controller  ////////////////
         ///
         Route::controller(ExchangeController::class)->group(function () {
