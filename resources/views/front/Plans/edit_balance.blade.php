@@ -3,7 +3,7 @@
     <div class="modal-dialog">
         <div class="modal-content" style="background-color:#2a3040">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"> تعديل رصيد الاستثمار في الخطة  </h5>
+                <h5 class="modal-title" id="exampleModalLabel"> تعديل رصيد الاستثمار في الخطة </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <nav>
@@ -31,7 +31,7 @@
                             <div class="exchange_third_section">
                                 <div class="form-group">
                                     <div class="input_data">
-                                        <input  style="width: 90%" type="number" name="total_price" step="0.01"
+                                        <input style="width: 90%" type="number" name="total_price" step="0.01"
                                             placeholder="الحد الادني 0.01">
                                         <input type="hidden" name="plan_id" value="{{ $plan_details['plan']['id'] }}">
                                         <span>دولار </span>
@@ -56,12 +56,14 @@
                             <div class="exchange_third_section">
                                 <div class="form-group">
                                     <div class="input_data">
-                                        <input  style="width: 90%" type="number" name="total_price" step="0.01"
+                                        <input style="width: 90%" type="number" name="total_price" step="0.01"
                                             placeholder="">
                                         <input type="hidden" name="plan_id" value="{{ $plan_details['plan']['id'] }}">
                                         <span>دولار </span>
                                     </div>
-                                    <p> مجموع الاستثمارت المتاح في الخطة <span style="color:#11af59"> {{ number_format($plan_details['total_investment'], 2) }} دولار  </span>  </p>
+                                    <p> مجموع الاستثمارت المتاح في الخطة <span style="color:#11af59">
+                                            {{ number_format($plan_details['total_investment'], 2) }} دولار </span>
+                                    </p>
 
                                 </div>
                             </div>

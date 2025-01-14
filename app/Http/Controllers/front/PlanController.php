@@ -16,10 +16,12 @@ use Illuminate\Support\Facades\DB;
 use App\Models\admin\PublicSetting;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\PlanInvestMent;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\admin\UserPlatformEarning;
 use Illuminate\Support\Facades\Validator;
 use App\Models\admin\UserDailyInvestmentReturn;
+use Illuminate\Support\Facades\Notification;
 
 class PlanController extends Controller
 {
@@ -49,7 +51,6 @@ class PlanController extends Controller
             $plan->plan_profit = UserPlatformEarning::where('user_id', Auth::id())
                 ->where('plan_id', $plan_id)
                 ->sum('investment_return');
-
             // أرباح آخر يوم
             $last_return = UserDailyInvestmentReturn::where('user_id', Auth::id())
                 ->where('plan_id', $plan_id)
@@ -105,52 +106,40 @@ class PlanController extends Controller
             if (!$user) {
                 return redirect()->back()->with('error', 'المستخدم غير موجود.');
             }
-
             $data = $request->all();
             // dd($data);
-
             // التحقق من إدخال السعر والخطة
             if (!isset($data['total_price']) || $data['total_price'] <= 0) {
                 return redirect()->back()->with('error', 'يرجى إدخال مبلغ صحيح.');
             }
-
             if (!isset($data['plan_id'])) {
                 return redirect()->back()->with('error', 'يرجى اختيار الخطة.');
             }
-
             if ($user->dollar_balance < $data['total_price']) {
                 return redirect()->back()->with('error', 'رصيدك الحالي لا يكفي لإضافة الرصيد للخطة.');
             }
-
             $plan = Plan::find($data['plan_id']);
             if (!$plan) {
                 return redirect()->back()->with('error', 'الخطة المختارة غير موجودة.');
             }
-
             $public_setting = PublicSetting::first();
             if (!$public_setting) {
                 return redirect()->back()->with('error', 'إعدادات السوق غير موجودة.');
             }
-
             $market_price = $public_setting->market_price;
             $bin_amount = $data['total_price'] / $market_price;
-
             DB::beginTransaction();
-
             $remaining_bin = $bin_amount;
-
             // شراء العملات من الصفقات المفتوحة
             $open_sales = SalesOrder::where('status', 0)
                 ->where('selling_currency_rate', '<=', $market_price)
                 ->orderBy('selling_currency_rate', 'asc')
                 ->get();
-
             foreach ($open_sales as $sale) {
                 if ($remaining_bin <= 0)
                     break;
                 $available_bin = $sale->bin_amount - $sale->bin_sold;
                 $seller = User::find($sale->user_id);
-
                 if ($available_bin >= $remaining_bin) {
                     $sale->bin_sold += $remaining_bin;
 
@@ -189,14 +178,16 @@ class PlanController extends Controller
                     DB::rollBack();
                     return redirect()->back()->with('error', 'لا توجد عملات كافية لإتمام العملية.');
                 }
-
+                // تحديث القيم
                 $public_setting->currency_number -= $remaining_bin;
                 $public_setting->total_capital += $remaining_bin * $market_price;
+                // حساب سعر السوق الجديد
+                $new_market_price = $public_setting->total_capital / max($public_setting->currency_number, 1);
+                $public_setting->market_price = $new_market_price;
+                $public_setting->old_market_price = $market_price;
+                $public_setting-> market_price_percentage = ($new_market_price - $market_price) / $market_price * 100;
+                // حفظ التحديثات في قاعدة البيانات
                 $public_setting->save();
-
-                // $user->bin_balance += $remaining_bin;
-                // $user->dollar_balance -= $remaining_bin * $market_price;
-                // $user->save();
             }
 
             $orderId = uniqid();
@@ -235,6 +226,10 @@ class PlanController extends Controller
             $statment->amount = $data['total_price'];
             $statment->save();
 
+            ############### Send Notification To User ###################
+
+            Notification::send($user, new PlanInvestMent($user,$user->id ,$plan->id, $plan->name, $data['total_price']));
+
             DB::commit();
 
             return redirect()->route('user_plans')->with('success_message', 'تم الاشتراك بنجاح في الخطة.');
@@ -253,7 +248,6 @@ class PlanController extends Controller
         //dd($userplan);
         $planinvestment = $userplan->total_investment;
         $total_balance = $user['dollar_balance'];
-
         try {
             // التحقق من البيانات المدخلة
 
@@ -288,26 +282,25 @@ class PlanController extends Controller
                 return Redirect::back()->withInput()->withErrors('رصيد العملات الرقمية غير كافٍ لتغطية السحب المطلوب.');
             }
             $public_setting = PublicSetting::first();
-            // سعر السوق الحالي للعملة (يمكنك جلبه من API خارجي)
             $market_price = $public_setting['market_price']; // افترض أن هذه دالة تجلب سعر السوق الحالي
-
-            // حساب قيمة البيع بالدولار
-            //  $sale_amount = $crypto_to_withdraw * $market_price;
-
             DB::beginTransaction();
-
             $sales = new SalesOrder();
             $sales->user_id = 1;
             $sales->currency_rate = $market_price;
             $sales->enter_currency_rate = $market_price;
             $sales->selling_currency_rate = $market_price;
-            $sales->currency_amount = 1;
+            $sales->currency_amount = $data['total_price'];
             $sales->bin_amount = $crypto_to_withdraw;
             $sales->bin_sold = 0;
             $sales->save();
             // تحديث رصيد العملات الرقمية
             $user->bin_balance -= $crypto_to_withdraw;
+            $user->dollar_balance  = $user->dollar_balance + $data['total_price'];
             $user->Save();
+            ############## Update Plan Investment
+            $userplan->total_investment -= $data['total_price'];
+            $userplan->save();
+
             #################### Add Statments
             $statment = new UserStatment();
             $statment->user_id = Auth::id();
@@ -315,7 +308,6 @@ class PlanController extends Controller
             $statment->transaction_type = 'withdrawbalance';
             $statment->amount = $data['total_price'];
             $statment->save();
-
             DB::commit();
             return $this->success_message('  تم تعديل مبلغ الاستثمار في الخطة بنجاح  ');
         } catch (\Exception $e) {

@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\Message_Trait;
 use App\Models\admin\Admin;
-use App\Models\front\StorageInvestment;
-use App\Models\front\UserPlan;
 use Illuminate\Http\Request;
+use App\Models\front\UserPlan;
+use App\Http\Traits\Message_Trait;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\front\StorageInvestment;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\admin\PlatformInvestmentReturn;
 
 class AdminController extends Controller
 {
@@ -22,6 +24,31 @@ class AdminController extends Controller
         ############### Plans Reports #############
         $countuserinvestments = UserPlan::count();
         $totalplaninvestments = UserPlan::sum('total_investment');
+        ######### Get The All Profite Percentage
+        $allprofit__profit_percentage = PlatformInvestmentReturn::sum('return_amount');
+        // جلب الأرباح اليومية
+        $dailyProfitData = PlatformInvestmentReturn::select('return_amount', 'created_at')
+            ->whereDate('created_at', '>=', now()->subDays(7))  // اخر ٧ ايام
+            ->get();
+        // تحضير البيانات للـ Chart
+        $dailyProfitLabels = $dailyProfitData->pluck('created_at')->map(function ($date) {
+            return $date->format('D H:i'); // تنسيق الوقت (ساعة:دقيقة)
+        });
+
+        $dailyProfitValues = $dailyProfitData->pluck('return_amount');
+
+        ################################################
+        // جلب العوائد المجمعة حسب plan_id مع أسماء الخطط
+        $planReturns = DB::table('platform_investment_returns')
+            ->join('plans', 'platform_investment_returns.plan_id', '=', 'plans.id')
+            ->select('plans.name as plan_name', DB::raw('SUM(platform_investment_returns.return_amount) as total_return'))
+            ->groupBy('plans.name')
+            ->get();
+
+        // تحضير البيانات للـ Chart
+        $planLabels = $planReturns->pluck('plan_name'); // أسماء الخطط
+        $planValues = $planReturns->pluck('total_return'); // مجموع العوائد
+
         ################# InvestMentStorage ##########
         $totalcountinvestmentstorage = StorageInvestment::count();
         $totalcountinvestmentstorageactive = StorageInvestment::where('status', 1)->count();
@@ -29,11 +56,23 @@ class AdminController extends Controller
         $suminvestmentstorage = StorageInvestment::sum('amount_invested');
         $suminvestmentstorageactive = StorageInvestment::where('status', 1)->sum('amount_invested');
         $suminvestmentstoragedisactive = $suminvestmentstorage - $suminvestmentstorageactive;
+        
         ####################################################
-        return view('admin.dashboard', compact('countuserinvestments', 'totalplaninvestments',
-    'totalcountinvestmentstorage','totalcountinvestmentstorageactive','totalcountinvestmentstoragedisactive',
-    'suminvestmentstorage','suminvestmentstorageactive','suminvestmentstoragedisactive'
-    ));
+        return view('admin.dashboard', compact(
+            'countuserinvestments',
+            'totalplaninvestments',
+            'totalcountinvestmentstorage',
+            'totalcountinvestmentstorageactive',
+            'totalcountinvestmentstoragedisactive',
+            'suminvestmentstorage',
+            'suminvestmentstorageactive',
+            'suminvestmentstoragedisactive',
+            'allprofit__profit_percentage',
+            'dailyProfitLabels',
+            'dailyProfitValues',
+            'planLabels',
+            'planValues'
+        ));
     }
 
     ////////////////////// Login Admin //////////////

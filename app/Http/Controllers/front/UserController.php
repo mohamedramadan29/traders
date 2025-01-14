@@ -24,9 +24,7 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user();
-
         $plans = Plan::where('status', 1)->with('platform', 'total_plans', 'investmentReturns')->get();
-
         ################## Plan With Returns #################
         $plansWithReturns = $plans->map(function ($plan) {
             $returns = $plan->investmentReturns;

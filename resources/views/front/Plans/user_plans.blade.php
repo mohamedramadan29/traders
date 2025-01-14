@@ -12,30 +12,14 @@
         <!-- Start Container Fluid -->
         <div class="container-xxl">
             <div class="row">
-                @if (Session::has('Success_message'))
-                    @php
-                        toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-                    @endphp
-                @endif
-                @if ($errors->any())
-                    @foreach ($errors->all() as $error)
-                        @php
-                            toastify()->error($error);
-                        @endphp
-                    @endforeach
-                @endif
-                @if (Session::has('Error_Message'))
-                    @php
-                        toastify()->error(\Illuminate\Support\Facades\Session::get('Error_Message'));
-                    @endphp
-                @endif
                 <div class="col-xl-12">
                     <div class="user_plans_page_info my_new_container" style="background-color: #191f31">
                         <div class="info">
                             <h5> اجمالي الاسثمارات الكلية </h5>
                             <h4 class="total_investment"> {{ number_format($totalbalance, 2) }} دولار </h4>
                             <div class="investment_percentages">
-                                <p class="percentage"> +{{ $daily_earning }}({{ $daily_earning_percentage * 100 }}%) <span> اليوم
+                                <p class="percentage"> +{{ $daily_earning }}({{ $daily_earning_percentage * 100 }}%) <span>
+                                        اليوم
                                         <i class="bi bi-arrow-up-short"></i> </span>
                                 </p>
                             </div>
@@ -103,7 +87,7 @@
                                             style="color: {{ $plan_details->plan_last_dayearning > 0 ? '#10AE59' : '#FF0000' }}">
                                             {{ $plan_details->plan_last_dayearning > 0 ? '+' : '' }}
                                             {{ number_format($plan_details->plan_last_dayearning, 2) }}
-                                            ({{ $plan_details->plan_last_daypercentage }} %)
+                                            ({{ $plan_details->plan_last_daypercentage * 100 }} %)
                                             <i
                                                 class="bi {{ $plan_details->plan_last_dayearning > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
                                         </span>
@@ -120,7 +104,7 @@
                                             style="color: {{ $plan_details->last_7_days_earning > 0 ? '#10AE59' : '#FF0000' }}">
                                             {{ $plan_details->last_7_days_earning > 0 ? '+' : '' }}
                                             {{ number_format($plan_details->last_7_days_earning, 2) }}
-                                            ({{ $plan_details->last_7_days_percentage }} %)
+                                            ({{ $plan_details->last_7_days_percentage * 100 }} %)
                                             <i
                                                 class="bi {{ $plan_details->last_7_days_earning > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
                                         </span>
@@ -137,7 +121,7 @@
                                             style="color: {{ $plan_details->last_30_days_earning > 0 ? '#10AE59' : '#FF0000' }}">
                                             {{ $plan_details->last_30_days_earning > 0 ? '+' : '' }}
                                             {{ number_format($plan_details->last_30_days_earning, 2) }}
-                                            ({{ $plan_details->last_30_days_percentage }} %)
+                                            ({{ $plan_details->last_30_days_percentage * 100 }} %)
                                             <i
                                                 class="bi {{ $plan_details->last_30_days_earning > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
                                         </span>

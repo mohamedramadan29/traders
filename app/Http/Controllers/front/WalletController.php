@@ -21,6 +21,13 @@ class WalletController extends Controller
         $totalinvestments = UserPlan::where('user_id', $user->id)->sum('total_investment');
         /////// رصيد التداول
         $trading_balance = SalesOrder::where('user_id', $user->id)->where('status', 0)->sum('currency_amount');
+
+        /////////// Need trading return percentage
+
+        $trading_selling_currency_rate = SalesOrder::where('user_id', $user->id)->where('status', 0)->sum('selling_currency_rate');
+        $trading_enter_currency_rate = SalesOrder::where('user_id', $user->id)->where('status', 0)->sum('enter_currency_rate');
+        $return_all_percentage = ($trading_selling_currency_rate - $trading_enter_currency_rate) * 100;
+        $profit_lose = $return_all_percentage * $trading_balance / 100;
         ////////////رصيد الاستثمار
         $storage_investment = StorageInvestment::where('user_id', $user->id)->where('status', 1)->sum('amount_invested');
         $daily_earning = UserPlatformEarning::where('user_id', $user->id)->sum('daily_earning');
@@ -43,7 +50,6 @@ class WalletController extends Controller
             $storageTotalEarning = 0;
             $storageTotalPercentage = 0;
         }
-
         return view('front.user.wallet', compact(
             'storage_investment',
             'trading_balance',
@@ -51,7 +57,9 @@ class WalletController extends Controller
             'daily_earning',
             'daily_earning_percentage',
             'storageTotalEarning',
-            'storageTotalPercentage'
+            'storageTotalPercentage',
+            'return_all_percentage',
+            'profit_lose'
         ));
     }
 }

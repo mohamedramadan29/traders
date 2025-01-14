@@ -89,7 +89,7 @@
             <ul class="list-unstyled">
                 @foreach ($plan_details['plan']['PlanDailyInvestMentReturn'] as $daily_return)
                     <li>
-                        <span class="increase">  + {{ $daily_return['daily_return'] }} ({{ $daily_return['profit_percentage'] }} %)  </span>دولار الي
+                        <span class="increase">  + {{ $daily_return['daily_return'] }} ({{ $daily_return['profit_percentage'] * 100 }} %)  </span>دولار الي
                         راس المال بتاريخ <span> {{ $daily_return['created_at'] }}</span>
                     </li>
                 @endforeach

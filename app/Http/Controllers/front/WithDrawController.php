@@ -19,9 +19,6 @@ use Illuminate\Support\Facades\Validator;
 class WithDrawController extends Controller
 {
     use Message_Trait;
-
-   
-
     public function store(Request $request)
     {
         // dd($request->all());
@@ -33,7 +30,7 @@ class WithDrawController extends Controller
         $withdrawSumCompeleted = WithDraw::where('user_id', Auth::id())->where('status', 1)->sum('amount');
         $withdrawSumPending = WithDraw::where('user_id', Auth::id())->where('status', 0)->sum('amount');
 
-        $last_total_balance = $total_balance - ($withdrawSumPending + $withdrawSumCompeleted);
+        $last_total_balance = $total_balance - $withdrawSumPending;
 
         try {
             // التحقق من البيانات المدخلة

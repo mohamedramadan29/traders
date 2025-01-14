@@ -50,7 +50,8 @@ class SalesOrderController extends Controller
 
             foreach ($open_sales as $sale) {
                 $available_bin = $sale->bin_amount - $sale->bin_sold;
-                if ($remaining_bin <= 0) break;
+                if ($remaining_bin <= 0)
+                    break;
 
                 if ($available_bin >= $remaining_bin) {
                     $sale->bin_sold += $remaining_bin;
@@ -131,6 +132,9 @@ class SalesOrderController extends Controller
             $public_setting->total_capital = $new_total_capital;
             $public_setting->market_price = $new_market_price;
             $public_setting->currency_number = $new_currency_number;
+
+            $public_setting->old_market_price = $market_price;
+            $public_setting->market_price_percentage = ($new_market_price - $market_price) / $market_price * 100;
 
             if (!$public_setting->save()) {
                 DB::rollBack();

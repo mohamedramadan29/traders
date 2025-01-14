@@ -79,7 +79,7 @@
                                         aria-controls="pills-contact" aria-selected="false"> اعدادات الامان </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
+                                    <button class="nav-link" id="pills-notification-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-notification" type="button" role="tab"
                                         aria-controls="pills-notification" aria-selected="false"> الاشعارات </button>
                                 </li>
@@ -141,9 +141,10 @@
                                 </div>
                                 <div class="tab-pane fade" id="pills-profile" role="tabpanel"
                                     aria-labelledby="pills-profile-tab" tabindex="0">
-                                    <form method="POST" action="{{ url('user/update_user_details') }}">
+                                    <form method="POST" action="{{ url('user/update_user_details') }}"
+                                        autocomplete="off">
                                         @csrf
-                                       
+
                                         <div class="mb-3">
                                             <label class="form-label" for="example-name"> الاسم
                                             </label>
@@ -183,7 +184,8 @@
                                 <div class="tab-pane fade" id="pills-contact" role="tabpanel"
                                     aria-labelledby="pills-contact-tab" tabindex="0">
 
-                                    <form method="POST" action="{{ url('user/update_user_password') }}">
+                                    <form method="POST" action="{{ url('user/update_user_password') }}"
+                                        autocomplete="off">
                                         @csrf
                                         <div class="mb-3">
                                             <label class="form-label" for="example-email"> البريد الالكتروني
@@ -220,10 +222,19 @@
                                     </form>
 
                                 </div>
-                                <div class="tab-pane fade" id="pills-contact" role="tabpanel"
+                                <div class="tab-pane fade" id="pills-notification" role="tabpanel"
                                     aria-labelledby="pills-notification-tab" tabindex="0">
+                                    <form>
+                                        <div class="all_notification_alerts">
+                                            <ul class="list-unstyled">
+                                                @foreach (Auth::user()->notifications as $notification)
+                                                    <li> <i class="bi bi-bell-fill"></i>
+                                                        {{ $notification->data['title'] }} </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
 
-                                    <h2> جميع اشعاارت المستخدم هنا </h2>
+                                    </form>
                                 </div>
                             </div>
                         </div>

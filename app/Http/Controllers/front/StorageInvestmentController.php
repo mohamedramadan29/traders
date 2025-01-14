@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\front;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\Message_Trait;
-use App\Models\admin\PublicSetting;
-use App\Models\front\SalesOrder;
-use App\Models\front\StorageInvestment;
 use App\Models\front\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\front\SalesOrder;
+use App\Http\Traits\Message_Trait;
 use Illuminate\Support\Facades\DB;
+use App\Models\admin\PublicSetting;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Models\front\StorageInvestment;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\StorageInvestMentNotification;
 
 class StorageInvestmentController extends Controller
 {
@@ -20,10 +22,11 @@ class StorageInvestmentController extends Controller
 
     public function index()
     {
-        $storages = StorageInvestment::with('DailyInvestments')->where("user_id", Auth::user()->id)->get();
-        return view('front.storage.index',compact('storages'));
-    }
+        $storages = StorageInvestment::with('DailyInvestments')->where('status',1)->where("user_id", Auth::user()->id)->get();
 
+        // dd($storages);
+        return view('front.storage.index', compact('storages'));
+    }
     public function store(Request $request)
     {
         // $user = Auth::user();
@@ -65,9 +68,9 @@ class StorageInvestmentController extends Controller
             // تحديد تاريخ البدء والانتهاء
             $start_date = $data['start_date'];
             $end_date = $data['end_date'];
-
+            $market_price = $public_setting->market_price;
             // حساب عدد العملات التي سيتم شراؤها
-            $bin_amount = $data['amount'] / $public_setting->market_price;
+            $bin_amount = $data['amount'] / $market_price;
             DB::beginTransaction();
 
             // شراء العملات
@@ -80,7 +83,8 @@ class StorageInvestmentController extends Controller
                 ->get();
 
             foreach ($open_sales as $sale) {
-                if ($remaining_bin <= 0) break;
+                if ($remaining_bin <= 0)
+                    break;
                 $available_bin = $sale->bin_amount - $sale->bin_sold;
                 $seller = User::find($sale->user_id);
 
@@ -102,7 +106,6 @@ class StorageInvestmentController extends Controller
                     $remaining_bin = 0;
                 } else {
                     $sale->bin_sold += $available_bin;
-
                     if ($seller) {
                         $seller->dollar_balance += $available_bin * $sale->selling_currency_rate;
                         $seller->save();
@@ -127,16 +130,21 @@ class StorageInvestmentController extends Controller
                 if ($public_setting->currency_number < $remaining_bin) {
                     return $this->error_message('لا توجد عملات كافية لإتمام العملية.');
                 }
-
-                // خصم العملات من رصيد الشركة
+                // تحديث القيم
                 $public_setting->currency_number -= $remaining_bin;
-                $public_setting->total_capital += $remaining_bin * $public_setting->market_price;
+                $public_setting->total_capital += $remaining_bin * $market_price;
+                // حساب سعر السوق الجديد
+                $new_market_price = $public_setting->total_capital / max($public_setting->currency_number, 1);
+                $public_setting->market_price = $new_market_price;
+                $public_setting->old_market_price = $market_price;
+                $public_setting-> market_price_percentage = ($new_market_price - $market_price) / $market_price * 100;
+                // حفظ التحديثات في قاعدة البيانات
                 $public_setting->save();
 
-                // زيادة رصيد المستخدم
-                $user->bin_balance += $remaining_bin;
-                $user->dollar_balance -= $remaining_bin * $public_setting->market_price;
-                $user->save();
+                // // زيادة رصيد المستخدم
+                // $user->bin_balance += $remaining_bin;
+                // $user->dollar_balance -= $remaining_bin * $public_setting->market_price;
+                // $user->save();
             }
 
             // إنشاء عملية الاستثمار
@@ -149,6 +157,15 @@ class StorageInvestmentController extends Controller
             $investment->start_date = $data['start_date'];
             $investment->end_date = $data['end_date'];
             $investment->save();
+            ################ Send Notification
+            Notification::send(
+                $user,
+                new StorageInvestMentNotification( $user->id,
+                    $user->name,
+                    $data['amount'],
+                    $data['duration'],
+                )
+            );
 
             DB::commit();
             return $this->success_message('تم تخزين العملة بنجاح.');

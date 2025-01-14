@@ -16,9 +16,11 @@ class ExchangeController extends Controller
     {
         $public_setting = PublicSetting::first();
         $market_price = $public_setting['market_price'];
+        $market_price_percentage = $public_setting['market_price_percentage'];
         $minimum_selling_price = $market_price * 1.01;
         $open_deals = SalesOrder::where('user_id',Auth::id())->where('status',0)->get();
+
         $closed_deals = SalesOrder::where('user_id',Auth::id())->where('status',1)->get();
-        return view('front.exchange.index',compact('market_price','minimum_selling_price','open_deals'));
+        return view('front.exchange.index',compact('market_price','minimum_selling_price','open_deals','closed_deals','market_price_percentage'));
     }
 }

@@ -27,7 +27,7 @@
             </a>
         </div>
         <div>
-            <a href="{{url('user/wallet')}}" class="{{ Request::is('user/withdraws') ? 'active_link' : '' }}">
+            <a href="{{url('user/wallet')}}" class="{{ Request::is('user/wallet') ? 'active_link' : '' }}">
                 {{-- <i class="bi bi-cash-coin"></i> --}}
 
                 <img src="{{ asset('assets/front/images/3.png') }}" alt="">

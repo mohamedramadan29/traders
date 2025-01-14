@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\Message_Trait;
-use App\Models\Admin\WithDraw;
 use App\Models\front\User;
 use Illuminate\Http\Request;
+use App\Models\Admin\WithDraw;
+use App\Http\Traits\Message_Trait;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Notifications\RefusedWithDraw;
+use App\Notifications\CompeleteWithDraw;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Notification;
 
 class WithDrawController extends Controller
 {
@@ -83,14 +87,16 @@ class WithDrawController extends Controller
 
                     // $user-> total_balance = $new_user_balance;
                     // $user->save();
+                    Notification::send($user, new CompeleteWithDraw($user_id, $user['name'], $amount));
                 } elseif ($data['status'] == 2) {
                     ////////// Update User Balance
+                    DB::beginTransaction();
                     $new_user_balance = $user_balance + $amount;
                     $user->dollar_balance = $new_user_balance;
                     $user->save();
-
+                    Notification::send($user, new RefusedWithDraw($user_id, $user['name'], $amount));
+                    DB::commit();
                 }
-
                 $withdraw->update([
                     'status' => $data['status']
                 ]);

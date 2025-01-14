@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <title> @yield('title') </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A fully responsive premium admin dashboard template" />
-    <meta name="author" content="Techzaa" />
+    <meta name="description" content="Binveste" />
+    <meta name="author" content="Binveste" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- App favicon -->
@@ -46,8 +46,7 @@
                                 <img src="{{ asset('assets/admin/images/logo-letter.svg') }}" alt="">
                             </div>
                             <div class="image_info">
-                                <h5> Quolink </h5>
-                                <p> مركز وكالات كيوتكس </p>
+                                <h5> Binveste </h5>
                             </div>
                         </div>
                         <style>
@@ -92,13 +91,6 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-1">
-                    <!-- Theme Color (Light/Dark) -->
-                    <div class="topbar-item">
-                        <button type="button" class="topbar-button" id="light-dark-mode">
-                            <iconify-icon icon="solar:moon-bold-duotone" class="fs-24 align-middle"></iconify-icon>
-                        </button>
-                    </div>
-
                     <!-- User -->
                     <div class="dropdown topbar-item">
                         <a type="button" class="topbar-button" id="page-header-user-dropdown" data-bs-toggle="dropdown"

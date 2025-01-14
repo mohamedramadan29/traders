@@ -13,18 +13,6 @@
         <!-- Start Container Fluid -->
         <div class="container-xxl">
             <div class="row">
-                @if (Session::has('Success_message'))
-                    @php
-                        toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-                    @endphp
-                @endif
-                @if ($errors->any())
-                    @foreach ($errors->all() as $error)
-                        @php
-                            toastify()->error($error);
-                        @endphp
-                    @endforeach
-                @endif
 
                 <div class="col-12">
                     <div class="user_plans_page_info my_new_container balance_page_section" style="">
@@ -77,7 +65,7 @@
                         <h4> رصيد التداول </h4>
                         <h4> اجمالي الرصيد </h4>
                         <h3> {{ number_format($trading_balance, 2) }} دولار </h3>
-                        <p class="percentage"> <span> ربح وخسارة اليوم </span> +38989.5(3%) </p>
+                        <p class="percentage"> <span> ربح وخسارة اليوم </span> +{{ number_format($profit_lose , 3) }}({{ $return_all_percentage }}%) </p>
                     </div>
                     <hr>
                     <div class="balance_public_info">

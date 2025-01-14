@@ -9,22 +9,9 @@
 @section('content')
     <!-- ==================================================== -->
     <div class="page-content">
-
         <!-- Start Container Fluid -->
         <div class="container-xxl">
             <div class="row">
-                @if (Session::has('Success_message'))
-                    @php
-                        toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-                    @endphp
-                @endif
-                @if ($errors->any())
-                    @foreach ($errors->all() as $error)
-                        @php
-                            toastify()->error($error);
-                        @endphp
-                    @endforeach
-                @endif
                 <div class="col-xl-12">
                     {{-- <div class="card info_card">
                         <h4 class="card-title flex-grow-1"> الخطط المتاحة </h4>
@@ -75,7 +62,8 @@
                                                             <span
                                                                 style="color: {{ $plan['today_returns_percentage'] > 0 ? '#10AE59' : '#FF0000' }}">
                                                                 {{ $plan['today_returns_percentage'] > 0 ? '+' : '' }}
-                                                                {{ number_format($plan['today_returns_percentage']*100, 2) }} %
+                                                                {{ number_format($plan['today_returns_percentage'] * 100, 2) }}
+                                                                %
                                                                 <i
                                                                     class="bi {{ $plan['today_returns_percentage'] > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
                                                             </span>
@@ -89,7 +77,8 @@
                                                             <span
                                                                 style="color: {{ $plan['last_7_days_percentage'] > 0 ? '#10AE59' : '#FF0000' }}">
                                                                 {{ $plan['last_7_days_percentage'] > 0 ? '+' : '' }}
-                                                                {{ number_format($plan['last_7_days_percentage']*100, 2) }} %
+                                                                {{ number_format($plan['last_7_days_percentage'] * 100, 2) }}
+                                                                %
                                                                 <i
                                                                     class="bi {{ $plan['last_7_days_percentage'] > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
                                                             </span>
@@ -103,7 +92,8 @@
                                                             <span
                                                                 style="color: {{ $plan['last_30_days_percentage'] > 0 ? '#10AE59' : '#FF0000' }}">
                                                                 {{ $plan['last_30_days_percentage'] > 0 ? '+' : '' }}
-                                                                {{ number_format($plan['last_30_days_percentage']*100, 2) }} %
+                                                                {{ number_format($plan['last_30_days_percentage'] * 100, 2) }}
+                                                                %
                                                                 <i
                                                                     class="bi {{ $plan['last_30_days_percentage'] > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
                                                             </span>
@@ -183,7 +173,6 @@
     <!-- ==================================================== -->
     <!-- End Page Content -->
     <!-- ==================================================== -->
-
 @endsection
 
 @section('js')

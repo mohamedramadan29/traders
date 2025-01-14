@@ -11,7 +11,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for=""> ادخل العائد </label>
-                        <input required type="number" name="return_profit" class="form-control" step="0.01"
+                        <input required type="number" name="return_profit" class="form-control" step="0.0000000000001"
                             min="0" value="{{ old('return_profit') }}">
                     </div>
                 </div>

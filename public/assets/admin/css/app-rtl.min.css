@@ -24687,3 +24687,14 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     text-align:right !important;
 }
 /***************************** End New Style  ***********************/
+
+
+.login_form{
+    width: 60%;
+    margin: auto;
+}
+@media(max-width:991px){
+    .login_form{
+        width: 100%;
+    }
+}

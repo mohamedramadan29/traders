@@ -9,21 +9,8 @@
 @section('content')
     <!-- ==================================================== -->
     <div class="page-content exchange_page">
-        @if (Session::has('Success_message'))
-            @php
-                toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-            @endphp
-        @endif
-        @if ($errors->any())
-            @foreach ($errors->all() as $error)
-                @php
-                    toastify()->error($error);
-                @endphp
-            @endforeach
-        @endif
         <!-- Start Container Fluid -->
         <div class="container-xxl">
-
             <div class="row">
                 <div class="save_exchange_data">
                     <!-- Modal structure  -->
@@ -35,42 +22,45 @@
                                     </div> --}}
                             <form method="post" action="{{ url('user/storage/add') }}" onsubmit="prepareFormData(event)">
                                 @csrf
-
                                 <div class="exchange_second_section">
-                                    <div class="option" data-value="30" data-rate="1" onclick="selectOption(this)">
-                                        <span class="days">30 d</span> <span>( 1 - 5 )%</span>
+                                    <div class="option" data-value="30" data-min-rate="1" data-max-rate="5"
+                                        onclick="selectOption(this)">
+                                        <span class="days">30 d</span> <span>(1 - 5)%</span>
                                     </div>
-                                    <div class="option" data-value="60" data-rate="2.5" onclick="selectOption(this)">
+                                    <div class="option" data-value="60" data-min-rate="2.5" data-max-rate="12"
+                                        onclick="selectOption(this)">
                                         <span class="days">60 d</span> <span>(2.5 - 12)%</span>
                                     </div>
-                                    <div class="option" data-value="90" data-rate="4.5" onclick="selectOption(this)">
-                                        <span class="days">90 d</span> <span> (4.5 - 22) %</span>
-                                    </div>
-                                    <div class="option" data-value="180" data-rate="9" onclick="selectOption(this)">
-                                        <span class="days">180 d</span> <span>( 10 - 50 ) %</span>
-                                    </div>
-                                    <div class="option selected" data-value="360" data-rate="12"
+                                    <div class="option" data-value="90" data-min-rate="4.5" data-max-rate="22"
                                         onclick="selectOption(this)">
-                                        <span class="days">360 d</span> <span> ( 25 - 125 ) %</span>
+                                        <span class="days">90 d</span> <span>(4.5 - 22)%</span>
+                                    </div>
+                                    <div class="option" data-value="180" data-min-rate="10" data-max-rate="50"
+                                        onclick="selectOption(this)">
+                                        <span class="days">180 d</span> <span>(10 - 50)%</span>
+                                    </div>
+                                    <div class="option selected" data-value="360" data-min-rate="25" data-max-rate="125"
+                                        onclick="selectOption(this)">
+                                        <span class="days">360 d</span> <span>(25 - 125)%</span>
                                     </div>
                                     <!-- Hidden inputs -->
-                                    <input type="radio" name="duration" value="30" data-rate="1"
+                                    <input type="radio" name="duration" value="30" data-min-rate="1" data-max-rate="5"
                                         class="hidden-radio">
-                                    <input type="radio" name="duration" value="60" data-rate="2.5"
-                                        class="hidden-radio">
-                                    <input type="radio" name="duration" value="90" data-rate="4.5"
-                                        class="hidden-radio">
-                                    <input type="radio" name="duration" value="180" data-rate="9"
-                                        class="hidden-radio">
-                                    <input type="radio" name="duration" value="360" data-rate="12" class="hidden-radio"
-                                        checked>
+                                    <input type="radio" name="duration" value="60" data-min-rate="2.5"
+                                        data-max-rate="12" class="hidden-radio">
+                                    <input type="radio" name="duration" value="90" data-min-rate="4.5"
+                                        data-max-rate="22" class="hidden-radio">
+                                    <input type="radio" name="duration" value="180" data-min-rate="10"
+                                        data-max-rate="50" class="hidden-radio">
+                                    <input type="radio" name="duration" value="360" data-min-rate="25"
+                                        data-max-rate="125" class="hidden-radio" checked>
                                 </div>
                                 <div class="exchange_third_section">
                                     <div class="form-group">
                                         <label> المبلغ </label>
                                         <div class="input_data">
                                             <input type="number" name="amount" id="amount" step="0.01"
-                                                max="5000" min="1" placeholder="الحد الادني 5000 دولار "
+                                                max="5000" min="1" placeholder="الحد الادني 5000 دولار"
                                                 oninput="updateSummary()">
                                             <span>دولار </span>
                                             <button type="button" onclick="setMax()"> الحد الاقصي</button>
@@ -86,16 +76,17 @@
                                         </div>
                                         <div>
                                             <h4> المكافئات المالية المقدرة </h4>
-                                            <span id="expectedRewards" style="color: #11af59"> +2.5 دولار </span>
+                                            <span id="expectedRewards" style="color: #11af59"> +2.5 دولار - +12.5 دولار
+                                            </span>
                                         </div>
                                         <div>
                                             <h4> العائد السنوي </h4>
-                                            <span id="annualReturn" style="color: #11af59">12 %</span>
+                                            <span id="annualReturn" style="color: #11af59">1% - 5%</span>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- الحقول المخفية -->
-                                <input type="hidden" name="start_date" id="start_date">
+                                <input type="hidden" name="start_date" id="start_date" value="{{ date('Y-m-d') }}">
                                 <input type="hidden" name="end_date" id="end_date">
                                 <input type="hidden" name="interest_rate" id="interest_rate">
                                 <div class="exchange_six_section">
@@ -115,26 +106,40 @@
                             <script>
                                 function updateSummary(selectedOption = null) {
                                     const amount = parseFloat(document.getElementById('amount').value) || 5000; // المبلغ الافتراضي
-                                    const startDate = new Date();
-                                    const duration = selectedOption ? parseInt(selectedOption.value) : 360; // الافتراضي 360 يوم
-                                    const rate = selectedOption ? parseFloat(selectedOption.dataset.rate) : 12; // الافتراضي 12%
+                                    const duration = selectedOption ? parseInt(selectedOption.getAttribute('data-value')) :
+                                        360; // الافتراضي 360 يوم
+                                    const minRate = selectedOption ? parseFloat(selectedOption.getAttribute('data-min-rate')) : 25; // الافتراضي 25%
+                                    const maxRate = selectedOption ? parseFloat(selectedOption.getAttribute('data-max-rate')) :
+                                        125; // الافتراضي 125%
 
-                                    // حساب تاريخ النهاية
-                                    const endDate = new Date();
-                                    endDate.setDate(startDate.getDate() + duration);
+                                    // حساب أدنى وأقصى قيمة للمكافآت المالية
+                                    const minRewards = (amount * minRate / 100).toFixed(2);
+                                    const maxRewards = (amount * maxRate / 100).toFixed(2);
 
                                     // تحديث الحقول الظاهرة
                                     document.getElementById('investmentAmount').textContent = `${amount} دولار`;
-                                    document.getElementById('expectedRewards').textContent = `+${(amount * rate / 100).toFixed(2)} دولار`;
-                                    document.getElementById('annualReturn').textContent = `${rate} %`;
-                                    document.getElementById('display_start_date').textContent = startDate.toLocaleDateString('en-GB');
-                                    document.getElementById('display_end_date').textContent = endDate.toLocaleDateString('en-GB');
+                                    document.getElementById('expectedRewards').textContent = `+${minRewards} دولار - +${maxRewards} دولار`;
+                                    document.getElementById('annualReturn').textContent = `${minRate}% - ${maxRate}%`;
 
                                     // تحديث الحقول المخفية
-                                    document.getElementById('start_date').value = startDate.toISOString().split('T')[0]; // yyyy-mm-dd
-                                    document.getElementById('end_date').value = endDate.toISOString().split('T')[0];
-                                    document.getElementById('interest_rate').value = rate;
+                                    document.getElementById('interest_rate').value =
+                                        maxRate; // يمكنك استخدام النسبة القصوى أو المتوسطة حسب احتياجاتك
                                 }
+
+                                function calculateEndDate(duration) {
+                                    const startDate = new Date();
+                                    const endDate = new Date(startDate); // إنشاء نسخة من startDate
+                                    endDate.setDate(startDate.getDate() + duration);
+
+                                    // التحقق من صحة التاريخ
+                                    if (isNaN(endDate.getTime())) {
+                                        console.error("تاريخ النهاية غير صالح!");
+                                        return null;
+                                    }
+
+                                    return endDate;
+                                }
+
 
                                 function setMax() {
                                     const maxAmount = 500000; // الحد الأقصى
@@ -159,7 +164,19 @@
                                     const value = element.getAttribute('data-value');
                                     document.querySelector(`input[name="duration"][value="${value}"]`).checked = true;
 
-                                    // استدعاء الدالة المخصصة لتحديث البيانات
+                                    // حساب تاريخ النهاية
+                                    const duration = parseInt(element.getAttribute('data-value'));
+                                    const endDate = calculateEndDate(duration);
+
+                                    if (endDate) {
+                                        // تحديث تاريخ الانتهاء في الواجهة
+                                        document.getElementById('display_end_date').textContent = endDate.toLocaleDateString('en-GB');
+
+                                        // تحديث الحقل المخفي لتاريخ الانتهاء
+                                        document.getElementById('end_date').value = endDate.toISOString().split('T')[0];
+                                    }
+
+                                    // تحديث الملخص
                                     updateSummary(element);
                                 }
                             </script>
@@ -192,7 +209,12 @@
                                             </span>
                                         </div>
                                         <div class="first_details">
-                                            <span class="sp_span"> 35 % <small style="color: #aaa5a5"> ( 2.5% ) </small>
+                                            @php
+                                                $totalReturn = $storage->DailyInvestments->sum('amount_return');
+                                                $totalProfit = $storage->DailyInvestments->sum('profit_percentage');
+                                            @endphp
+                                            <span class="sp_span"> {{ $totalReturn }} $ <small style="color: #aaa5a5"> (
+                                                    {{ $totalProfit * 100 }} % ) </small>
                                             </span>
                                         </div>
                                         <div>
@@ -245,7 +267,14 @@
                                     </div>
                                     <div class="details">
                                         <div class="first_details">
-                                            <span class="sp_span"> 2.5 $ </span>
+                                            @php
+                                                $lastInvestment = $storage
+                                                    ->DailyInvestments()
+                                                    ->latest('created_at')
+                                                    ->first();
+                                            @endphp
+                                            <span class="sp_span">
+                                                {{ number_format($lastInvestment['amount_return'],5) ?? '0' }} $ </span>
                                         </div>
                                         <div class="first_details">
                                             <span

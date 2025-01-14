@@ -9,18 +9,7 @@
 @section('content')
     <!-- ==================================================== -->
     <div class="page-content exchange_page">
-        @if (Session::has('Success_message'))
-            @php
-                toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
-            @endphp
-        @endif
-        @if ($errors->any())
-            @foreach ($errors->all() as $error)
-                @php
-                    toastify()->error($error);
-                @endphp
-            @endforeach
-        @endif
+
         <!-- Start Container Fluid -->
         <div class="container-xxl">
 
@@ -33,11 +22,12 @@
                 <div class="open_exchange">
 
                     <button class="open_button" data-bs-toggle="modal" data-bs-target="#open_new_deal"> فتح صفقة </button>
-                    <h4> {{ number_format($market_price, 4)  }} <span> دولار  </span></h4>
-                    <h4>  <span> +1 % ( نسبة الصعود خلال اخر ٢٤ ساعة  ) </span></h4>
+                    <h4> {{ number_format($market_price, 4) }} <span> دولار </span></h4>
+                    {{-- <h4>  <span> +1 % ( نسبة الصعود خلال اخر ٢٤ ساعة  ) </span></h4> --}}
+                    <h4> <span> {{ $market_price_percentage }} % </span></h4>
                 </div>
 
-                <div class="col-xl-12">
+                <div class="col-xl-12 open_exchange_model">
                     <div class="modal fade edit_balance_tab" id="open_new_deal" tabindex="-1"
                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
@@ -77,8 +67,8 @@
                                                         <p>مبلغ الصفقة</p>
                                                         <div class="buttons" style="margin-bottom: 10px;">
                                                             <button onclick="decrement('dealAmount', event)">-</button>
-                                                            <input type="number" step="0.01" name="deal_amount" id="dealAmount"
-                                                                value="100" min="0"
+                                                            <input type="number" step="0.01" name="deal_amount"
+                                                                id="dealAmount" value="100" min="0"
                                                                 onchange="updateDealAmount(this.value)">
                                                             <button onclick="increment('dealAmount', event)">+</button>
                                                         </div>
@@ -131,7 +121,8 @@
                                                     ($open_deal['selling_currency_rate'] -
                                                         $open_deal['enter_currency_rate']) *
                                                     100;
-                                                $profit_lose = $return_percentage * $open_deal['currency_amount'];
+                                                $profit_lose =
+                                                    ($return_percentage * $open_deal['currency_amount']) / 100;
                                             @endphp
                                             <div class="first_details">
                                                 <p> الربح والخسارة (دولار) </p>
@@ -167,40 +158,56 @@
                                     </div>
                                     <hr>
                                 @endforeach
-
-                                <h6 style="border-top: 1px solid #78797a;padding-top: 10px"> سجل الصفقات </h6>
-                                <div class="trader_archive">
-                                    <div class="first_main">
-                                        <h3> BIN / USD </h3>
-                                        <p> ربح </p>
-                                    </div>
-                                    <div class="second_main">
-                                        <div class="first">
-                                            <div>
-                                                <p> الربح </p> <span class="sp_span"> 10 </span>
-                                            </div>
-                                            <div>
-                                                <p> الحجم </p> <span> 300 </span>
-                                            </div>
-                                            <div>
-                                                <p> العائد </p> <span class="sp_span"> + 1% </span>
-                                            </div>
-                                        </div>
-                                        <div class="second">
-                                            <div style="margin-left: 8px">
-                                                <p> سعر الدخول </p>
-                                                <span> 1.00 </span>
-                                            </div>
-                                            <div>
-                                                <p> سعر البيع (دولار) </p>
-                                                <span> 1.00 </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     @endif
+                    <!-------------------------------------------- سجل الصفقات --------------------------------------------->
+                    @if ($closed_deals->count() > 0)
+                        <div class="table-responsive my_new_container">
+                            <div class="open_trader">
+                                <h6 style="border-top: 1px solid #78797a;padding-top: 10px"> سجل الصفقات </h6>
+                                @foreach ($closed_deals as $deal)
+                                    @php
+                                        // عائد الاستثمار
+                                        $return_percentage =
+                                            ($deal['selling_currency_rate'] - $deal['enter_currency_rate']) * 100;
+                                        $profit_lose = ($return_percentage * $deal['currency_amount']) / 100;
+                                    @endphp
+                                    <div class="trader_archive">
+                                        <div class="first_main">
+                                            <h3> BIN / USD </h3>
+                                            <p> ربح </p>
+                                        </div>
+                                        <div class="second_main">
+                                            <div class="first">
+                                                <div>
+                                                    <p> الربح </p> <span class="sp_span"> {{ number_format($profit_lose,2) }} </span>
+                                                </div>
+                                                <div>
+                                                    <p> الحجم </p> <span> {{ number_format($deal['currency_amount'], 2) }}
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <p> العائد </p> <span class="sp_span"> + {{ $return_percentage  }}% </span>
+                                                </div>
+                                            </div>
+                                            <div class="second">
+                                                <div style="margin-left: 8px">
+                                                    <p> سعر الدخول </p>
+                                                    <span> {{ $deal['enter_currency_rate'] }} </span>
+                                                </div>
+                                                <div>
+                                                    <p> سعر البيع (دولار) </p>
+                                                    <span> {{ $deal['selling_currency_rate'] }} </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
 
                 </div>
             </div>
