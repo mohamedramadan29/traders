@@ -10,7 +10,7 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for=""> ادخل العائد </label>
+                        <label for=""> ادخل نسبة  العائد </label>
                         <input required type="number" name="return_amount" class="form-control" step="0.01"
                             min="0" max="1"  value="{{ old('return_amount') }}">
                     </div>

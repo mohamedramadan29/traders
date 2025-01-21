@@ -39,7 +39,7 @@ Route::group(['prefix' => 'user'], function () {
         Route::match(['post', 'get'], '/', 'login')->name('user_login');
         Route::match(['post', 'get'], '/register', 'register')->name('user_register');
         Route::get('/confirm/{code}', 'UserConfirm');
-        Route::post('send_confirm_email','send_confirm_email');
+        Route::post('send_confirm_email', 'send_confirm_email');
         /////// Forget Password
         ///
         Route::match(['post', 'get'], 'forget-password', 'forget_password');
@@ -75,7 +75,7 @@ Route::group(['prefix' => 'user'], function () {
         /////////////// Start WithDraws ///////////////
         ///
         Route::controller(WithDrawController::class)->group(function () {
-          //  Route::get('wallet', 'index');
+            //  Route::get('wallet', 'index');
             Route::post('withdraw/add', 'store');
             Route::post('withdraw/update/{id}', 'update');
             Route::post('withdraw/delete/{id}', 'delete');
@@ -83,7 +83,7 @@ Route::group(['prefix' => 'user'], function () {
 
         ####################### Start Wallet Controller ############
         Route::controller(WalletController::class)->group(function () {
-           Route::get('wallet','index');
+            Route::get('wallet', 'index');
         });
         ####################### End Wallet Controller ##############
         ///////////////// Start Exchange Controller  ////////////////
@@ -100,6 +100,9 @@ Route::group(['prefix' => 'user'], function () {
         //////////////////////////////// Start User Make Deposit And WithDraw //////////
         Route::controller(UserBalanceController::class)->group(function () {
             Route::match(['post', 'get'], 'deposit', 'deposit');
+            Route::post('/payment/callback', 'handleCallback')->name('payment.callback');
+            Route::get('/payment/success', 'paymentSuccess')->name('payment.success');
+            Route::get('/payment/cancel', 'paymentCancel')->name('payment.cancel');
         });
 
         ///////////////////////// Storage InvestMent ///// تخزين الغملات
@@ -112,7 +115,7 @@ Route::group(['prefix' => 'user'], function () {
 });
 
 Route::controller(TermsController::class)->group(function () {
-    Route::get('terms','terms');
+    Route::get('terms', 'terms');
 });
 Route::get('auth/{provider}/redirect', [SocialLoginController::class, 'redirect'])->name('auth.google.redirect');
 Route::get('auth/{provider}/callback', [SocialLoginController::class, 'callback'])->name('auth.google.callback');

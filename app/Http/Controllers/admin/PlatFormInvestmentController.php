@@ -10,6 +10,8 @@ use App\Models\admin\PlatformInvestmentReturn;
 use App\Models\admin\UserDailyInvestmentReturn;
 use App\Models\admin\UserPlatformEarning;
 use App\Models\front\Invoice;
+use App\Models\front\User;
+use App\Models\front\UserPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -36,8 +38,8 @@ class PlatFormInvestmentController extends Controller
                 'return_amount' => 'required|min:0'
             ];
             $message = [
-                'return_amount.required' => ' من فضلك ادخل المبلغ  ',
-                'return_amount.min' => 'اقل مبلغ  0',
+                'return_amount.required' => ' من فضلك ادخل النسبة   ',
+                'return_amount.min' => 'اقل نسبة   0',
             ];
             $validator = Validator::make($data, $rules, $message);
             if ($validator->fails()) {
@@ -50,63 +52,49 @@ class PlatFormInvestmentController extends Controller
                 'return_date' => now(),
             ]);
 
-            //       جلب جميع الفواتير المتعلقة بالمنصة
-            // جلب جميع الفواتير المتعلقة بالمنصة
-            //  $invoices = Invoice::where('platform_id', $platform->id)->get();
-
-            $invoices = Invoice::where('plan_id', $plan->id)->where('status', 1)
-                ->with('user') // لجلب بيانات المستخدم
-                ->get();
-            // dd($invoices);
-
-            if ($invoices->isEmpty()) {
-                return redirect()->back()->with('error', 'لا يوجد مشتركين في هذه المنصة.');
+            ############# Get User Plans
+            $userPlans = UserPlan::where('plan_id', $plan->id)->get();
+            if ($userPlans->isEmpty()) {
+                return redirect()->back()->with('error', 'لا يوجد مشتركين في هذه الخطة .');
             }
 
-            // حساب إجمالي عدد الفواتير في هذه المنصة
-            $totalSubscriptions = $invoices->count();
+            foreach ($userPlans as $userplan) {
+                $user = User::where('id', $userplan['user_id'])->first();
+                $dollar_amount_return = $userplan['total_investment'] * $request->return_amount;
+                ####################################################
 
-            // حساب العائد لكل اشتراك
-            $returnPerSubscription = $request->return_amount / $totalSubscriptions;
 
-            // توزيع العائد على المستخدمين بناءً على عدد خططهم في المنصة
-            foreach ($invoices->groupBy('user_id') as $userInvoices) {
-                // dd($plan->id);
-                $user = $userInvoices->first()->user;
-                /////////// حساب اجمالي قيمة الاشتراكات للمستخدم
-                $totalbalance = $invoices->sum('plan_price');
-                $dailyProfit = $totalbalance * $request->return_amount;
+                $user_daily_investment_return = new UserDailyInvestmentReturn();
+                $user_daily_investment_return->user_id = $user->id;
+                $user_daily_investment_return->plan_id = $plan->id;
+                $user_daily_investment_return->daily_return = $dollar_amount_return;
+                $user_daily_investment_return->profit_percentage = $request->return_amount;
+                $user_daily_investment_return->save();
 
-                //  dd($user);
-                // جلب سجل عائد الاستثمار للمستخدم في هذه المنصة
-                //  dd($plan->id);
+
+                ##################################################
+
                 $userEarning = UserPlatformEarning::firstOrCreate([
                     'user_id' => $user->id,
                     'plan_id' => $plan->id,
                 ]);
                 // إضافة العائد بناءً على عدد الاشتراكات الخاصة بالمستخدم
-                $userEarning->increment('investment_return', $dailyProfit);
+                $userEarning->increment('investment_return', $dollar_amount_return);
                 $profitPercentage = $request->return_amount;
                 // يمكنك هنا حفظ أو عرض نسبة الربح
-
                 $userEarning->profit_percentage = $profitPercentage;
-                $userEarning->daily_earning = $dailyProfit;
+                $userEarning->daily_earning = $dollar_amount_return;
                 $userEarning->save();
+                ##########################################
 
-                $user_daily_investment_return = new UserDailyInvestmentReturn();
-                $user_daily_investment_return->user_id = $user->id;
-                $user_daily_investment_return->plan_id = $plan->id;
-                $user_daily_investment_return->daily_return = $dailyProfit;
-                $user_daily_investment_return->profit_percentage = $request->return_amount;
-                $user_daily_investment_return->save();
 
-                // يمكنك هنا تسجيل البيانات أو إرسال إشعار للمستخدم إن أردت
                 ///////////// تحديث ربح الكلي للمستخدم
                 $old_user_balance = $user['dollar_balance'];
-                $new_user_balance = $old_user_balance + $dailyProfit;
+                $new_user_balance = $old_user_balance + $dollar_amount_return;
                 $user->dollar_balance = $new_user_balance;
                 $user->update();
             }
+
             DB::commit();
 
             return $this->success_message(' تم اضافة العائد بنجاح  ');

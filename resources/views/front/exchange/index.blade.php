@@ -140,7 +140,7 @@
                                             </div>
                                             <div class="first_details">
                                                 <p> سعر الحالي (دولار) </p>
-                                                <span> {{ $open_deal['currency_rate'] }} </span>
+                                                <span> {{ $market_price }} </span>
                                             </div>
                                         </div>
                                         <div class="details">
