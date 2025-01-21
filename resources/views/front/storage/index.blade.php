@@ -273,8 +273,9 @@
                                                     ->latest('created_at')
                                                     ->first();
                                             @endphp
-                                            <span class="sp_span">
-                                                {{ number_format($lastInvestment['amount_return'],5) ?? '0' }} $ </span>
+                                           <span class="sp_span">
+                                            {{ number_format(data_get($lastInvestment, 'amount_return', 0), 5) }} $
+                                        </span>
                                         </div>
                                         <div class="first_details">
                                             <span

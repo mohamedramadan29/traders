@@ -63,9 +63,9 @@ class UserController extends Controller
                 'totalinvestment' => $totalInvestmentPlan,
                 'platform_name' => $plan->platform_name,
                 'platform_link' => $plan->platform_link,
-                'today_returns_percentage' => $totalInvestmentPlan > 0 ? ($todayReturns / $totalInvestmentPlan) * 100 : 0,
-                'last_7_days_percentage' => $totalInvestmentPlan > 0 ? ($last7DaysReturns / $totalInvestmentPlan) * 100 : 0,
-                'last_30_days_percentage' => $totalInvestmentPlan > 0 ? ($last30DaysReturns / $totalInvestmentPlan) * 100 : 0,
+                'today_returns_percentage' => $totalInvestmentPlan > 0 ? $todayReturns  : 0,
+                'last_7_days_percentage' => $totalInvestmentPlan > 0 ? $last7DaysReturns  : 0,
+                'last_30_days_percentage' => $totalInvestmentPlan > 0 ? $last30DaysReturns  : 0,
             ];
         });
 
