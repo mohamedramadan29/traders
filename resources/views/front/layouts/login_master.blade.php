@@ -4,11 +4,12 @@
     <meta charset="utf-8"/>
     <title> @yield('title') </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="مركز وكالات كيوتيكس"/>
-    <meta name="author" content="Techzaa"/>
+    <meta name="description" content=" Binveste فريق من الخبراء يتداولون نيابة عنك لتحقيق أقصى قدر من العائدات.
+اصول , eo,ex,Qx,px. "/>
+    <meta name="author" content="Mohamed Ramadan +201011642731"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('assets/front/images/logo-letter.svg')}}">
+    <link rel="shortcut icon" href="{{ asset('assets/uploads/logo.png') }}">
     <!-- Vendor css (Require in all Page) -->
     <link href="{{asset('assets/front/css/vendor.min.css')}}" rel="stylesheet" type="text/css"/>
     <!-- Icons css (Require in all Page) -->

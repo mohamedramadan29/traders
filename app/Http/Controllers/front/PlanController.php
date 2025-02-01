@@ -285,7 +285,7 @@ class PlanController extends Controller
             $market_price = $public_setting['market_price']; // افترض أن هذه دالة تجلب سعر السوق الحالي
             DB::beginTransaction();
             $sales = new SalesOrder();
-            $sales->user_id = 1;
+            $sales->user_id = Auth::id();
             $sales->currency_rate = $market_price;
             $sales->enter_currency_rate = $market_price;
             $sales->selling_currency_rate = $market_price;
@@ -295,12 +295,11 @@ class PlanController extends Controller
             $sales->save();
             // تحديث رصيد العملات الرقمية
             $user->bin_balance -= $crypto_to_withdraw;
-            $user->dollar_balance  = $user->dollar_balance + $data['total_price'];
+            //$user->dollar_balance  = $user->dollar_balance + $data['total_price'];
             $user->Save();
             ############## Update Plan Investment
             $userplan->total_investment -= $data['total_price'];
             $userplan->save();
-
             #################### Add Statments
             $statment = new UserStatment();
             $statment->user_id = Auth::id();

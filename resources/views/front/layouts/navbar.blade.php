@@ -4,10 +4,17 @@
             <a class="navbar-brand" href="{{ url('/') }}"> <img src="{{ asset('assets/uploads/logo.png') }}"
                     alt=""> </a>
         </div>
-        <div class="nav_buttons">
-            <a class="login" href="{{ url('login') }}"> تسجيل دخول </a>
-            <a class="register" href="{{ route('user_register') }}"> حساب جديد </a>
-        </div>
+        @if (Auth::check())
+            <div class="nav_buttons">
+                <a class="login" href="{{ url('user/dashboard') }}"> حسابي <i class="bi bi-person-circle"></i> </a>
+            </div>
+        @else
+            <div class="nav_buttons">
+                <a class="login" href="{{ url('login') }}"> تسجيل دخول </a>
+                <a class="register" href="{{ route('user_register') }}"> حساب جديد </a>
+            </div>
+        @endif
+
         {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
