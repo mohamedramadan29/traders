@@ -1,13 +1,4 @@
 
-
-
-
-
-
-
-
-
-
 .top_bar_data .topbar-item {
     height: auto;
 }
@@ -453,10 +444,12 @@ display: flex;
     .user_plans_page_info .info .stat {
         margin-right: 5px;
         font-size: 12px;
+        padding: 5px;
     }
 
     .user_plans_page_info .info .public_button {
         font-size: 12px;
+        padding: 5px;
     }
 }
 

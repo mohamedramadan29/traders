@@ -25,7 +25,10 @@ class UserBalanceController extends Controller
     {
         $user = User::find(Auth::id());
         if (!$user) {
-            return back()->with('error', 'المستخدم غير موجود.');
+            return Redirect()->back()->withErrors('error', 'المستخدم غير موجود.');
+        }
+        if($request->deposit < 10){
+            return Redirect()->back()->withErrors([ 'المبلغ المدخل يجب ان يكون على الاقل 10 دولار']);
         }
 
         $endpoint = 'https://api.nowpayments.io/v1/invoice';
@@ -60,46 +63,6 @@ class UserBalanceController extends Controller
         } else {
             return back()->with('error', 'فشل إنشاء الفاتورة: ' . ($invoice['message'] ?? 'خطأ غير معروف'));
         }
-
-
-
-        // if ($user) {
-        //     try {
-        //         $data = $request->all();
-        //         $rules = [
-        //             'deposit' => 'required|numeric|min:1'
-        //         ];
-        //         $messages = [
-        //             'deposit.required' => ' من فضلك ادخل المبلغ  ',
-        //             'deposit.numeric' => ' من فضلك ادخل المبلغ بشكل صحيح ',
-        //             'deposit.min' => ' اقل مبلغ ايداع هو 1 دولار '
-        //         ];
-        //         $validator = Validator::make($data, $rules, $messages);
-        //         if ($validator->fails()) {
-        //             return Redirect::back()->withInput()->withErrors($validator);
-        //         }
-        //         //////////// Insert Balance To User Account
-        //         $user_balance = $user['dollar_balance'];
-        //         $new_balance = $user_balance + $data['deposit'];
-        //         DB::beginTransaction();
-        //         $user->dollar_balance = $new_balance;
-        //         $user->save();
-        //         /////////// Add New User Transaction
-        //         ///
-        //         $statement = new UserStatment();
-        //         $statement->user_id = Auth::id();
-        //         $statement->transaction_type = 'deposit';
-        //         $statement->amount = $data['deposit'];
-        //         $statement->save();
-        //         ################### Send Notification To User ###########################
-        //         Notification::send($user, new ChargeBalance($user, Auth::id(), $data['deposit'], date('Y-m-d H:i:s')));
-        //         DB::commit();
-        //         return $this->success_message(' تم ايداع المبلغ بنجاح  ');
-        //     } catch (\Exception $e) {
-        //         return $this->exception_message($e);
-        //     }
-        // }
-        // abort(404);
     }
 
 

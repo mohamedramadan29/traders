@@ -20,6 +20,7 @@ return new class extends Migration
             $table->double('selling_currency_rate',8,2);
             $table->double('currency_amount',8,2);
             $table->tinyInteger('status')->default(0);
+            $table->string('type')->nullable();
 
             $table->timestamps();
         });

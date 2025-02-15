@@ -138,6 +138,7 @@
                                                 value="{{ Auth::user()->city }}">
                                         </div>
                                     </form>
+                                    <a  href="{{ url('user/logout') }}" class="btn btn-sm logout_button"> تسجيل الخروج <i class="bi bi-box-arrow-left"></i></a>
                                 </div>
                                 <div class="tab-pane fade" id="pills-profile" role="tabpanel"
                                     aria-labelledby="pills-profile-tab" tabindex="0">

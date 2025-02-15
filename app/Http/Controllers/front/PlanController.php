@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\admin\UserPlatformEarning;
 use Illuminate\Support\Facades\Validator;
 use App\Models\admin\UserDailyInvestmentReturn;
+use App\Models\admin\WithDraw;
 use Illuminate\Support\Facades\Notification;
 
 class PlanController extends Controller
@@ -44,6 +45,14 @@ class PlanController extends Controller
         $daily_earning = UserPlatformEarning::where('user_id', $user->id)->sum('daily_earning');
         $daily_earning_percentage = UserPlatformEarning::where('user_id', $user->id)->sum('profit_percentage');
         $totalbalance = UserPlan::where('user_id', $user->id)->sum('total_investment');
+
+        ######### check If User Has Edit Balan Balace Untill Sales Order Compeled
+        $TotalBalanceRevision = SalesOrder::where('user_id', Auth::id())->where('type','withdrawfromplan')->where('status', 0)->sum('currency_amount');
+        ######### End Check #########################
+
+        ################## Start User WithDraw Statments #########
+        $user_withdraw_statments = WithDraw::where('user_id', Auth::id())->get();
+        ################# End User WithDraw Statments ############
         $Plans = $Plans->map(function ($plan) {
             $plan_id = $plan['plan']->id;
 
@@ -84,7 +93,7 @@ class PlanController extends Controller
             return $plan;
         });
 
-        return view('front.Plans.user_plans', compact('Plans', 'totalbalance', 'investment_earning', 'daily_earning', 'daily_earning_percentage'));
+        return view('front.Plans.user_plans', compact('Plans', 'totalbalance', 'investment_earning', 'daily_earning', 'daily_earning_percentage','TotalBalanceRevision','user_withdraw_statments'));
     }
 
     public function platformPlans($plan_id)
@@ -250,7 +259,6 @@ class PlanController extends Controller
         $total_balance = $user['dollar_balance'];
         try {
             // التحقق من البيانات المدخلة
-
             $rules = [
                 'plan_id' => 'required',
                 'total_price' => 'required|min:1',
@@ -292,6 +300,7 @@ class PlanController extends Controller
             $sales->currency_amount = $data['total_price'];
             $sales->bin_amount = $crypto_to_withdraw;
             $sales->bin_sold = 0;
+            $sales->type = 'withdrawfromplan';
             $sales->save();
             // تحديث رصيد العملات الرقمية
             $user->bin_balance -= $crypto_to_withdraw;

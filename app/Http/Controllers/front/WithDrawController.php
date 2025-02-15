@@ -23,6 +23,8 @@ class WithDrawController extends Controller
     {
         // dd($request->all());
         // $user = Auth::user();
+
+
         $user = User::where('id', Auth::id())->first();
         $total_balance = $user['dollar_balance'];
 
@@ -56,6 +58,11 @@ class WithDrawController extends Controller
 
             if ($last_total_balance < $data['amount']) {
                 return Redirect::back()->withInput()->withErrors('رصيدك الحالي لا يكفي لإجراء طلب السحب.');
+            }
+
+            ####### Check If Request Amount Is Less Than 10 $
+            if ($data['amount'] < 10) {
+                return Redirect::back()->withInput()->withErrors('المبلغ المدخل يجب ان يكون على الاقل 10 دولار');
             }
 
             DB::beginTransaction();

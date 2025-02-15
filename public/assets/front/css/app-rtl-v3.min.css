@@ -26091,3 +26091,30 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, ta
     color: #ccc;
     margin-left: 5px;
 }
+
+.logout_button{
+    background-color: #EF5E5F;
+    color: #fff;
+}
+.logout_button:hover{
+    background-color: #EF5E5F;
+    color: #fff;
+}
+
+.under_revision{
+    color:#fff;
+    font-weight: normal;
+    font-size: 15px;
+}
+
+.under_revision strong{
+    color: #f51010;
+    font-weight: bold;
+}
+
+@media(max-width:991px){
+    .under_revision{
+        font-size: 13px;
+        margin-top: -25px;
+    }
+}

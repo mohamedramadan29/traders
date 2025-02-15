@@ -4,7 +4,6 @@
         <div class="modal-content" style="background-color:#2a3040">
             <div class="modal-header">
                 <p class="modal-title" id="exampleModalLabel"> سحب الرصيد </p>
-
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="tab-content" id="nav-tabContent">

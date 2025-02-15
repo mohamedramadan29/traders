@@ -35,7 +35,9 @@
                             <h4 class="profit_balance"> {{ number_format($investment_earning, 2) }} دولار </h4>
                             <button style="border: none;" class="stat" data-bs-toggle="modal"
                                 data-bs-target="#main_withdraw_balance"> سحب </button>
+                            <a href="#" class="stat WithDrawTransactions" data-plan-id="WithDrawTransactions"> سجل السحوبات </a>
                             @include('front.Plans.withdraw')
+
                         </div>
                         <div class="info">
                             <h5> الرقم التعريفي : {{ Auth::user()->id }} </h5>
@@ -46,6 +48,7 @@
                             @endif
                         </div>
                     </div>
+                    @include('front.Plans.WithDrawTransactions')
                     <hr>
                     @foreach ($Plans as $plan_details)
                         <div class="user_plans_page_info my_new_container">
@@ -129,6 +132,10 @@
                                         <span style="color: #999999"> % 0.00 </span>
                                     @endif
                                 </h4>
+                                <!------------- Under Revision Untill Sales Order Compeled ------------->
+                                <h4 class="under_revision"> تحت المراجعة :: <strong> -
+                                        {{ number_format($TotalBalanceRevision, 2) }} دولار </strong> </h4>
+                                <!------------- Under Revision Untill Sales Order Compeled ------------->
                             </div>
                             <div class="info">
                                 <h5> {{ $plan_details['plan']['name'] }} </h5>
@@ -183,6 +190,26 @@
                             @endforeach
                         });
                     </script>
+                    <!-- ################------ Show WithDrawTransactions ###################  !-->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            // إضافة حدث لجميع الأزرار
+                            document.querySelectorAll('.WithDrawTransactions').forEach(button => {
+                                button.addEventListener('click', (e) => {
+                                    e.preventDefault(); // منع التحديث
+                                    const planId = button.getAttribute('data-plan-id'); // الحصول على ID الخطة
+                                    const container = document.getElementById(
+                                        `WithDrawTransactions`); // البحث عن القسم الخاص بالخطة
+                                    if (container.style.display === 'none' || !container.style.display) {
+                                        container.style.display = 'block'; // إظهار المعاملات
+                                    } else {
+                                        container.style.display = 'none'; // إخفاء المعاملات
+                                    }
+                                });
+                            });
+                        });
+                    </script>
+                    <!-- ################------ Show WithDrawTransactions ###################  !-->
                 </div>
             </div>
 
@@ -193,7 +220,6 @@
     <!-- ==================================================== -->
     <!-- End Page Content -->
     <!-- ==================================================== -->
-
 @endsection
 
 @section('js')
