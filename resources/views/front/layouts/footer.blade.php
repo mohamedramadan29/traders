@@ -44,6 +44,11 @@
                 <i class="bi bi-ticket-fill"></i>
             </a>
         </div>
+        <div>
+            <a href="{{url('user/oks')}}" class="{{ Request::is('user/oks') ? 'active_link' : '' }}">
+                <i class="bi bi-bar-chart-steps"></i>
+            </a>
+        </div>
     </div>
 </footer>
 

@@ -2,19 +2,20 @@
 
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\front\OksContoller;
 use App\Http\Controllers\front\UserController;
 use \App\Http\Controllers\front\PlanController;
+use App\Http\Controllers\front\ChartController;
 use App\Http\Controllers\front\TermsController;
+use App\Http\Controllers\front\WalletController;
 use \App\Http\Controllers\front\StorageInvestment;
 use App\Http\Controllers\front\WithDrawController;
 use \App\Http\Controllers\front\ExchangeController;
 use App\Http\Controllers\Auth\SocialLoginController;
-use App\Http\Controllers\front\ChartController;
 use \App\Http\Controllers\front\SalesOrderController;
 use \App\Http\Controllers\front\UserBalanceController;
 use App\Http\Controllers\front\NotificationController;
 use \App\Http\Controllers\front\StorageInvestmentController;
-use App\Http\Controllers\front\WalletController;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,6 +118,13 @@ Route::group(['prefix' => 'user'], function () {
             Route::get('charts', 'index');
         });
         ################# End Chart Controller ############
+
+        ############# Start Oks Controller ############
+        Route::controller(OksContoller::class)->group(function () {
+            Route::get('oks', 'index');
+            Route::post('OksInvestment','OksInvestment');
+        });
+        ############# End Oks Controller ##############
     });
 });
 
