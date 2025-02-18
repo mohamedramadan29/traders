@@ -46,9 +46,6 @@ class PlanController extends Controller
         $daily_earning_percentage = UserPlatformEarning::where('user_id', $user->id)->sum('profit_percentage');
         $totalbalance = UserPlan::where('user_id', $user->id)->sum('total_investment');
 
-        ######### check If User Has Edit Balan Balace Untill Sales Order Compeled
-        $TotalBalanceRevision = SalesOrder::where('user_id', Auth::id())->where('type','withdrawfromplan')->where('status', 0)->sum('currency_amount');
-        ######### End Check #########################
 
         ################## Start User WithDraw Statments #########
         $user_withdraw_statments = WithDraw::where('user_id', Auth::id())->get();
@@ -90,10 +87,14 @@ class PlanController extends Controller
                 ->whereBetween('created_at', $last30Days)
                 ->sum('profit_percentage');
 
+            ######### check If User Has Edit Balan Balace Untill Sales Order Compeled
+            $plan->TotalBalanceRevision = SalesOrder::where('user_id', Auth::id())->where('type', 'withdrawfromplan')->where('status', 0)->where('plan_id', $plan_id)->sum('currency_amount');
+            ######### End Check #########################
+
             return $plan;
         });
 
-        return view('front.Plans.user_plans', compact('Plans', 'totalbalance', 'investment_earning', 'daily_earning', 'daily_earning_percentage','TotalBalanceRevision','user_withdraw_statments'));
+        return view('front.Plans.user_plans', compact('Plans', 'totalbalance', 'investment_earning', 'daily_earning', 'daily_earning_percentage', 'user_withdraw_statments'));
     }
 
     public function platformPlans($plan_id)
@@ -194,7 +195,7 @@ class PlanController extends Controller
                 $new_market_price = $public_setting->total_capital / max($public_setting->currency_number, 1);
                 $public_setting->market_price = $new_market_price;
                 $public_setting->old_market_price = $market_price;
-                $public_setting-> market_price_percentage = ($new_market_price - $market_price) / $market_price * 100;
+                $public_setting->market_price_percentage = ($new_market_price - $market_price) / $market_price * 100;
                 // حفظ التحديثات في قاعدة البيانات
                 $public_setting->save();
             }
@@ -237,7 +238,7 @@ class PlanController extends Controller
 
             ############### Send Notification To User ###################
 
-            Notification::send($user, new PlanInvestMent($user,$user->id ,$plan->id, $plan->name, $data['total_price']));
+            Notification::send($user, new PlanInvestMent($user, $user->id, $plan->id, $plan->name, $data['total_price']));
 
             DB::commit();
 
@@ -301,6 +302,7 @@ class PlanController extends Controller
             $sales->bin_amount = $crypto_to_withdraw;
             $sales->bin_sold = 0;
             $sales->type = 'withdrawfromplan';
+            $sales->plan_id = $data['plan_id'];
             $sales->save();
             // تحديث رصيد العملات الرقمية
             $user->bin_balance -= $crypto_to_withdraw;

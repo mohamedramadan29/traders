@@ -35,7 +35,8 @@
                             <h4 class="profit_balance"> {{ number_format($investment_earning, 2) }} دولار </h4>
                             <button style="border: none;" class="stat" data-bs-toggle="modal"
                                 data-bs-target="#main_withdraw_balance"> سحب </button>
-                            <a href="#" class="stat WithDrawTransactions" data-plan-id="WithDrawTransactions"> سجل السحوبات </a>
+                            <a href="#" class="stat WithDrawTransactions" data-plan-id="WithDrawTransactions"> سجل
+                                السحوبات </a>
                             @include('front.Plans.withdraw')
 
                         </div>
@@ -133,8 +134,11 @@
                                     @endif
                                 </h4>
                                 <!------------- Under Revision Untill Sales Order Compeled ------------->
-                                <h4 class="under_revision"> تحت المراجعة :: <strong> -
-                                        {{ number_format($TotalBalanceRevision, 2) }} دولار </strong> </h4>
+                                @if ($plan_details['TotalBalanceRevision'] > 0)
+                                    <h4 class="under_revision"> تحت المراجعة :: <strong> -
+                                            {{ number_format($plan_details['TotalBalanceRevision'], 2) }} دولار </strong> </h4>
+                                @endif
+
                                 <!------------- Under Revision Untill Sales Order Compeled ------------->
                             </div>
                             <div class="info">

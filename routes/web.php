@@ -9,6 +9,7 @@ use \App\Http\Controllers\front\StorageInvestment;
 use App\Http\Controllers\front\WithDrawController;
 use \App\Http\Controllers\front\ExchangeController;
 use App\Http\Controllers\Auth\SocialLoginController;
+use App\Http\Controllers\front\ChartController;
 use \App\Http\Controllers\front\SalesOrderController;
 use \App\Http\Controllers\front\UserBalanceController;
 use App\Http\Controllers\front\NotificationController;
@@ -111,6 +112,11 @@ Route::group(['prefix' => 'user'], function () {
             Route::get('storage', 'index');
             Route::post('storage/add', 'store');
         });
+        #################### Start Chart Controller  ##########
+        Route::controller(ChartController::class)->group(function () {
+            Route::get('charts', 'index');
+        });
+        ################# End Chart Controller ############
     });
 });
 
