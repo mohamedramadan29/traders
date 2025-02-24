@@ -136,7 +136,8 @@
                                 <!------------- Under Revision Untill Sales Order Compeled ------------->
                                 @if ($plan_details['TotalBalanceRevision'] > 0)
                                     <h4 class="under_revision"> تحت المراجعة :: <strong> -
-                                            {{ number_format($plan_details['TotalBalanceRevision'], 2) }} دولار </strong> </h4>
+                                            {{ number_format($plan_details['TotalBalanceRevision'], 2) }} دولار </strong>
+                                    </h4>
                                 @endif
 
                                 <!------------- Under Revision Untill Sales Order Compeled ------------->
@@ -151,6 +152,59 @@
 
                         <!-- #################################### Start Plan Transaction Details ############################# -->
                         @include('front.Plans.user_plan_statments')
+                        <!-- #################################### End Plan Transaction Details ############################# -->
+                    @endforeach
+
+                    <hr>
+
+                    <h4 style="color: #fff;font-size:16px"> خطط الاستثمار في العملات الرقمية </h4>
+
+                    @foreach ($userCurrencyPlans as $currencyplan)
+                        <div class="user_plans_page_info my_new_container">
+                            <div class="info">
+                                <h5> خطة الاستثمار في : {{ $currencyplan->CurrencyPlan['name'] }} </h5>
+                                <h4 class="total_investment"> {{ number_format($currencyplan['total_investment'], 2) }}
+                                    دولار
+                                </h4>
+                                <div class="buttons">
+                                    <a href="#" class="public_button" data-bs-toggle="modal"
+                                        data-bs-target="#edit_currency_balance_{{ $currencyplan['id'] }}"> تعديل الرصيد
+                                    </a>
+                                    <a href="#" class="stat toggle-transactions"
+                                        data-plan-id="{{ $currencyplan['id'] }}"> المعاملات </a>
+                                </div>
+                            </div>
+                            @include('front.Plans._edit_currency_balance')
+                            <div class="info">
+                                <h5 class="select_h5">
+                                    الربح الكلي
+                                </h5>
+
+                                <!-- الربح الكلي -->
+                                <h4 class="profit_balance stats">
+                                    @php
+
+                                        $total_profit =
+                                            $currencyplan['currency_number'] *
+                                                $currencyplan->CurrencyPlan['currency_current_price'] -
+                                            $currencyplan['total_investment'];
+
+                                    @endphp
+                                    {{ number_format($total_profit, 2) }} دولار
+                                </h4>
+                                <!------------- Under Revision Untill Sales Order Compeled ------------->
+                            </div>
+                            <div class="info">
+                                <h5> {{ $currencyplan->CurrencyPlan['name'] }} </h5>
+                                <a href="{{ $currencyplan->CurrencyPlan['url'] }}">
+                                    <img
+                                        src="{{ asset('assets/uploads/currency/' . $currencyplan->CurrencyPlan['logo']) }}">
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- #################################### Start Plan Transaction Details ############################# -->
+                        @include('front.Plans._user_curreny_plan_statments')
                         <!-- #################################### End Plan Transaction Details ############################# -->
                     @endforeach
 

@@ -17,10 +17,11 @@
                         <div class="table-responsive my_new_container">
                             <div class="plans_total_report plan_report_section">
                                 <div class="total_report increment_section">
+
                                     <p> الاستثمار في عملة Oks
                                     </p>
                                     <!-- Subscription form -->
-                                    <form method="post" action="{{ url('user/OksInvestment') }}">
+                                    <form method="post" action="{{ url('user/investment') }}">
                                         @csrf
                                         <div style="display: flex; align-items: center; margin-top: 10px;">
                                             <button class="mines_button" type="button" onclick="decrementQuantity"

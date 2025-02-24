@@ -158,8 +158,124 @@
                                     </div>
                                 </div>
                             @endforeach
-                        </div>
 
+                            <h4 style="color: #fff;font-weight: bold; "> الاستثمار في العملات
+                            </h4>
+
+                            @foreach ($currencyPlans as $currencyplan)
+                                <div class="plans_total_report plan_report_section">
+                                    <div class="total_report increment_section">
+                                        <p>{{ $currencyplan['name'] }}
+                                        </p>
+                                        <!-- Subscription form -->
+                                        <form method="post" action="{{ route('currency_investment') }}">
+                                            @csrf
+                                            <div style="display: flex; align-items: center; margin-top: 10px;">
+                                                <button class="mines_button" type="button"
+                                                    onclick="decrementQuantity({{ $currencyplan['id'] }})"
+                                                    style="width: 30px; height: 30px; font-size: 18px;">-
+                                                </button>
+                                                <input required class="quantity" type="number"
+                                                    id="quantity_{{ $currencyplan['id'] }}" name="currency_price"
+                                                    min="1" placeholder=" مبلغ الاستثمار "
+                                                    oninput="calculateTotal({{ $currencyplan['id'] }})">
+                                                <button class="increase_button" type="button"
+                                                    onclick="incrementQuantity({{ $currencyplan['id'] }})"
+                                                    style="width: 30px; height: 30px; font-size: 18px;">+
+                                                </button>
+                                                <input type="hidden" name="currecny_plan_id" value="{{ $currencyplan['id'] }}">
+                                            </div>
+                                            <button style="display: block; width: 100%; margin-top: 20px;" type="submit"
+                                                class="btn withdraw_button">
+                                                اشتراك
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="plans ">
+                                        <div class="plans_details">
+                                            <div class="plan1 investment_return">
+                                                <h4> بيانات الخطة </h4>
+                                                <div class="investment_return_data">
+                                                    <h4> عدد العملات
+                                                        <br>
+                                                        <span style="color: #10AE59 }}">
+                                                            {{ $currencyplan['curreny_number'] }}
+                                                        </span>
+                                                    </h4>
+                                                    <h4> مبلغ الاستثمار الكلي
+                                                        <br>
+                                                        <span style="color: #10AE59 }}">
+                                                            @php
+                                                            $totalinvestments = $currencyplan['main_investment'] + $currencyplan['current_investments'];
+                                                            @endphp
+                                                            {{ number_format($totalinvestments, 2) }} $
+                                                        </span>
+                                                    </h4>
+                                                    <h4> سعر العملة الحالي
+                                                        <br>
+                                                        <span style="color: #10AE59 }}">
+                                                            {{ $currencyplan['currency_current_price'] !=0 ? $currencyplan['currency_current_price'] : $currencyplan['currency_main_price'] }}
+                                                        </span>
+                                                    </h4>
+                                                </div>
+                                            </div>
+                                            <div class="plan1 platform_info">
+                                                <h4 data-bs-toggle="modal"
+                                                    data-bs-target="#add_attribute_{{ $currencyplan['id'] }}">
+                                                    <span class="platform-trigger"
+                                                        style="cursor:pointer;">{{ $currencyplan['name'] }}</span>
+                                                    <i class="bi bi-caret-down-fill" style="cursor:pointer;"></i>
+                                                </h4>
+                                                <a href="{{ url($currencyplan['url']) }}">
+                                                    <img
+                                                        src="{{ asset('assets/uploads/currency/' . $currencyplan['logo']) }}">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="button_footer">
+                                            <div class="statics">
+                                                <i class="bi bi-people-fill"></i>
+                                                <span> {{ $plan['total_subscriptions'] }} </span>
+                                            </div>
+                                            <div class="statics">
+                                                <i class="bi bi-currency-dollar"></i>
+                                                <span>
+                                                    {{ number_format($plan['totalinvestment'], 2) }}
+                                                    دولار </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal structure  -->
+                                <div class="modal fade platform_data" id="add_attribute_{{ $currencyplan['id'] }}"
+                                    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="platformModalLabel">
+                                                    {{ $currencyplan['name'] }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                <h6> {{ $currencyplan['name'] }} </h6>
+                                                <!-- Platform logo -->
+                                                <img src="{{ asset('assets/uploads/currency/' . $currencyplan['logo']) }}"
+                                                    alt="{{ $currencyplan['name'] }}" class="img-fluid"
+                                                    style="max-width: 150px;">
+                                                <!-- Platform link -->
+                                                <p class="mt-3">
+                                                    <a href="{{ url($currencyplan['url']) }}" target="_blank"
+                                                        class="btn btn-success">
+                                                        زيارة الموقع
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
                         <!-- end table-responsive -->
                     </div>
 

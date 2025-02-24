@@ -15,6 +15,7 @@ use App\Models\front\UserStatment;
 use Illuminate\Support\Facades\DB;
 use App\Models\admin\PublicSetting;
 use App\Http\Controllers\Controller;
+use App\Models\admin\CurrencyPlanInvestment;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\PlanInvestMent;
 use Illuminate\Support\Facades\Redirect;
@@ -93,8 +94,11 @@ class PlanController extends Controller
 
             return $plan;
         });
-
-        return view('front.Plans.user_plans', compact('Plans', 'totalbalance', 'investment_earning', 'daily_earning', 'daily_earning_percentage', 'user_withdraw_statments'));
+        ##################### Start User Currency Plans ###############
+        $userCurrencyPlans = CurrencyPlanInvestment::where('user_id', Auth::id())->latest()->get();
+        //dd($userCurrencyPlans);
+        #################### End User Currency Plans ###################
+        return view('front.Plans.user_plans', compact('Plans', 'totalbalance', 'investment_earning', 'daily_earning', 'daily_earning_percentage', 'user_withdraw_statments', 'userCurrencyPlans'));
     }
 
     public function platformPlans($plan_id)

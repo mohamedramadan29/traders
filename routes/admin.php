@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\Admin\WithDrawController;
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\Admin\UserController;
 use \App\Http\Controllers\admin\AdminController;
 use \App\Http\Controllers\admin\PlansController;
+use App\Http\Controllers\Admin\WithDrawController;
 use \App\Http\Controllers\admin\PlatformController;
-use \App\Http\Controllers\admin\PlatFormInvestmentController;
-use App\Http\Controllers\admin\StorageInvestmentController;
 use App\Http\Controllers\admin\StoragePlanController;
-use \App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\admin\CurrencyPlansController;
+use App\Http\Controllers\admin\StorageInvestmentController;
+use \App\Http\Controllers\admin\PlatFormInvestmentController;
 Route::group(['prefix' => 'admin'], function () {
     // Admin Login
     Route::controller(AdminController::class)->group(function () {
@@ -74,5 +75,15 @@ Route::group(['prefix' => 'admin'], function () {
 
         });
         ##################### End Storage Plan Daily Investment ##############
+
+        ############## Start Currency Plans Controller ##################
+
+        Route::controller(CurrencyPlansController::class)->group(function () {
+            Route::get('currency_plans', 'index');
+            Route::match(['post','get'],'currency_plan/store','store');
+            Route::match(['post','get'],'currency_plan/update/{id}','update');
+            Route::post('currency_plan/delete/{id}', 'delete');
+        });
+        ################# End Currency Plans Controller #################
     });
 });

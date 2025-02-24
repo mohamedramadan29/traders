@@ -12,6 +12,7 @@ use \App\Http\Controllers\front\StorageInvestment;
 use App\Http\Controllers\front\WithDrawController;
 use \App\Http\Controllers\front\ExchangeController;
 use App\Http\Controllers\Auth\SocialLoginController;
+use App\Http\Controllers\front\CurrencyInvestmentController;
 use \App\Http\Controllers\front\SalesOrderController;
 use \App\Http\Controllers\front\UserBalanceController;
 use App\Http\Controllers\front\NotificationController;
@@ -122,9 +123,15 @@ Route::group(['prefix' => 'user'], function () {
         ############# Start Oks Controller ############
         Route::controller(OksContoller::class)->group(function () {
             Route::get('oks', 'index');
-            Route::post('OksInvestment','OksInvestment');
+            Route::post('OksInvestment', 'OksInvestment');
         });
         ############# End Oks Controller ##############
+
+        ########### Start Currency Investments ############
+        Route::controller(CurrencyInvestmentController::class)->group(function () {
+            Route::post('investment', 'investment')->name('currency_investment');
+        });
+        ############## End Currency Investments ##########
     });
 });
 

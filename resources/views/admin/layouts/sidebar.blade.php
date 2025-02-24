@@ -57,6 +57,30 @@
                     <span class="nav-text"> العوائد اليومية </span>
                 </a>
             </li>
+            <li class="menu-title mt-2"> خطط العملات الرقمية </li>
+
+            <li class="nav-item">
+                <a class="nav-link menu-arrow" href="#sidebaradminprofile" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarCustomers">
+                    <span class="nav-icon">
+                        <iconify-icon icon="solar:chat-square-like-bold-duotone"></iconify-icon>
+                    </span>
+                    <span class="nav-text">خطط العملات الرقمية </span>
+                </a>
+                <div class="collapse" id="sidebaradminprofile">
+                    <ul class="nav sub-navbar-nav">
+
+                        <li class="sub-nav-item">
+                            <a class="sub-nav-link" href="{{ url('admin/currency_plans') }}"> جميع الخطط
+                            </a>
+                        </li>
+                        <li class="sub-nav-item">
+                            <a class="sub-nav-link" href="{{ url('admin/currency_plan/store') }}"> اضافة خطة جديدة
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
             <li class="menu-title mt-2"> اعدادات الموقع </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('admin/public-setting/update') }}">

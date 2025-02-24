@@ -5,6 +5,7 @@ namespace App\Http\Controllers\front;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Message_Trait;
 use App\Http\Traits\Upload_Images;
+use App\Models\admin\CurrencyPlan;
 use App\Models\admin\Plan;
 use App\Models\front\User;
 use App\Models\front\UserPlan;
@@ -63,13 +64,16 @@ class UserController extends Controller
                 'totalinvestment' => $totalInvestmentPlan,
                 'platform_name' => $plan->platform_name,
                 'platform_link' => $plan->platform_link,
-                'today_returns_percentage' => $totalInvestmentPlan > 0 ? $todayReturns  : 0,
-                'last_7_days_percentage' => $totalInvestmentPlan > 0 ? $last7DaysReturns  : 0,
-                'last_30_days_percentage' => $totalInvestmentPlan > 0 ? $last30DaysReturns  : 0,
+                'today_returns_percentage' => $totalInvestmentPlan > 0 ? $todayReturns : 0,
+                'last_7_days_percentage' => $totalInvestmentPlan > 0 ? $last7DaysReturns : 0,
+                'last_30_days_percentage' => $totalInvestmentPlan > 0 ? $last30DaysReturns : 0,
             ];
         });
+        ################# Start Currency Plans #################
+        $currencyPlans = CurrencyPlan::with('investments')->where('status', 1)->get();
+        ################ End Currency Plans #####################
 
-        return view('front.dashboard', compact('plansWithReturns', 'plans'));
+        return view('front.dashboard', compact('plansWithReturns', 'plans', 'currencyPlans'));
     }
 
 
