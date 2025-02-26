@@ -130,6 +130,7 @@ Route::group(['prefix' => 'user'], function () {
         ########### Start Currency Investments ############
         Route::controller(CurrencyInvestmentController::class)->group(function () {
             Route::post('investment', 'investment')->name('currency_investment');
+            Route::post('withdraw_currency_profit', 'withdraw_currency_profit')->name('withdraw_currency_profit');
         });
         ############## End Currency Investments ##########
     });

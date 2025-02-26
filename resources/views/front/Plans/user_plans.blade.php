@@ -170,8 +170,8 @@
                                     <a href="#" class="public_button" data-bs-toggle="modal"
                                         data-bs-target="#edit_currency_balance_{{ $currencyplan['id'] }}"> تعديل الرصيد
                                     </a>
-                                    <a href="#" class="stat toggle-transactions"
-                                        data-plan-id="{{ $currencyplan['id'] }}"> المعاملات </a>
+                                    <a href="#" class="stat toggle-transactions-currency"
+                                        data-plan-id="{{ $currencyplan->CurrencyPlan['id'] }}"> المعاملات </a>
                                 </div>
                             </div>
                             @include('front.Plans._edit_currency_balance')
@@ -179,19 +179,38 @@
                                 <h5 class="select_h5">
                                     الربح الكلي
                                 </h5>
-
                                 <!-- الربح الكلي -->
                                 <h4 class="profit_balance stats">
                                     @php
-
+                                        ############ Get All WithDraw In this Plan
+                                        $TotalDraw = App\Models\front\WithDrawCurrencyPlan::where(
+                                            'currency_plan',
+                                            $currencyplan->CurrencyPlan['id'],
+                                        )
+                                            ->where('user_id', Auth::id())
+                                            ->sum('amount');
                                         $total_profit =
                                             $currencyplan['currency_number'] *
                                                 $currencyplan->CurrencyPlan['currency_current_price'] -
-                                            $currencyplan['total_investment'];
-
+                                            ($currencyplan['total_investment'] + $TotalDraw);
                                     @endphp
                                     {{ number_format($total_profit, 2) }} دولار
                                 </h4>
+                                <div class="info d-flex">
+                                    <form action="{{ route('withdraw_currency_profit') }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="currency_plan_id"
+                                            value="{{ $currencyplan->CurrencyPlan['id'] }}">
+                                        <button style="border: none;" class="stat" type="submit"> سحب ونقل الارباح
+                                        </button>
+                                    </form>
+
+                                    <a href="#" class="stat WithDrawTransactions"
+                                        data-plan-id="WithDrawTransactions"> سجل
+                                        السحوبات </a>
+                                    @include('front.Plans.withdraw')
+
+                                </div>
                                 <!------------- Under Revision Untill Sales Order Compeled ------------->
                             </div>
                             <div class="info">
@@ -226,6 +245,26 @@
                             });
                         });
                     </script>
+                    <!-- Show Hide Currency Plan Transactions  -->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            // إضافة حدث لجميع الأزرار
+                            document.querySelectorAll('.toggle-transactions-currency').forEach(button => {
+                                button.addEventListener('click', (e) => {
+                                    e.preventDefault(); // منع التحديث
+                                    const planId = button.getAttribute('data-plan-id'); // الحصول على ID الخطة
+                                    const container = document.getElementById(
+                                        `transactions-${planId}`); // البحث عن القسم الخاص بالخطة
+                                    if (container.style.display === 'none' || !container.style.display) {
+                                        container.style.display = 'block'; // إظهار المعاملات
+                                    } else {
+                                        container.style.display = 'none'; // إخفاء المعاملات
+                                    }
+                                });
+                            });
+                        });
+                    </script>
+                    <!-- Show Hide Currency Plan Transactions  -->
                     <!--################------ Show hide 24 / 7 / 30 Days ###################  !-->
                     <script>
                         function updateStats(planId) {

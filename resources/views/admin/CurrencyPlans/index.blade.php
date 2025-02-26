@@ -46,7 +46,10 @@
                                             <th> اللوجو </th>
                                             <th> عدد العملات </th>
                                             <th> قيمة الاستثمارات الاولي </th>
-                                            <th> سعر الخطة الاولي </th>
+                                            <th> قيمة الاستثمارات الحالية </th>
+                                            <th> سعر العملة الاولي </th>
+                                            <th> السعر الحالي </th>
+                                            <th> عدد المستثمرين </th>
                                             <th> الحالة </th>
                                             <th> العمليات</th>
                                         </tr>
@@ -68,8 +71,16 @@
                                                     {{ number_format($plan->curreny_number, 4) }} عملة
                                                 </td>
                                                 <td> {{ number_format($plan->main_investment, 4) }} $ </td>
+                                                <td>
+                                                    @php
+                                                        $totalinvestments =
+                                                            $plan['main_investment'] + $plan['current_investments'];
+                                                    @endphp
+                                                    {{ number_format($totalinvestments, 2) }} $
+                                                </td>
                                                 <td>{{ $plan['currency_main_price'] }} $</td>
-
+                                                <td>{{ $plan['currency_current_price'] }} $</td>
+                                                <td> {{ $plan->investments->count() }} </td>
                                                 <td>
                                                     @if ($plan['status'] == 1)
                                                         <span class="badge badge-outline-success"> فعالة </span>
@@ -84,10 +95,10 @@
                                                             <iconify-icon icon="solar:pen-2-broken"
                                                                 class="align-middle fs-18"></iconify-icon>
                                                         </a>
-                                                        <a href="{{ url('admin/investments/' . $plan['id']) }}"
+                                                        {{-- <a href="{{ url('admin/investments/' . $plan['id']) }}"
                                                             class="btn btn-success"> عوائد الاستثمار </a>
                                                         <a href="{{ url('admin/plan_report/' . $plan['id']) }}"
-                                                            class="btn btn-success"> تقرير الخطة </a>
+                                                            class="btn btn-success"> تقرير الخطة </a> --}}
                                                         <button type="button" class="btn btn-soft-danger btn-sm"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#delete_plan_{{ $plan['id'] }}">
