@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers\front;
 
-use App\Models\front\User;
-use App\Models\front\WithDrawCurrencyPlan;
 use Exception;
+use App\Models\front\User;
 use Illuminate\Http\Request;
 use App\Http\Traits\Message_Trait;
 use App\Models\admin\CurrencyPlan;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Validator;
-use App\Models\admin\CurrencyPlanInvestment;
-use App\Notifications\CurrencyInvestment;
 use App\Notifications\PlanInvestMent;
+use App\Models\front\CurrencyPlanStep;
+use Illuminate\Support\Facades\Redirect;
+use App\Notifications\CurrencyInvestment;
+use Illuminate\Support\Facades\Validator;
+use App\Models\front\WithDrawCurrencyPlan;
+use App\Models\admin\CurrencyPlanInvestment;
 use Illuminate\Support\Facades\Notification;
 
 class CurrencyInvestmentController extends Controller
 {
     use Message_Trait;
-
-
     public function investment(Request $request)
     {
         $data = $request->all();
@@ -82,6 +81,12 @@ class CurrencyInvestmentController extends Controller
         ############# Update User Data ###############
         $user->dollar_balance = $user->dollar_balance - $data['currency_price'];
         $user->save();
+        ################### Add Currency Step To Currency Plan Steps #####################################
+        $currencyStep = new CurrencyPlanStep();
+        $currencyStep->currency_plan_id = $data['currecny_plan_id'];
+        $currencyStep->currency_price = ($currencyplan->current_investments + $data['currency_price'] + $currencyplan->main_investment) / $currencyplan->curreny_number;
+        $currencyStep->user_id = Auth::id();
+        $currencyStep->save();
         ############################# Send Mail  To User And DB Notification  ############################
         Notification::send($user, new CurrencyInvestment($user, $user->id, $data['currecny_plan_id'], $currencyName, $data['currency_price'], $userCurrencyNumber));
         DB::commit();

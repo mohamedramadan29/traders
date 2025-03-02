@@ -161,7 +161,16 @@
 
                             <h4 style="color: #fff;font-weight: bold; "> الاستثمار في العملات
                             </h4>
-
+                            @php
+                                if (!function_exists('calculateProfit')) {
+                                    function calculateProfit($current, $previous)
+                                    {
+                                        return $previous
+                                            ? number_format(abs(($current - $previous) * 100), 2)
+                                            : '0';
+                                    }
+                                }
+                            @endphp
                             @foreach ($currencyPlans as $currencyplan)
                                 <div class="plans_total_report plan_report_section">
                                     <div class="total_report increment_section">
@@ -183,7 +192,8 @@
                                                     onclick="incrementQuantity({{ $currencyplan['id'] }})"
                                                     style="width: 30px; height: 30px; font-size: 18px;">+
                                                 </button>
-                                                <input type="hidden" name="currecny_plan_id" value="{{ $currencyplan['id'] }}">
+                                                <input type="hidden" name="currecny_plan_id"
+                                                    value="{{ $currencyplan['id'] }}">
                                             </div>
                                             <button style="display: block; width: 100%; margin-top: 20px;" type="submit"
                                                 class="btn withdraw_button">
@@ -194,28 +204,111 @@
                                     <div class="plans ">
                                         <div class="plans_details">
                                             <div class="plan1 investment_return">
-                                                <h4> بيانات الخطة </h4>
+                                                <h4> عائد الاستثمار </h4>
+                                                <!---------- Get The Currency Price In Last Day --------->
+                                                @php
+                                                    // السعر الحالي
+                                                    $currentPrice = $currencyplan->currency_current_price;
+
+                                                    // 🔵 السعر في آخر 24 ساعة
+                                                    $lastDayPrice = $currencyplan
+                                                        ->CurrencyPlanSteps()
+                                                        ->where('created_at', '>=', now()->subDay()->startOfDay())
+                                                        ->where('created_at', '<=', now()->subDay()->endOfDay())
+                                                        ->orderBy('created_at', 'desc')
+                                                        ->value('currency_price');
+
+                                                    // ✅ إذا لم توجد بيانات في آخر يوم، جلب آخر سجل متاح
+                                                    if (!$lastDayPrice) {
+                                                        $lastDayPrice = $currencyplan
+                                                            ->CurrencyPlanSteps()
+                                                            ->orderBy('created_at', 'desc')
+                                                            ->value('currency_price');
+                                                    }
+
+                                                    // 🔵 السعر في آخر 7 أيام
+                                                    $lastWeekPrice = $currencyplan
+                                                        ->CurrencyPlanSteps()
+                                                        ->where('created_at', '>=', now()->subDays(7)->startOfDay())
+                                                        ->where('created_at', '<=', now()->endOfDay())
+                                                        ->orderBy('created_at', 'desc')
+                                                        ->value('currency_price');
+
+                                                    // ✅ إذا لم توجد بيانات في آخر 7 أيام، جلب آخر سجل متاح
+                                                    if (!$lastWeekPrice) {
+                                                        $lastWeekPrice = $currencyplan
+                                                            ->CurrencyPlanSteps()
+                                                            ->orderBy('created_at', 'desc')
+                                                            ->value('currency_price');
+                                                    }
+
+                                                    // 🔵 السعر في آخر 30 يومًا
+                                                    $lastMonthPrice = $currencyplan
+                                                        ->CurrencyPlanSteps()
+                                                        ->where('created_at', '>=', now()->subDays(30)->startOfDay())
+                                                        ->where('created_at', '<=', now()->endOfDay())
+                                                        ->orderBy('created_at', 'desc')
+                                                        ->value('currency_price');
+
+                                                    // ✅ إذا لم توجد بيانات في آخر 30 يومًا، جلب آخر سجل متاح
+                                                    if (!$lastMonthPrice) {
+                                                        $lastMonthPrice = $currencyplan
+                                                            ->CurrencyPlanSteps()
+                                                            ->orderBy('created_at', 'desc')
+                                                            ->value('currency_price');
+                                                    }
+
+                                                    // حساب نسبة الربح
+                                                    $profitLastDay = calculateProfit($currentPrice, $lastDayPrice);
+                                                    $profitLastWeek = calculateProfit($currentPrice, $lastWeekPrice);
+                                                    $profitLastMonth = calculateProfit($currentPrice, $lastMonthPrice);
+                                                @endphp
+
                                                 <div class="investment_return_data">
-                                                    <h4> عدد العملات
+                                                    <h4> 24 ساعة
                                                         <br>
-                                                        <span style="color: #10AE59 }}">
-                                                            {{ $currencyplan['curreny_number'] }}
-                                                        </span>
+                                                        @if ($profitLastDay != 0)
+                                                            <span
+                                                                style="color: {{ $profitLastDay > 0 ? '#10AE59' : '#FF0000' }}">
+                                                                {{ $profitLastDay > 0 ? '+' : '' }}
+                                                                {{ $profitLastDay }}
+                                                                %
+                                                                <i
+                                                                    class="bi {{ $plan['today_returns_percentage'] > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
+                                                            </span>
+                                                        @else
+                                                            <span style="color: #999999"> % 0.00 </span>
+                                                        @endif
                                                     </h4>
-                                                    <h4> مبلغ الاستثمار الكلي
+                                                    <h4> 7 ايــام
                                                         <br>
-                                                        <span style="color: #10AE59 }}">
-                                                            @php
-                                                            $totalinvestments = $currencyplan['main_investment'] + $currencyplan['current_investments'];
-                                                            @endphp
-                                                            {{ number_format($totalinvestments, 2) }} $
-                                                        </span>
+                                                        @if ($profitLastWeek != 0)
+                                                            <span
+                                                                style="color: {{ $profitLastWeek > 0 ? '#10AE59' : '#FF0000' }}">
+                                                                {{ $profitLastWeek > 0 ? '+' : '' }}
+                                                                {{ $profitLastWeek }}
+                                                                %
+                                                                <i
+                                                                    class="bi {{ $plan['today_returns_percentage'] > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
+                                                            </span>
+                                                        @else
+                                                            <span style="color: #999999"> % 0.00 </span>
+                                                        @endif
                                                     </h4>
-                                                    <h4> سعر العملة الحالي
+                                                    <h4> 30 يــوم
                                                         <br>
-                                                        <span style="color: #10AE59 }}">
-                                                            {{ $currencyplan['currency_current_price'] !=0 ? $currencyplan['currency_current_price'] : $currencyplan['currency_main_price'] }}
-                                                        </span>
+                                                        @if ($profitLastMonth != 0)
+                                                            <span
+                                                                style="color: {{ $profitLastMonth > 0 ? '#10AE59' : '#FF0000' }}">
+                                                                {{ $profitLastMonth > 0 ? '+' : '' }}
+                                                                {{ $profitLastMonth }}
+                                                                %
+                                                                <i
+                                                                    class="bi {{ $plan['today_returns_percentage'] > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
+                                                            </span>
+                                                        @else
+                                                            <span style="color: #999999"> % 0.00 </span>
+                                                        @endif
                                                     </h4>
                                                 </div>
                                             </div>
@@ -235,13 +328,18 @@
                                         <div class="button_footer">
                                             <div class="statics">
                                                 <i class="bi bi-people-fill"></i>
-                                                <span> {{ $plan['total_subscriptions'] }} </span>
+                                                <span> {{ $currencyplan->investments->count() }} </span>
                                             </div>
                                             <div class="statics">
                                                 <i class="bi bi-currency-dollar"></i>
                                                 <span>
-                                                    {{ number_format($plan['totalinvestment'], 2) }}
-                                                    دولار </span>
+                                                    @php
+                                                        $totalinvestments =
+                                                            $currencyplan['main_investment'] +
+                                                            $currencyplan['current_investments'];
+                                                    @endphp
+                                                    {{ number_format($totalinvestments, 2) }} $
+                                                </span>
                                             </div>
                                         </div>
                                     </div>

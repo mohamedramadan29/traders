@@ -31,7 +31,6 @@ class UserController extends Controller
             $returns = $plan->investmentReturns;
             // الحصول على تاريخ آخر إدخال
             $lastEntryDate = $returns->max('return_date');
-
             // إذا لم يتم إدخال عوائد اليوم، استخدم آخر إدخال متاح
             $todayReturns = $returns->where('return_date', Carbon::today())->sum('return_amount');
             if ($todayReturns == 0 && $lastEntryDate) {
