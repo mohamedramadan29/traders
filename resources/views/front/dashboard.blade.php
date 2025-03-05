@@ -165,9 +165,7 @@
                                 if (!function_exists('calculateProfit')) {
                                     function calculateProfit($current, $previous)
                                     {
-                                        return $previous
-                                            ? number_format(abs(($current - $previous) * 100), 2)
-                                            : '0';
+                                        return $previous ? number_format(abs(($current - $previous) * 100), 2) : '0';
                                     }
                                 }
                             @endphp
@@ -209,7 +207,9 @@
                                                 @php
                                                     // السعر الحالي
                                                     $currentPrice = $currencyplan->currency_current_price;
+                                                    $main_price = $currencyplan->currency_main_price;
 
+                                                    // dd($currentPrice);
                                                     // 🔵 السعر في آخر 24 ساعة
                                                     $lastDayPrice = $currencyplan
                                                         ->CurrencyPlanSteps()
@@ -217,6 +217,7 @@
                                                         ->where('created_at', '<=', now()->subDay()->endOfDay())
                                                         ->orderBy('created_at', 'desc')
                                                         ->value('currency_price');
+                                                    //   dd($lastDayPrice);
 
                                                     // ✅ إذا لم توجد بيانات في آخر يوم، جلب آخر سجل متاح
                                                     if (!$lastDayPrice) {
@@ -224,6 +225,8 @@
                                                             ->CurrencyPlanSteps()
                                                             ->orderBy('created_at', 'desc')
                                                             ->value('currency_price');
+
+                                                        // dd($lastDayPrice);
                                                     }
 
                                                     // 🔵 السعر في آخر 7 أيام
@@ -257,9 +260,15 @@
                                                             ->orderBy('created_at', 'desc')
                                                             ->value('currency_price');
                                                     }
-
                                                     // حساب نسبة الربح
-                                                    $profitLastDay = calculateProfit($currentPrice, $lastDayPrice);
+                                                    //dd($currentPrice);
+
+                                                    if ($currentPrice == $lastDayPrice) {
+                                                        $profitLastDay = calculateProfit($main_price, $lastDayPrice);
+                                                    } else {
+                                                        $profitLastDay = calculateProfit($currentPrice, $lastDayPrice);
+                                                    }
+
                                                     $profitLastWeek = calculateProfit($currentPrice, $lastWeekPrice);
                                                     $profitLastMonth = calculateProfit($currentPrice, $lastMonthPrice);
                                                 @endphp

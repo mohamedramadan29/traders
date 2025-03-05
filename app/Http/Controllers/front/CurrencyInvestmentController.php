@@ -76,7 +76,7 @@ class CurrencyInvestmentController extends Controller
         ########### Update Currency Data #############
         $currencyplan->curreny_number = $currencyNumber - $userCurrencyNumber;
         $currencyplan->current_investments = $currencyplan->current_investments + $data['currency_price'];
-        $currencyplan->currency_current_price = ($currencyplan->current_investments + $data['currency_price'] + $currencyplan->main_investment) / $currencyplan->curreny_number;
+        $currencyplan->currency_current_price = ($currencyplan->current_investments + $currencyplan->main_investment) / max($currencyplan->main_investment, 1);
         $currencyplan->save();
         ############# Update User Data ###############
         $user->dollar_balance = $user->dollar_balance - $data['currency_price'];
@@ -84,7 +84,7 @@ class CurrencyInvestmentController extends Controller
         ################### Add Currency Step To Currency Plan Steps #####################################
         $currencyStep = new CurrencyPlanStep();
         $currencyStep->currency_plan_id = $data['currecny_plan_id'];
-        $currencyStep->currency_price = ($currencyplan->current_investments + $data['currency_price'] + $currencyplan->main_investment) / $currencyplan->curreny_number;
+        $currencyStep->currency_price = ($currencyplan->current_investments + $currencyplan->main_investment) / max($currencyplan->main_investment, 1);
         $currencyStep->user_id = Auth::id();
         $currencyStep->save();
         ############################# Send Mail  To User And DB Notification  ############################
