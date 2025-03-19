@@ -95,7 +95,7 @@ class PlanController extends Controller
             return $plan;
         });
         ##################### Start User Currency Plans ###############
-        $userCurrencyPlans = CurrencyPlanInvestment::where('user_id', Auth::id())->latest()->get();
+        $userCurrencyPlans = CurrencyPlanInvestment::where('user_id', Auth::id())->where('currency_plan', '!=', null)->latest()->get();
         //dd($userCurrencyPlans);
         #################### End User Currency Plans ###################
         return view('front.Plans.user_plans', compact('Plans', 'totalbalance', 'investment_earning', 'daily_earning', 'daily_earning_percentage', 'user_withdraw_statments', 'userCurrencyPlans'));
@@ -114,31 +114,31 @@ class PlanController extends Controller
 
     public function invoice_create(Request $request)
     {
-        //dd($request->all());
+        // dd($request->all());
         try {
             $user = User::where('id', Auth::id())->first();
             if (!$user) {
-                return redirect()->back()->with('error', 'المستخدم غير موجود.');
+                return redirect()->back()->withErrors(['المستخدم غير موجود.']);
             }
             $data = $request->all();
             // dd($data);
             // التحقق من إدخال السعر والخطة
             if (!isset($data['total_price']) || $data['total_price'] <= 0) {
-                return redirect()->back()->with('error', 'يرجى إدخال مبلغ صحيح.');
+                return redirect()->back()->withErrors(['يرجى إدخال مبلغ صحيح.']);
             }
             if (!isset($data['plan_id'])) {
-                return redirect()->back()->with('error', 'يرجى اختيار الخطة.');
+                return redirect()->back()->withErrors(['يرجى اختيار الخطة.']);
             }
             if ($user->dollar_balance < $data['total_price']) {
-                return redirect()->back()->with('error', 'رصيدك الحالي لا يكفي لإضافة الرصيد للخطة.');
+                return redirect()->back()->withErrors(['رصيدك الحالي لا يكفي لإضافة الرصيد للخطة.']);
             }
             $plan = Plan::find($data['plan_id']);
             if (!$plan) {
-                return redirect()->back()->with('error', 'الخطة المختارة غير موجودة.');
+                return redirect()->back()->withErrors(['الخطة المختارة غير موجودة.']);
             }
             $public_setting = PublicSetting::first();
             if (!$public_setting) {
-                return redirect()->back()->with('error', 'إعدادات السوق غير موجودة.');
+                return redirect()->back()->withErrors(['إعدادات السوق غير موجودة.']);
             }
             $market_price = $public_setting->market_price;
             $bin_amount = $data['total_price'] / $market_price;

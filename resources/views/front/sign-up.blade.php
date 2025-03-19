@@ -96,7 +96,7 @@
                                     document.getElementById('registrationForm').addEventListener('submit', function() {
                                         var submitbutton = document.getElementById('submitButton');
                                         submitbutton.disabled = true;
-                                        submitbutton.innerHTML = ' جاري الارسال ...'
+                                        submitbutton.innerHTML = ' جاري التسجيل  ...'
                                     });
                                 </script>
                             </div>

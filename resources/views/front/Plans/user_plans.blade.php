@@ -49,8 +49,9 @@
                             @endif
                         </div>
                     </div>
-                    @include('front.Plans.WithDrawTransactions')
+                    @include('front.Plans.WithdrawTransactions')
                     <hr>
+                    @if($Plans->count() > 0)
                     @foreach ($Plans as $plan_details)
                         <div class="user_plans_page_info my_new_container">
                             <div class="info">
@@ -154,78 +155,91 @@
                         @include('front.Plans.user_plan_statments')
                         <!-- #################################### End Plan Transaction Details ############################# -->
                     @endforeach
-
+                    @else
+                    <div class="alert alert-warning">
+                        لا يوجد خطط متاحة
+                    </div>
+                    @endif
                     <hr>
 
-                    <h4 style="color: #fff;font-size:16px"> خطط الاستثمار في العملات الرقمية </h4>
+                    @if ($userCurrencyPlans->count() > 0)
+                        <h4 style="color: #fff;font-size:16px"> خطط الاستثمار في العملات الرقمية </h4>
 
-                    @foreach ($userCurrencyPlans as $currencyplan)
-                        <div class="user_plans_page_info my_new_container">
-                            <div class="info">
-                                <h5> خطة الاستثمار في : {{ $currencyplan->CurrencyPlan['name'] }} </h5>
-                                <h4 class="total_investment"> {{ number_format($currencyplan['total_investment'], 2) }}
-                                    دولار
-                                </h4>
-                                <div class="buttons">
-                                    <a href="#" class="public_button" data-bs-toggle="modal"
-                                        data-bs-target="#edit_currency_balance_{{ $currencyplan['id'] }}"> تعديل الرصيد
+                        @foreach ($userCurrencyPlans as $currencyplan)
+                            <div class="user_plans_page_info my_new_container">
+                                <div class="info">
+                                    <h5> خطة الاستثمار في : {{ $currencyplan->CurrencyPlan['name'] }} </h5>
+                                    <h4 class="total_investment"> {{ number_format($currencyplan['total_investment'], 2) }}
+                                        دولار
+                                    </h4>
+                                    <div class="buttons">
+                                        <a href="#" class="public_button" data-bs-toggle="modal"
+                                            data-bs-target="#edit_currency_balance_{{ $currencyplan['id'] }}"> تعديل الرصيد
+                                        </a>
+                                        <a href="#" class="stat toggle-transactions-currency"
+                                            data-plan-id="{{ $currencyplan->CurrencyPlan['id'] }}"> المعاملات </a>
+                                    </div>
+                                </div>
+                                @include('front.Plans._edit_currency_balance')
+                                <div class="info">
+                                    <h5 class="select_h5">
+                                        الربح الكلي
+                                    </h5>
+                                    <!-- الربح الكلي -->
+                                    <h4 class="profit_balance stats">
+                                        @php
+                                            ############ Get All WithDraw In this Plan
+                                            $TotalDraw = App\Models\front\WithDrawCurrencyPlan::where(
+                                                'currency_plan',
+                                                $currencyplan->CurrencyPlan['id'],
+                                            )
+                                                ->where('user_id', Auth::id())
+                                                ->sum('amount');
+                                            $total_profit =
+                                                $currencyplan['currency_number'] *
+                                                    $currencyplan->CurrencyPlan['currency_current_price'] -
+                                                ($currencyplan['total_investment'] + $TotalDraw);
+                                            $allprofit =
+                                                $currencyplan['currency_number'] *
+                                                    $currencyplan->CurrencyPlan['currency_current_price'] -
+                                                $currencyplan['total_investment'];
+                                        @endphp
+                                        {{ number_format($total_profit, 2) }} دولار
+                                        <span style="color: #999999;display: block;margin-top: 10px;">
+                                            ({{ number_format($allprofit, 2) }} دولار)
+                                        </span>
+                                    </h4>
+                                    <div class="info d-flex">
+                                        <form action="{{ route('withdraw_currency_profit') }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="currency_plan_id"
+                                                value="{{ $currencyplan->CurrencyPlan['id'] }}">
+                                            <button style="border: none;" class="stat" type="submit"> سحب ونقل الارباح
+                                            </button>
+                                        </form>
+
+                                        <a href="#" class="stat WithDrawTransactions"
+                                            data-plan-id="WithDrawTransactions"> سجل
+                                            السحوبات </a>
+                                        @include('front.Plans.withdraw')
+
+                                    </div>
+                                    <!------------- Under Revision Untill Sales Order Compeled ------------->
+                                </div>
+                                <div class="info">
+                                    <h5> {{ $currencyplan->CurrencyPlan['name'] }} </h5>
+                                    <a href="{{ $currencyplan->CurrencyPlan['url'] }}">
+                                        <img
+                                            src="{{ asset('assets/uploads/currency/' . $currencyplan->CurrencyPlan['logo']) }}">
                                     </a>
-                                    <a href="#" class="stat toggle-transactions-currency"
-                                        data-plan-id="{{ $currencyplan->CurrencyPlan['id'] }}"> المعاملات </a>
                                 </div>
                             </div>
-                            @include('front.Plans._edit_currency_balance')
-                            <div class="info">
-                                <h5 class="select_h5">
-                                    الربح الكلي
-                                </h5>
-                                <!-- الربح الكلي -->
-                                <h4 class="profit_balance stats">
-                                    @php
-                                        ############ Get All WithDraw In this Plan
-                                        $TotalDraw = App\Models\front\WithDrawCurrencyPlan::where(
-                                            'currency_plan',
-                                            $currencyplan->CurrencyPlan['id'],
-                                        )
-                                            ->where('user_id', Auth::id())
-                                            ->sum('amount');
-                                        $total_profit =
-                                            $currencyplan['currency_number'] *
-                                                $currencyplan->CurrencyPlan['currency_current_price'] -
-                                            ($currencyplan['total_investment'] + $TotalDraw);
-                                    @endphp
-                                    {{ number_format($total_profit, 2) }} دولار
-                                </h4>
-                                <div class="info d-flex">
-                                    <form action="{{ route('withdraw_currency_profit') }}" method="post">
-                                        @csrf
-                                        <input type="hidden" name="currency_plan_id"
-                                            value="{{ $currencyplan->CurrencyPlan['id'] }}">
-                                        <button style="border: none;" class="stat" type="submit"> سحب ونقل الارباح
-                                        </button>
-                                    </form>
 
-                                    <a href="#" class="stat WithDrawTransactions"
-                                        data-plan-id="WithDrawTransactions"> سجل
-                                        السحوبات </a>
-                                    @include('front.Plans.withdraw')
-
-                                </div>
-                                <!------------- Under Revision Untill Sales Order Compeled ------------->
-                            </div>
-                            <div class="info">
-                                <h5> {{ $currencyplan->CurrencyPlan['name'] }} </h5>
-                                <a href="{{ $currencyplan->CurrencyPlan['url'] }}">
-                                    <img
-                                        src="{{ asset('assets/uploads/currency/' . $currencyplan->CurrencyPlan['logo']) }}">
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- #################################### Start Plan Transaction Details ############################# -->
-                        @include('front.Plans._user_curreny_plan_statments')
-                        <!-- #################################### End Plan Transaction Details ############################# -->
-                    @endforeach
+                            <!-- #################################### Start Plan Transaction Details ############################# -->
+                            {{-- @include('front.Plans._user_curreny_plan_statments') --}}
+                            <!-- #################################### End Plan Transaction Details ############################# -->
+                        @endforeach
+                    @endif
 
                     <script>
                         document.addEventListener('DOMContentLoaded', () => {

@@ -26,6 +26,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $plans = Plan::where('status', 1)->with('platform', 'total_plans', 'investmentReturns')->get();
+        $count_plans = $plans->count();
         ################## Plan With Returns #################
         $plansWithReturns = $plans->map(function ($plan) {
             $returns = $plan->investmentReturns;
@@ -70,9 +71,10 @@ class UserController extends Controller
         });
         ################# Start Currency Plans #################
         $currencyPlans = CurrencyPlan::with('investments')->where('status', 1)->get();
+        $count_currency_plans = $currencyPlans->count();
         ################ End Currency Plans #####################
 
-        return view('front.dashboard', compact('plansWithReturns', 'plans', 'currencyPlans'));
+        return view('front.dashboard', compact('plansWithReturns', 'plans', 'currencyPlans', 'count_plans', 'count_currency_plans'));
     }
 
 

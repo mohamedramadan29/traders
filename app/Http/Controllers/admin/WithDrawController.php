@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\front\User;
 use Illuminate\Http\Request;
-use App\Models\Admin\WithDraw;
+use App\Models\admin\WithDraw;
 use App\Http\Traits\Message_Trait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;

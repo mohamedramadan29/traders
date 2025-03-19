@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Admin\UserController;
 use \App\Http\Controllers\admin\AdminController;
 use \App\Http\Controllers\admin\PlansController;
-use App\Http\Controllers\Admin\WithDrawController;
+use App\Http\Controllers\admin\WithDrawController;
 use \App\Http\Controllers\admin\PlatformController;
 use App\Http\Controllers\admin\StoragePlanController;
 use App\Http\Controllers\admin\CurrencyPlansController;

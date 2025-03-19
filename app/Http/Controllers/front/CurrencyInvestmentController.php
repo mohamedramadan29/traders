@@ -25,16 +25,36 @@ class CurrencyInvestmentController extends Controller
     public function investment(Request $request)
     {
         $data = $request->all();
-        //dd($data);
+        $user = User::where('id', Auth::id())->first();
+        if (!$user) {
+            return redirect()->back()->withErrors(['المستخدم غير موجود.']);
+        }
+
+        if (!isset($data['currency_price']) || $data['currency_price'] <= 0) {
+            return redirect()->back()->withErrors(['يرجى إدخال مبلغ صحيح.']);
+        }
+
+        if (!isset($data['currecny_plan_id'])) {
+            return redirect()->back()->withErrors(['يرجى اختيار الخطة.']);
+        }
+
+        if ($user->dollar_balance < $data['currency_price']) {
+            return redirect()->back()->withErrors(['رصيدك الحالي لا يكفي لإضافة الرصيد للخطة.']);
+        }
+
+       // dd($data);
         $currencyplan = CurrencyPlan::where('id', $data['currecny_plan_id'])->first();
         //dd($currencyplan);
+
         $currencyName = $currencyplan['name'];
         $currencyNumber = $currencyplan['curreny_number'];
         $currencyPrice = $currencyplan['currency_current_price'] != 0 ? $currencyplan['currency_current_price'] : $currencyplan['currency_main_price'];
 
         $userCurrencyNumber = $data['currency_price'] / $currencyPrice;
 
-        $user = User::where('id', Auth::id())->first();
+
+
+
         if (!$user) {
             return Redirect::route('user_login');
         }
@@ -88,7 +108,7 @@ class CurrencyInvestmentController extends Controller
         $currencyStep->user_id = Auth::id();
         $currencyStep->save();
         ############################# Send Mail  To User And DB Notification  ############################
-        Notification::send($user, new CurrencyInvestment($user, $user->id, $data['currecny_plan_id'], $currencyName, $data['currency_price'], $userCurrencyNumber));
+        // Notification::send($user, new CurrencyInvestment($user, $user->id, $data['currecny_plan_id'], $currencyName, $data['currency_price'], $userCurrencyNumber));
         DB::commit();
         return $this->success_message('تم انشاء الاستثمار في العملة بنجاح');
     }

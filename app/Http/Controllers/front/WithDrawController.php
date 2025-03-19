@@ -4,7 +4,7 @@ namespace App\Http\Controllers\front;
 
 use App\Models\front\User;
 use Illuminate\Http\Request;
-use App\Models\Admin\WithDraw;
+use App\Models\admin\WithDraw;
 use App\Models\front\UserPlan;
 use App\Models\front\SalesOrder;
 use App\Http\Traits\Message_Trait;
@@ -27,16 +27,14 @@ class WithDrawController extends Controller
 
         $user = User::where('id', Auth::id())->first();
         $total_balance = $user['dollar_balance'];
-
         // إجمالي السحب المكتمل والمعلق
         $withdrawSumCompeleted = WithDraw::where('user_id', Auth::id())->where('status', 1)->sum('amount');
         $withdrawSumPending = WithDraw::where('user_id', Auth::id())->where('status', 0)->sum('amount');
 
-        $last_total_balance = $total_balance - $withdrawSumPending;
-
         try {
             // التحقق من البيانات المدخلة
             $data = $request->all();
+            $last_total_balance = $total_balance - ($withdrawSumPending + $data['amount']);
             $rules = [
                 'amount' => 'required|numeric|min:1',
                 'withdraw_method' => 'required',
@@ -64,7 +62,7 @@ class WithDrawController extends Controller
             if ($data['amount'] < 10) {
                 return Redirect::back()->withInput()->withErrors('المبلغ المدخل يجب ان يكون على الاقل 10 دولار');
             }
-
+            $userbalancenow = $total_balance - $data['amount'];
             DB::beginTransaction();
 
             // إنشاء طلب سحب
@@ -76,7 +74,7 @@ class WithDrawController extends Controller
             $withdraw->save();
 
             // تحديث رصيد العملات الرقمية
-            $user->dollar_balance = $last_total_balance;
+            $user->dollar_balance = $userbalancenow;
             $user->Save();
             DB::commit();
             return $this->success_message('تم إضافة طلب السحب بنجاح.');
