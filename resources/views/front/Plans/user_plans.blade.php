@@ -19,7 +19,7 @@
                             <h4 class="total_investment"> {{ number_format($totalbalance, 2) }} دولار </h4>
                             <div class="investment_percentages">
                                 <p class="percentage"> +{{ $daily_earning }}({{ $daily_earning_percentage * 100 }}%) <span>
-                                        اليوم
+                                        {{-- اليوم --}}
                                         <i class="bi bi-arrow-up-short"></i> </span>
                                 </p>
                             </div>
@@ -156,14 +156,14 @@
                         <!-- #################################### End Plan Transaction Details ############################# -->
                     @endforeach
                     @else
-                    <div class="alert alert-warning">
+                    {{-- <div class="alert alert-warning">
                         لا يوجد خطط متاحة
-                    </div>
+                    </div> --}}
                     @endif
                     <hr>
 
                     @if ($userCurrencyPlans->count() > 0)
-                        <h4 style="color: #fff;font-size:16px"> خطط الاستثمار في العملات الرقمية </h4>
+                        {{-- <h4 style="color: #fff;font-size:16px"> خطط الاستثمار في العملات الرقمية </h4> --}}
 
                         @foreach ($userCurrencyPlans as $currencyplan)
                             <div class="user_plans_page_info my_new_container">
@@ -176,8 +176,8 @@
                                         <a href="#" class="public_button" data-bs-toggle="modal"
                                             data-bs-target="#edit_currency_balance_{{ $currencyplan['id'] }}"> تعديل الرصيد
                                         </a>
-                                        <a href="#" class="stat toggle-transactions-currency"
-                                            data-plan-id="{{ $currencyplan->CurrencyPlan['id'] }}"> المعاملات </a>
+                                        {{-- <a href="#" class="stat toggle-transactions-currency"
+                                            data-plan-id="{{ $currencyplan->CurrencyPlan['id'] }}"> المعاملات </a> --}}
                                     </div>
                                 </div>
                                 @include('front.Plans._edit_currency_balance')
@@ -218,10 +218,10 @@
                                             </button>
                                         </form>
 
-                                        <a href="#" class="stat WithDrawTransactions"
+                                        {{-- <a href="#" class="stat WithDrawTransactions"
                                             data-plan-id="WithDrawTransactions"> سجل
                                             السحوبات </a>
-                                        @include('front.Plans.withdraw')
+                                        @include('front.Plans.withdraw') --}}
 
                                     </div>
                                     <!------------- Under Revision Untill Sales Order Compeled ------------->

@@ -207,7 +207,22 @@
                                                 <div class="plan1 investment_return">
                                                     <h4> عائد الاستثمار </h4>
                                                     <!---------- Get The Currency Price In Last Day --------->
+                                                    <!-- New Way To Get  -->
                                                     @php
+                                                        $totalinvestments =
+                                                            $currencyplan['main_investment'] +
+                                                            $currencyplan['current_investments'];
+                                                        $firstinvestment = $currencyplan['main_investment'];
+
+                                                        // الحساب الصحيح لعائد الاستثمار
+                                                        $investment_return =
+                                                            (($totalinvestments - $firstinvestment) /
+                                                                $firstinvestment) *
+                                                            100;
+                                                    @endphp
+                                                    <!-- End New Way -->
+                                                    @php
+
                                                         // السعر الحالي
                                                         $currentPrice = $currencyplan->currency_current_price;
                                                         $main_price = $currencyplan->currency_main_price;
@@ -291,9 +306,11 @@
                                                             $lastMonthPrice,
                                                         );
                                                     @endphp
-
                                                     <div class="investment_return_data">
-                                                        <h4> 24 ساعة
+                                                        <h4 style="color: #10AE59">
+                                                            {{ number_format($investment_return, 2) }} %
+                                                        </h4>
+                                                        {{-- <h4> 24 ساعة
                                                             <br>
                                                             @if ($profitLastDay != 0)
                                                                 <span
@@ -307,8 +324,8 @@
                                                             @else
                                                                 <span style="color: #999999"> % 0.00 </span>
                                                             @endif
-                                                        </h4>
-                                                        <h4> 7 ايــام
+                                                        </h4> --}}
+                                                        {{-- <h4> 7 ايــام
                                                             <br>
                                                             @if ($profitLastWeek != 0)
                                                                 <span
@@ -322,8 +339,8 @@
                                                             @else
                                                                 <span style="color: #999999"> % 0.00 </span>
                                                             @endif
-                                                        </h4>
-                                                        <h4> 30 يــوم
+                                                        </h4> --}}
+                                                        {{-- <h4> 30 يــوم
                                                             <br>
                                                             @if ($profitLastMonth != 0)
                                                                 <span
@@ -337,7 +354,7 @@
                                                             @else
                                                                 <span style="color: #999999"> % 0.00 </span>
                                                             @endif
-                                                        </h4>
+                                                        </h4> --}}
                                                     </div>
                                                 </div>
                                                 <div class="plan1 platform_info">
