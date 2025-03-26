@@ -7,6 +7,35 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 @endsection
 @section('content')
+
+    @php
+        $allprofit = 0;
+        $total_profit = 0;
+    @endphp
+    @if ($userCurrencyPlans->count() > 0)
+        @foreach ($userCurrencyPlans as $currencyplan)
+            @php
+                ############ Get All WithDraw In this Plan
+                $TotalDrawForPlan = App\Models\front\WithDrawCurrencyPlan::where(
+                    'currency_plan',
+                    $currencyplan->CurrencyPlan['id'],
+                )
+                    ->where('user_id', Auth::id())
+                    ->sum('amount');
+                $total_profit_for_plan =
+                    $currencyplan['currency_number'] * $currencyplan->CurrencyPlan['currency_current_price'] -
+                    ($currencyplan['total_investment'] + $TotalDrawForPlan);
+                $total_profit += $total_profit_for_plan;
+            @endphp
+            @php
+                $allprofitforplan =
+                    $currencyplan['currency_number'] * $currencyplan->CurrencyPlan['currency_current_price'] -
+                    $currencyplan['total_investment'];
+                $allprofit += $allprofitforplan;
+            @endphp
+        @endforeach
+    @endif
+
     <!-- ==================================================== -->
     <div class="page-content user_plans user_plans_details">
         <!-- Start Container Fluid -->
@@ -16,11 +45,21 @@
                     <div class="user_plans_page_info my_new_container" style="background-color: #191f31">
                         <div class="info">
                             <h5> اجمالي الاسثمارات الكلية </h5>
-                            <h4 class="total_investment"> {{ number_format($totalbalance, 2) }} دولار </h4>
+                            @php
+                                $total = $userCurrencyTotalInvestment + $totalbalance;
+
+                                $percentage = $allprofit / $total;
+                                $percentage = $percentage * 100;
+                            @endphp
+                            <h4 class="total_investment"> {{ number_format($total, 2) }} دولار </h4>
                             <div class="investment_percentages">
-                                <p class="percentage"> +{{ $daily_earning }}({{ $daily_earning_percentage * 100 }}%) <span>
-                                        {{-- اليوم --}}
-                                        <i class="bi bi-arrow-up-short"></i> </span>
+                                <p class="percentage"> +{{ number_format($percentage, 3) }} %
+                                    {{-- ({{ $daily_earning_percentage * 100 }}%)  --}}
+
+                                    {{-- <span>
+
+                                        <i class="bi bi-arrow-up-short"></i>
+                                    </span> --}}
                                 </p>
                             </div>
                             <div class="buttons">
@@ -30,13 +69,21 @@
                             </div>
                             @include('front.layouts.add_balance')
                         </div>
+
                         <div class="info">
                             <h5> الارباح الكلية </h5>
-                            <h4 class="profit_balance"> {{ number_format($investment_earning, 2) }} دولار </h4>
+                            @php
+                                $total_profit_investment = $allprofit + $investment_earning;
+                            @endphp
+                            <h4 class="profit_balance" style="margin-bottom: 0px">
+                                {{ number_format($total_profit, 2) }} دولار </h4>
+                            <span
+                                style="color: #999999;display: block;margin-top: 10px;margin-bottom: 10px;font-size: 18px;">
+                                ( {{ number_format($allprofit, 2) }} دولار )</span>
                             <button style="border: none;" class="stat" data-bs-toggle="modal"
                                 data-bs-target="#main_withdraw_balance"> سحب </button>
-                            <a href="#" class="stat WithDrawTransactions" data-plan-id="WithDrawTransactions"> سجل
-                                السحوبات </a>
+                            <a href="#" class="stat WithDrawTransactions" data-plan-id="WithDrawTransactions"> السجل
+                            </a>
                             @include('front.Plans.withdraw')
 
                         </div>
@@ -51,112 +98,114 @@
                     </div>
                     @include('front.Plans.WithdrawTransactions')
                     <hr>
-                    @if($Plans->count() > 0)
-                    @foreach ($Plans as $plan_details)
-                        <div class="user_plans_page_info my_new_container">
-                            <div class="info">
-                                <h5> خطة الاستثمار في : {{ $plan_details['plan']['name'] }} </h5>
-                                <h4 class="total_investment"> {{ number_format($plan_details['total_investment'], 2) }}
-                                    دولار
-                                </h4>
-                                <div class="buttons">
-                                    <a href="#" class="public_button" data-bs-toggle="modal"
-                                        data-bs-target="#edit_balance_{{ $plan_details['plan']['id'] }}"> تعديل الرصيد </a>
-                                    <a href="#" class="stat toggle-transactions"
-                                        data-plan-id="{{ $plan_details['plan']['id'] }}"> المعاملات </a>
+                    @if ($Plans->count() > 0)
+                        @foreach ($Plans as $plan_details)
+                            <div class="user_plans_page_info my_new_container">
+                                <div class="info">
+                                    <h5> خطة الاستثمار في : {{ $plan_details['plan']['name'] }} </h5>
+                                    <h4 class="total_investment"> {{ number_format($plan_details['total_investment'], 2) }}
+                                        دولار
+                                    </h4>
+                                    <div class="buttons">
+                                        <a href="#" class="public_button" data-bs-toggle="modal"
+                                            data-bs-target="#edit_balance_{{ $plan_details['plan']['id'] }}"> تعديل الرصيد
+                                        </a>
+                                        <a href="#" class="stat toggle-transactions"
+                                            data-plan-id="{{ $plan_details['plan']['id'] }}"> المعاملات </a>
+                                    </div>
+                                </div>
+                                @include('front.Plans.edit_balance')
+                                <div class="info">
+                                    <h5 class="select_h5">
+                                        <select name="" class="form-select" placeholder=" الربح"
+                                            id="statsDropdown-{{ $plan_details->id }}"
+                                            onchange="updateStats({{ $plan_details->id }})">
+                                            <option value="360" selected> الربح [ الكلي ] </option>
+                                            <option value="24"> الربح [ 24 ساعة ] </option>
+                                            <option value="7"> الربح [ 7 ايام ] </option>
+                                            <option value="30"> الربح [ 30 يوم ] </option>
+                                        </select>
+                                    </h5>
+
+                                    <!-- الربح الكلي -->
+                                    <h4 class="profit_balance stats" id="stats-360-{{ $plan_details->id }}">
+                                        {{ number_format($plan_details->plan_profit, 2) }} دولار
+                                    </h4>
+
+                                    <!-- الربح لآخر 24 ساعة -->
+                                    <h4 class="profit_balance stats" id="stats-24-{{ $plan_details->id }}"
+                                        style="display:none;">
+                                        @if ($plan_details->plan_last_dayearning != 0)
+                                            <span
+                                                style="color: {{ $plan_details->plan_last_dayearning > 0 ? '#10AE59' : '#FF0000' }}">
+                                                {{ $plan_details->plan_last_dayearning > 0 ? '+' : '' }}
+                                                {{ number_format($plan_details->plan_last_dayearning, 2) }}
+                                                ({{ $plan_details->plan_last_daypercentage * 100 }} %)
+                                                <i
+                                                    class="bi {{ $plan_details->plan_last_dayearning > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
+                                            </span>
+                                        @else
+                                            <span style="color: #999999"> % 0.00 </span>
+                                        @endif
+                                    </h4>
+
+                                    <!-- الربح لآخر 7 أيام -->
+                                    <h4 class="profit_balance stats" id="stats-7-{{ $plan_details->id }}"
+                                        style="display:none;">
+                                        @if ($plan_details->last_7_days_earning != 0)
+                                            <span
+                                                style="color: {{ $plan_details->last_7_days_earning > 0 ? '#10AE59' : '#FF0000' }}">
+                                                {{ $plan_details->last_7_days_earning > 0 ? '+' : '' }}
+                                                {{ number_format($plan_details->last_7_days_earning, 2) }}
+                                                ({{ $plan_details->last_7_days_percentage * 100 }} %)
+                                                <i
+                                                    class="bi {{ $plan_details->last_7_days_earning > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
+                                            </span>
+                                        @else
+                                            <span style="color: #999999"> % 0.00 </span>
+                                        @endif
+                                    </h4>
+
+                                    <!-- الربح لآخر 30 يوم -->
+                                    <h4 class="profit_balance stats" id="stats-30-{{ $plan_details->id }}"
+                                        style="display:none;">
+                                        @if ($plan_details->last_30_days_earning != 0)
+                                            <span
+                                                style="color: {{ $plan_details->last_30_days_earning > 0 ? '#10AE59' : '#FF0000' }}">
+                                                {{ $plan_details->last_30_days_earning > 0 ? '+' : '' }}
+                                                {{ number_format($plan_details->last_30_days_earning, 2) }}
+                                                ({{ $plan_details->last_30_days_percentage * 100 }} %)
+                                                <i
+                                                    class="bi {{ $plan_details->last_30_days_earning > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
+                                            </span>
+                                        @else
+                                            <span style="color: #999999"> % 0.00 </span>
+                                        @endif
+                                    </h4>
+                                    <!------------- Under Revision Untill Sales Order Compeled ------------->
+                                    @if ($plan_details['TotalBalanceRevision'] > 0)
+                                        <h4 class="under_revision"> تحت المراجعة :: <strong> -
+                                                {{ number_format($plan_details['TotalBalanceRevision'], 2) }} دولار
+                                            </strong>
+                                        </h4>
+                                    @endif
+
+                                    <!------------- Under Revision Untill Sales Order Compeled ------------->
+                                </div>
+                                <div class="info">
+                                    <h5> {{ $plan_details['plan']['name'] }} </h5>
+                                    <a href="{{ $plan_details['plan']['platform_link'] }}">
+                                        <img src="{{ asset('assets/uploads/plans/' . $plan_details['plan']['logo']) }}">
+                                    </a>
                                 </div>
                             </div>
-                            @include('front.Plans.edit_balance')
-                            <div class="info">
-                                <h5 class="select_h5">
-                                    <select name="" class="form-select" placeholder=" الربح"
-                                        id="statsDropdown-{{ $plan_details->id }}"
-                                        onchange="updateStats({{ $plan_details->id }})">
-                                        <option value="360" selected> الربح [ الكلي ] </option>
-                                        <option value="24"> الربح [ 24 ساعة ] </option>
-                                        <option value="7"> الربح [ 7 ايام ] </option>
-                                        <option value="30"> الربح [ 30 يوم ] </option>
-                                    </select>
-                                </h5>
 
-                                <!-- الربح الكلي -->
-                                <h4 class="profit_balance stats" id="stats-360-{{ $plan_details->id }}">
-                                    {{ number_format($plan_details->plan_profit, 2) }} دولار
-                                </h4>
-
-                                <!-- الربح لآخر 24 ساعة -->
-                                <h4 class="profit_balance stats" id="stats-24-{{ $plan_details->id }}"
-                                    style="display:none;">
-                                    @if ($plan_details->plan_last_dayearning != 0)
-                                        <span
-                                            style="color: {{ $plan_details->plan_last_dayearning > 0 ? '#10AE59' : '#FF0000' }}">
-                                            {{ $plan_details->plan_last_dayearning > 0 ? '+' : '' }}
-                                            {{ number_format($plan_details->plan_last_dayearning, 2) }}
-                                            ({{ $plan_details->plan_last_daypercentage * 100 }} %)
-                                            <i
-                                                class="bi {{ $plan_details->plan_last_dayearning > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
-                                        </span>
-                                    @else
-                                        <span style="color: #999999"> % 0.00 </span>
-                                    @endif
-                                </h4>
-
-                                <!-- الربح لآخر 7 أيام -->
-                                <h4 class="profit_balance stats" id="stats-7-{{ $plan_details->id }}"
-                                    style="display:none;">
-                                    @if ($plan_details->last_7_days_earning != 0)
-                                        <span
-                                            style="color: {{ $plan_details->last_7_days_earning > 0 ? '#10AE59' : '#FF0000' }}">
-                                            {{ $plan_details->last_7_days_earning > 0 ? '+' : '' }}
-                                            {{ number_format($plan_details->last_7_days_earning, 2) }}
-                                            ({{ $plan_details->last_7_days_percentage * 100 }} %)
-                                            <i
-                                                class="bi {{ $plan_details->last_7_days_earning > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
-                                        </span>
-                                    @else
-                                        <span style="color: #999999"> % 0.00 </span>
-                                    @endif
-                                </h4>
-
-                                <!-- الربح لآخر 30 يوم -->
-                                <h4 class="profit_balance stats" id="stats-30-{{ $plan_details->id }}"
-                                    style="display:none;">
-                                    @if ($plan_details->last_30_days_earning != 0)
-                                        <span
-                                            style="color: {{ $plan_details->last_30_days_earning > 0 ? '#10AE59' : '#FF0000' }}">
-                                            {{ $plan_details->last_30_days_earning > 0 ? '+' : '' }}
-                                            {{ number_format($plan_details->last_30_days_earning, 2) }}
-                                            ({{ $plan_details->last_30_days_percentage * 100 }} %)
-                                            <i
-                                                class="bi {{ $plan_details->last_30_days_earning > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
-                                        </span>
-                                    @else
-                                        <span style="color: #999999"> % 0.00 </span>
-                                    @endif
-                                </h4>
-                                <!------------- Under Revision Untill Sales Order Compeled ------------->
-                                @if ($plan_details['TotalBalanceRevision'] > 0)
-                                    <h4 class="under_revision"> تحت المراجعة :: <strong> -
-                                            {{ number_format($plan_details['TotalBalanceRevision'], 2) }} دولار </strong>
-                                    </h4>
-                                @endif
-
-                                <!------------- Under Revision Untill Sales Order Compeled ------------->
-                            </div>
-                            <div class="info">
-                                <h5> {{ $plan_details['plan']['name'] }} </h5>
-                                <a href="{{ $plan_details['plan']['platform_link'] }}">
-                                    <img src="{{ asset('assets/uploads/plans/' . $plan_details['plan']['logo']) }}">
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- #################################### Start Plan Transaction Details ############################# -->
-                        @include('front.Plans.user_plan_statments')
-                        <!-- #################################### End Plan Transaction Details ############################# -->
-                    @endforeach
+                            <!-- #################################### Start Plan Transaction Details ############################# -->
+                            @include('front.Plans.user_plan_statments')
+                            <!-- #################################### End Plan Transaction Details ############################# -->
+                        @endforeach
                     @else
-                    {{-- <div class="alert alert-warning">
+                        {{-- <div class="alert alert-warning">
                         لا يوجد خطط متاحة
                     </div> --}}
                     @endif

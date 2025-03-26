@@ -31,7 +31,7 @@
                             <div class="exchange_third_section">
                                 <div class="form-group">
                                     <div class="input_data">
-                                        <input style="width: 90%" type="number" name="total_price" step="0.01"
+                                        <input style="width: 90%" type="number" name="total_price" step="0.01" min="0.01"
                                             placeholder="الحد الادني 0.01">
                                         <input type="hidden" name="plan_id" value="{{ $plan_details['plan']['id'] }}">
                                         <span>دولار </span>

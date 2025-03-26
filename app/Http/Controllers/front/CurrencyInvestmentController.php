@@ -25,13 +25,14 @@ class CurrencyInvestmentController extends Controller
     public function investment(Request $request)
     {
         $data = $request->all();
+        //dd($data);
         $user = User::where('id', Auth::id())->first();
         if (!$user) {
             return redirect()->back()->withErrors(['المستخدم غير موجود.']);
         }
 
-        if (!isset($data['currency_price']) || $data['currency_price'] <= 0) {
-            return redirect()->back()->withErrors(['يرجى إدخال مبلغ صحيح.']);
+        if (!isset($data['currency_price']) || $data['currency_price'] < 0.01) {
+            return redirect()->back()->withErrors([' اقل مبلغ للاستثمار هو 0.01 ']);
         }
 
         if (!isset($data['currecny_plan_id'])) {
@@ -60,14 +61,14 @@ class CurrencyInvestmentController extends Controller
         }
         $rules = [
             'currecny_plan_id' => 'required|integer',
-            'currency_price' => 'required|numeric|min:10',
+            'currency_price' => 'required|numeric|min:0.01',
         ];
         $messages = [
             'currency_plan_id.required' => ' من فضلك حدد الخطة بشكل صحيح  ',
             'currecny_plan_id.integer' => ' من فضلك حدد خطة الاستثمار بشكل صحيح  ',
             'currency_price.required' => ' من فضلك ادخل مبلغ الاستثمار بشكل صحيح  ',
             'currency_price.numeric' => ' من فضلك مبلغ الاستثمار يجب ان يكون رقم صحيح  ',
-            'currency_price.min' => '  مبلغ الاستثمار يجب ان يكون اكثر من 10 دولار ',
+            'currency_price.min' => '  مبلغ الاستثمار يجب ان يكون اكثر من 0.01 دولار ',
         ];
         $validator = Validator::make($data, $rules, $messages);
         if ($validator->fails()) {

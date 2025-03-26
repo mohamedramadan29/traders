@@ -16,9 +16,9 @@
                                 <div class="form-group">
                                     <label for="amount"> ادخل مبـلغ الســحـب </label>
                                     <div class="input_data mb-3">
-                                        <input required type="number" id="amount" min="1"
+                                        <input required type="number" id="amount" min="10"
                                             max="{{ Auth::user()->dollar_balance }}" name="amount"
-                                            placeholder="ادخل مبلغ السحب">
+                                            placeholder=" اقل مبلغ للسحب 10 ">
                                         <span>دولار </span>
                                     </div>
                                 </div>

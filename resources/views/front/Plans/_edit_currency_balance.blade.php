@@ -13,7 +13,7 @@
                         aria-controls="add_balance_{{ $currencyplan['id'] }}" aria-selected="true">
                         اضافة رصيد
                     </button>
-                     
+
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent-{{ $currencyplan['id'] }}">
@@ -25,8 +25,8 @@
                             <div class="exchange_third_section">
                                 <div class="form-group">
                                     <div class="input_data">
-                                        <input style="width: 90%" type="number" name="currency_price" step="0.01"
-                                            placeholder="الحد الادني 0.01">
+                                        <input style="width: 90%" type="number" min="0.01" name="currency_price"
+                                            step="0.01" placeholder="الحد الادني 0.01">
                                         <input type="hidden" name="currecny_plan_id"
                                             value="{{ $currencyplan->CurrencyPlan['id'] }}">
                                         <span>دولار </span>

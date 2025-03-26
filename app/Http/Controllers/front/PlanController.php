@@ -96,9 +96,11 @@ class PlanController extends Controller
         });
         ##################### Start User Currency Plans ###############
         $userCurrencyPlans = CurrencyPlanInvestment::where('user_id', Auth::id())->where('currency_plan', '!=', null)->latest()->get();
+        $userCurrencyTotalInvestment = CurrencyPlanInvestment::where('user_id', Auth::id())->where('currency_plan', '!=', null)->sum('total_investment');
+        //dd($userCurrencyTotalInvestment);
         //dd($userCurrencyPlans);
         #################### End User Currency Plans ###################
-        return view('front.Plans.user_plans', compact('Plans', 'totalbalance', 'investment_earning', 'daily_earning', 'daily_earning_percentage', 'user_withdraw_statments', 'userCurrencyPlans'));
+        return view('front.Plans.user_plans', compact('Plans', 'totalbalance', 'investment_earning', 'daily_earning', 'daily_earning_percentage', 'user_withdraw_statments', 'userCurrencyPlans','userCurrencyTotalInvestment'));
     }
 
     public function platformPlans($plan_id)
@@ -123,8 +125,8 @@ class PlanController extends Controller
             $data = $request->all();
             // dd($data);
             // التحقق من إدخال السعر والخطة
-            if (!isset($data['total_price']) || $data['total_price'] <= 0) {
-                return redirect()->back()->withErrors(['يرجى إدخال مبلغ صحيح.']);
+            if (!isset($data['total_price']) || $data['total_price'] < 0.01) {
+                return redirect()->back()->withErrors(['يرجى إدخال مبلغ صحيح. واقل مبلغ للاستثمار 0.01']);
             }
             if (!isset($data['plan_id'])) {
                 return redirect()->back()->withErrors(['يرجى اختيار الخطة.']);

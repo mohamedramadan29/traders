@@ -36,7 +36,7 @@ class WithDrawController extends Controller
             $data = $request->all();
             $last_total_balance = $total_balance - ($withdrawSumPending + $data['amount']);
             $rules = [
-                'amount' => 'required|numeric|min:1',
+                'amount' => 'required|numeric|min:10',
                 'withdraw_method' => 'required',
                 'usdt_link' => 'required',
             ];
@@ -44,7 +44,7 @@ class WithDrawController extends Controller
             $messages = [
                 'amount.required' => 'من فضلك حدد المبلغ',
                 'amount.numeric' => 'المبلغ يجب أن يكون رقمًا صحيحًا',
-                'amount.min' => 'المبلغ يجب أن يكون أكبر من صفر',
+                'amount.min' => ' اقل مبلغ للسحب هو 10 دولار',
                 'withdraw_method.required' => 'من فضلك حدد طريقة السحب',
                 'usdt_link.required' => 'من فضلك أدخل عنوان المحفظة',
             ];

@@ -73,7 +73,7 @@
 
                                         <div class="mb-3">
                                             <label for="currency_main_price" class="form-label"> سعر العملة </label>
-                                            <input required type="number" id="currency_main_price" class="form-control"
+                                            <input required type="number" step="0.01" id="currency_main_price" class="form-control"
                                                 name="currency_main_price" value="{{ old('currency_main_price') }}">
                                         </div>
 

@@ -67,7 +67,7 @@
                                         <div class="mb-3">
                                             <label for="main_investment" class="form-label"> مبلغ الاستثمار </label>
                                             <input required type="number" id="main_investment" class="form-control"
-                                                name="main_investment" value="{{ $plan->main_investment ?? old('main_investment') }}">
+                                                name="main_investment" step="0.01" value="{{ $plan->main_investment ?? old('main_investment') }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -75,7 +75,7 @@
                                         <div class="mb-3">
                                             <label for="currency_main_price" class="form-label"> سعر العملة </label>
                                             <input required type="number" id="currency_main_price" class="form-control"
-                                                name="currency_main_price" value="{{ $plan->currency_main_price ?? old('currency_main_price') }}">
+                                                name="currency_main_price" step="0.01" value="{{ $plan->currency_main_price ?? old('currency_main_price') }}">
                                         </div>
 
                                     </div>
