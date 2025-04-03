@@ -100,13 +100,7 @@ Route::group(['prefix' => 'user'], function () {
         Route::controller(SalesOrderController::class)->group(function () {
             Route::post('sales/create', 'create');
         });
-        //////////////////////////////// Start User Make Deposit And WithDraw //////////
-        Route::controller(UserBalanceController::class)->group(function () {
-            Route::match(['post', 'get'], 'deposit', 'deposit');
-            Route::post('/payment/callback', 'handleCallback')->name('payment.callback');
-            Route::get('/payment/success', 'paymentSuccess')->name('payment.success');
-            Route::get('/payment/cancel', 'paymentCancel')->name('payment.cancel');
-        });
+
 
         ///////////////////////// Storage InvestMent ///// تخزين الغملات
         ///
@@ -133,6 +127,14 @@ Route::group(['prefix' => 'user'], function () {
             Route::post('withdraw_currency_profit', 'withdraw_currency_profit')->name('withdraw_currency_profit');
         });
         ############## End Currency Investments ##########
+    });
+    //////////////////////////////// Start User Make Deposit And WithDraw //////////
+    Route::controller(UserBalanceController::class)->group(function () {
+        Route::match(['post', 'get'], 'deposit', 'deposit');
+        Route::post('/payment/callback', 'handleCallback')->name('payment.callback');
+        Route::get('/payment/success/{order_id}', 'paymentSuccess')->name('payment.success');
+        Route::get('/payment/cancel', 'paymentCancel')->name('payment.cancel');
+        Route::get('/payment/checkstatus/{id}', 'checkPaymentStatus')->name('payment.checkstatus');
     });
 });
 

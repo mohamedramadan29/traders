@@ -4,6 +4,28 @@
 @endsection
 @section('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        .whatsapp-icon{
+            position: fixed;
+    bottom: 10px;
+    right: 10px;
+        }
+        .whatsapp-icon a{
+            background-color: #25D366;
+    text-decoration: none;
+    width: 45px;
+    height: 45px;
+    display: block;
+    text-align: center;
+    line-height: 52px;
+    border-radius: 5px;
+
+        }
+        .whatsapp-icon a i{
+            color: #fff;
+            font-size: 25px;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="page_content main_page">
@@ -171,6 +193,11 @@
             </div>
         </div>
         <div class="last_footer">
+            <div class='whatsapp-icon'>
+                <a href="https://wa.me/+963980978681" target="_blank">
+                    <i class="bi bi-whatsapp"></i>
+                </a>
+            </div>
             <div class="container">
                 <div class="data">
                     <div class="row">

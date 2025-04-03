@@ -158,7 +158,7 @@
                                     </div>
                                 </div>
                             @endforeach
-{{-- 
+{{--
                             <h4 style="color: #fff;font-weight: bold; "> الاستثمار في العملات
                             </h4> --}}
                             @php

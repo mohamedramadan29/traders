@@ -15,5 +15,6 @@ class PaymentTransaction extends Model
         'price_currency',
         'invoice_url',
         'status',
+        'invoice_id',
     ];
 }

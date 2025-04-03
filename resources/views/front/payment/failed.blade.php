@@ -42,8 +42,8 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="cancel-page text-center">
-                        <h1>تمت العملية بنجاح!</h1>
-                        <p>شكراً لك! لقد تم شحن رصيدك بنجاح.</p>
+                        <h1> لم تتم عملية الدفع بشكل كامل ! </h1>
+                        <p>عذراً، لم تتم عملية الدفع بشكل كامل ! اذا كنت تواجة اي مشكلة من فضلك تواصل معنا .</p>
 
                         <div class="d-flex justify-content-center">
 

@@ -48,8 +48,11 @@
                             @php
                                 $total = $userCurrencyTotalInvestment + $totalbalance;
 
-                                $percentage = $allprofit / $total;
-                                $percentage = $percentage * 100;
+                                if ($total > 0) {
+                                    $percentage = ($allprofit / $total) * 100;
+                                } else {
+                                    $percentage = 0; // تجنب القسمة على صفر
+                                }
                             @endphp
                             <h4 class="total_investment"> {{ number_format($total, 2) }} دولار </h4>
                             <div class="investment_percentages">
