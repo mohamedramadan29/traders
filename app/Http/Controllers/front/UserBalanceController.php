@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Notification;
 class UserBalanceController extends Controller
 {
     use Message_Trait;
-   // protected $apiKey = 'ADCTNJS-XZ046AA-HDM04NW-BCATW23';
+    // protected $apiKey = 'ADCTNJS-XZ046AA-HDM04NW-BCATW23';
     protected $apiKey = "8B7S9MR-55DMS8B-NMS7H2R-6CE1N2C";
     //6ea152f8-52ee-4ede-beb8-5cf15fc63b44
 
@@ -128,13 +128,13 @@ class UserBalanceController extends Controller
         //$invoice_payment_id = $request->query('invoice_id'); // استلام ID الفاتورة من URL
         $invoice = PaymentTransaction::where('order_id', $orderId)->first();
         if (!$invoice) {
-           abort(404);
+            abort(404);
         }
         $invoice_payment_id = $invoice->invoice_id;
 
         // البحث عن الفاتورة في قاعدة البيانات
         //$invoice = PaymentTransaction::where('invoice_id', $invoice_payment_id)->first();
-       // dd($invoice);
+        // dd($invoice);
 
         if (!$invoice || $invoice->status === 'paid') {
             return response()->json(['status' => 'paid']);
