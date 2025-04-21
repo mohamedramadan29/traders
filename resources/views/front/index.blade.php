@@ -11,7 +11,7 @@
     right: 10px;
         }
         .whatsapp-icon a{
-            background-color: #25D366;
+            background-color: #26A8E8;
     text-decoration: none;
     width: 45px;
     height: 45px;
@@ -194,8 +194,8 @@
         </div>
         <div class="last_footer">
             <div class='whatsapp-icon'>
-                <a href="https://wa.me/+963980978681" target="_blank">
-                    <i class="bi bi-whatsapp"></i>
+                <a href="https://t.me/binveste" target="_blank">
+                    <i class="bi bi-telegram"></i>
                 </a>
             </div>
             <div class="container">

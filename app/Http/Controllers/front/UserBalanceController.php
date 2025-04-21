@@ -20,7 +20,10 @@ use Illuminate\Support\Facades\Notification;
 class UserBalanceController extends Controller
 {
     use Message_Trait;
-    protected $apiKey = 'ADCTNJS-XZ046AA-HDM04NW-BCATW23';
+   // protected $apiKey = 'ADCTNJS-XZ046AA-HDM04NW-BCATW23';
+    protected $apiKey = "8B7S9MR-55DMS8B-NMS7H2R-6CE1N2C";
+    //6ea152f8-52ee-4ede-beb8-5cf15fc63b44
+
 
 
     public function deposit(Request $request)
@@ -138,8 +141,8 @@ class UserBalanceController extends Controller
         }
 
         // بيانات تسجيل الدخول للحصول على الـ JWT Token
-        $email = 'mr319242@gmail.com';
-        $password = 'Mohamedramadan2930#';
+        $email = 'qout12ex@gmail.com';
+        $password = 'Hussain.h1998';
 
         $authResponse = Http::withHeaders([
             'Content-Type' => 'application/json'

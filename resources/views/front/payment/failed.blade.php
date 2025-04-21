@@ -49,8 +49,8 @@
 
                             <a href="{{ url('user/dashboard') }}" class="btn btn-secondary deposit_button">العودة إلى الصفحة
                                 الرئيسية <i class="bi bi-box-arrow-left"></i> </a>
-                            <a href="https://wa.me/+963980978681" target="_blank""
-                                class="btn btn-secondary deposit_button">تواصل معنا <i class="bi bi-whatsapp"></i> </a>
+                            <a href="https://t.me/binveste" target="_blank"
+                                class="btn btn-secondary deposit_button">تواصل معنا <i class="bi bi-telegram"></i> </a>
                         </div>
                     </div>
 
