@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "74d8991ad1dab8621b09bf6a2821fa0e",
+    "content-hash": "fd590fca18680336be5c7089bedbe876",
     "packages": [
         {
             "name": "anhskohbo/no-captcha",
@@ -2963,6 +2963,54 @@
                 }
             ],
             "time": "2024-09-16T03:06:04+00:00"
+        },
+        {
+            "name": "plisio/plisio-sdk-laravel",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Plisio/plisio-sdk-laravel.git",
+                "reference": "66c2c866bfe31b17dae25aab208e3e37e853f2e3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Plisio/plisio-sdk-laravel/zipball/66c2c866bfe31b17dae25aab208e3e37e853f2e3",
+                "reference": "66c2c866bfe31b17dae25aab208e3e37e853f2e3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=7.3"
+            },
+            "type": "sdk",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Plisio\\PlisioSdkLaravel\\Providers\\PlisioProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Plisio\\PlisioSdkLaravel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "plisdeveloper",
+                    "email": "plugins@plisio.net"
+                }
+            ],
+            "description": "SDK package for building your own payment gateway using Plisio API.",
+            "support": {
+                "issues": "https://github.com/Plisio/plisio-sdk-laravel/issues",
+                "source": "https://github.com/Plisio/plisio-sdk-laravel/tree/v1.0.0"
+            },
+            "time": "2023-03-28T19:57:27+00:00"
         },
         {
             "name": "psr/clock",

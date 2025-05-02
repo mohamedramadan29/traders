@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.8",
+        "plisio/plisio-sdk-laravel": "^1.0",
         "redot/laravel-toastify": "^1.0",
         "spatie/laravel-backup": "^9.2"
     },

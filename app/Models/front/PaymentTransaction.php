@@ -16,5 +16,6 @@ class PaymentTransaction extends Model
         'invoice_url',
         'status',
         'invoice_id',
+        'email',
     ];
 }

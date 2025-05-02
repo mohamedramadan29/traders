@@ -31,6 +31,7 @@ class SocialLoginController extends Controller
                 'name' => $user_provider->name,
                 'email' => $user_provider->email,
                 'google_token' => $user_provider->token,
+                'account_status' => 1,
                 'password' => Hash::make(Str::random(8)),
             ]);
             Auth::login($user);

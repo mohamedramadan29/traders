@@ -12,11 +12,14 @@ use \App\Http\Controllers\front\StorageInvestment;
 use App\Http\Controllers\front\WithDrawController;
 use \App\Http\Controllers\front\ExchangeController;
 use App\Http\Controllers\Auth\SocialLoginController;
-use App\Http\Controllers\front\CurrencyInvestmentController;
 use \App\Http\Controllers\front\SalesOrderController;
+use App\Http\Controllers\front\CoinPaymentController;
 use \App\Http\Controllers\front\UserBalanceController;
 use App\Http\Controllers\front\NotificationController;
 use \App\Http\Controllers\front\StorageInvestmentController;
+use App\Http\Controllers\front\CurrencyInvestmentController;
+use App\Http\Controllers\PlisoPaymentController;
+use Hexters\CoinPayment\CoinPayment;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +31,7 @@ use \App\Http\Controllers\front\StorageInvestmentController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Route::get('/', [\App\Http\Controllers\front\FrontController::class, 'index'])->name('index');
 //Route::get('/', function () {
 //    return view('front.index');
@@ -130,12 +134,28 @@ Route::group(['prefix' => 'user'], function () {
     });
     //////////////////////////////// Start User Make Deposit And WithDraw //////////
     Route::controller(UserBalanceController::class)->group(function () {
-        Route::match(['post', 'get'], 'deposit', 'deposit');
-        Route::post('/payment/callback', 'handleCallback')->name('payment.callback');
-        Route::get('/payment/success/{order_id}', 'paymentSuccess')->name('payment.success');
-        Route::get('/payment/cancel', 'paymentCancel')->name('payment.cancel');
-        Route::get('/payment/checkstatus/{id}', 'checkPaymentStatus')->name('payment.checkstatus');
+        Route::match(['post', 'get'], 'deposit', 'deposit')->name('pliso.payment.create');
+        Route::post('/payment/callback', 'handleCallback')->name('pliso.payment.callback');
+        Route::get('/payment/success', 'paymentSuccess')->name('pliso.payment.success');
+        Route::get('/payment/cancel', 'paymentCancel')->name('pliso.payment.failed');
+        // Route::get('/payment/checkstatus/{id}', 'checkPaymentStatus')->name('payment.checkstatus');
     });
+    ############### Pliso Controller ##################
+
+
+    // Route::get('pliso/create-invoice', [PlisoPaymentController::class, 'createInvoice'])->name('pliso.payment.create');
+
+    // Route::get('pliso/payment-success', function () {
+    //     return 'تم الدفع بنجاح!';
+    // })->name('pliso.payment.success');
+
+    // Route::get('pliso/payment-failed', function () {
+    //     return 'فشل الدفع.';
+    // })->name('pliso.payment.failed');
+
+    // // Callback route (POST)
+    // Route::post('pliso/payment-callback', [PlisoPaymentController::class, 'handleCallback'])->name('pliso.payment.callback');
+
 });
 
 Route::controller(TermsController::class)->group(function () {
