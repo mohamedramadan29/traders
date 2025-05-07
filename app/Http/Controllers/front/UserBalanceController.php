@@ -107,8 +107,31 @@ class UserBalanceController extends Controller
     {
         return view('front.payment.cancel');
     }
-    public function paymentSuccess()
-{
-    return view('front.payment.success');
-}
+    public function paymentSuccess(Request $request)
+    {
+        $orderNumber = $request->id;
+
+        $invoice = PaymentTransaction::where('invoice_id', $orderNumber)->first();
+
+        if ($invoice && $invoice->status !== 'paid') {
+            // ⚠️ لا يوجد تحقق فعلي من Plisio هنا، فقط تحديث محلي
+
+            $user = User::find($invoice->user_id);
+            if ($user) {
+                $user->dollar_balance += $invoice->price_amount;
+                $user->save();
+
+                $invoice->status = 'paid';
+                $invoice->save();
+
+                UserStatment::create([
+                    'user_id' => $user->id,
+                    'transaction_type' => 'deposit',
+                    'amount' => $invoice->price_amount,
+                ]);
+            }
+        }
+
+        return view('front.payment.success2');
+    }
 }
