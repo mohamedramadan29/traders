@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
 use App\Models\admin\AddBalanceToInvestmentBlan;
+use App\Models\front\Sitecomssion;
 
 class CurrencyPlansController extends Controller
 {
@@ -204,5 +205,10 @@ class CurrencyPlansController extends Controller
         } catch (\Exception $e) {
             return $this->exception_message($e);
         }
+    }
+    public function planCommission(Request $request,$id){
+        $plan = CurrencyPlan::findOrFail($id);
+        $commisions = Sitecomssion::where('currency_plan_id', $id)->latest()->get();
+        return view('admin.CurrencyPlans.plan_commission', compact('plan','commisions'));
     }
 }

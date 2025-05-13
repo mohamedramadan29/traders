@@ -85,6 +85,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('currency_plan/add_balance/{id}','addBalance');
             Route::post('currency_plan/remove_balance/{id}','removeBalance');
             Route::post('currency_plan/delete/{id}', 'delete');
+            Route::match(['post','get'],'currency_plan/plan_commission/{id}','planCommission');
         });
         ################# End Currency Plans Controller #################
     });

@@ -17,6 +17,7 @@ use App\Notifications\CurrencyInvestment;
 use Illuminate\Support\Facades\Validator;
 use App\Models\front\WithDrawCurrencyPlan;
 use App\Models\admin\CurrencyPlanInvestment;
+use App\Models\front\Sitecomssion;
 use Illuminate\Support\Facades\Notification;
 
 class CurrencyInvestmentController extends Controller
@@ -132,25 +133,74 @@ class CurrencyInvestmentController extends Controller
             //dd($currencyInvestments);
             ############ Get All WithDraw In this Plan
             $TotalDraw = WithDrawCurrencyPlan::where('currency_plan', $currencyPlan['id'])->where('user_id', Auth::id())->sum('amount');
-            // dd($TotalDraw);
+            //dd($TotalDraw);
             $total_profit =
                 ($currencyInvestments['currency_number'] * $currencyPlan['currency_current_price']) - ($currencyInvestments['total_investment'] + $TotalDraw);
             //dd($total_profit);
             DB::beginTransaction();
-            $total_profit = $total_profit / 2;
+            $total_profit_for_user = $total_profit / 2;
             ######### Transfer Total Profit To User Dollar Balance
-            $user->dollar_balance = $user->dollar_balance + $total_profit;
+            //dd($total_profit);
+            $user->dollar_balance = $user->dollar_balance + $total_profit_for_user;
             $user->save();
             ########### Add WithDraw Statment To Withdraw Table
-
             $withdraw = new WithDrawCurrencyPlan();
             $withdraw->currency_plan = $currencyPlan['id'];
             $withdraw->user_id = Auth::id();
-            $withdraw->amount = $total_profit;
+            $withdraw->amount = $total_profit_for_user;
             $withdraw->status = 1;
             $withdraw->save();
+            ################# Add haif Profit To Site Commission Plan
+            $total_profit_for_site = $total_profit / 2;
+            $sitecommission = new Sitecomssion();
+            $sitecommission->currency_plan_id = $currencyPlan['id'];
+            $sitecommission->user_id = Auth::id();
+            $sitecommission->amount = $total_profit_for_site;
+            $sitecommission->save();
             DB::commit();
             return $this->success_message(' تم نقل الارباح الخاصة بك بنجاح  ');
+        } catch (Exception $e) {
+            return $this->exception_message($e);
+        }
+    }
+    ####################### withdraw_investment From Plan  #######################
+
+    public function withdraw_investment(Request $request)
+    {
+        try {
+            $data = $request->all();
+            //  dd($data);
+            $currencyPlan = CurrencyPlan::where('id', $data['currency_plan_id'])->first();
+            $user = User::where('id', Auth::id())->first();
+            if (!$user) {
+                return Redirect::route('user_login');
+            }
+            $amount = $data['amount'];
+            ######### Get The User Investments And Get Profit
+            $currencyInvestments = CurrencyPlanInvestment::where('currency_plan', $currencyPlan['id'])->where('user_id', Auth::id())->first();
+            //dd($currencyInvestments);
+            ############ Get All WithDraw In this Plan
+            $TotalDraw = WithDrawCurrencyPlan::where('currency_plan', $currencyPlan['id'])->where('user_id', Auth::id())->sum('amount');
+            //dd($TotalDraw);
+            $all_profit =
+                ($currencyInvestments['currency_number'] * $currencyPlan['currency_current_price']) - ($currencyInvestments['total_investment']);
+            $all_profit_for_user = $all_profit / 2;
+            if ($amount > $all_profit_for_user) {
+                return redirect()->back()->withErrors(['الارباح المتاحة للسحب هي ' . $all_profit_for_user]);
+            }
+            DB::beginTransaction();
+            $amount = 100;
+            ###### Update User Balance
+            $user->dollar_balance = $user->dollar_balance + $amount;
+            $user->save();
+            ########### Decreease User InvestMent In This Plan ###########
+             ########### حساب عدد الوحدات ال هتتخصم كمان من العميل  ############
+            $userCurrencyNumber = $amount / $currencyPlan->currency_current_price;
+            $currencyInvestments->total_investment = $currencyInvestments['total_investment'] - $amount;
+            $currencyInvestments->currency_number = $currencyInvestments['currency_number'] - $userCurrencyNumber;
+            $currencyInvestments->save();
+            DB::commit();
+            return $this->success_message('تم سحب الاستثمار بنجاح');
         } catch (Exception $e) {
             return $this->exception_message($e);
         }

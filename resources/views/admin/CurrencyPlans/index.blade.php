@@ -94,6 +94,10 @@
                                                             href="{{ url('admin/currency_plan/update/' . $plan['id']) }}">
                                                             <i class="ti ti-edit"></i>
                                                         </a>
+                                                        <a class="btn btn-warning btn-sm"
+                                                            href="{{ url('admin/currency_plan/plan_commission/' . $plan['id']) }}">
+                                                            <i class="ti ti-coin"></i>
+                                                        </a>
                                                         <button type="button" class="btn btn-soft-success btn-sm"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#add_balance_{{ $plan['id'] }}">
