@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Models\admin\CurrencyPlan;
 use Illuminate\Http\Request;
 use App\Http\Traits\Message_Trait;
 use App\Http\Traits\Upload_Images;
+use App\Models\admin\CurrencyPlan;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
+use App\Models\admin\AddBalanceToInvestmentBlan;
 
 class CurrencyPlansController extends Controller
 {
@@ -17,7 +20,10 @@ class CurrencyPlansController extends Controller
     public function index()
     {
         $plans = CurrencyPlan::latest()->get();
-        return view('admin.CurrencyPlans.index', compact('plans'));
+        $addedbalances = AddBalanceToInvestmentBlan::where('type', 'add')->latest()->get();
+        $removedbalances = AddBalanceToInvestmentBlan::where('type', 'remove')->latest()->get();
+        // dd($plans);
+        return view('admin.CurrencyPlans.index', compact('plans', 'addedbalances', 'removedbalances'));
     }
 
     public function store(Request $request)
@@ -135,5 +141,68 @@ class CurrencyPlansController extends Controller
         $currencyPlane->delete();
         return $this->success_message(' تم الحذف بنجاح  ');
     }
-
+    public function addBalance(Request $request)
+    {
+        $data = $request->all();
+        $rules = [
+            'plan_id' => 'required',
+            'amount' => 'required',
+        ];
+        $messages = [
+            'plan_id.required' => ' من فضلك اختر العملة  ',
+            'amount.required' => ' من فضلك ادخل المبلغ  ',
+        ];
+        $validator = Validator::make($data, $rules, $messages);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        try {
+            DB::beginTransaction();
+            $plan = CurrencyPlan::findOrFail($data['plan_id']);
+            $plan->main_investment = $plan->main_investment + $data['amount'];
+            $plan->save();
+            ######## Add Balance To AddBalanceToInvestmentBlan Table
+            $addBalanceToInvestmentBlan = new AddBalanceToInvestmentBlan();
+            $addBalanceToInvestmentBlan->plan_id = $data['plan_id'];
+            $addBalanceToInvestmentBlan->amount = $data['amount'];
+            $addBalanceToInvestmentBlan->type = 'add';
+            $addBalanceToInvestmentBlan->save();
+            DB::commit();
+            return $this->success_message(' تم اضافة المبلغ بنجاح  ');
+        } catch (\Exception $e) {
+            return $this->exception_message($e);
+        }
+    }
+    public function removeBalance(Request $request)
+    {
+        $data = $request->all();
+        $rules = [
+            'plan_id' => 'required',
+            'amount' => 'required',
+        ];
+        $messages = [
+            'plan_id.required' => ' من فضلك اختر العملة  ',
+            'amount.required' => ' من فضلك ادخل المبلغ  ',
+        ];
+        $validator = Validator::make($data, $rules, $messages);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        try {
+            DB::beginTransaction();
+            $plan = CurrencyPlan::findOrFail($data['plan_id']);
+            $plan->main_investment = $plan->main_investment - $data['amount'];
+            $plan->save();
+            ######## Add Balance To AddBalanceToInvestmentBlan Table
+            $addBalanceToInvestmentBlan = new AddBalanceToInvestmentBlan();
+            $addBalanceToInvestmentBlan->plan_id = $data['plan_id'];
+            $addBalanceToInvestmentBlan->amount = $data['amount'];
+            $addBalanceToInvestmentBlan->type = 'remove';
+            $addBalanceToInvestmentBlan->save();
+            DB::commit();
+            return $this->success_message(' تم ازالة المبلغ بنجاح  ');
+        } catch (\Exception $e) {
+            return $this->exception_message($e);
+        }
+    }
 }

@@ -190,7 +190,7 @@
                                                     onclick="incrementQuantity({{ $currencyplan['id'] }})"
                                                     style="width: 30px; height: 30px; font-size: 18px;">+
                                                 </button>
-                                                <input type="hidden" name="currecny_plan_id"
+                                                <input type="hidden" name="currency_plan_id"
                                                     value="{{ $currencyplan['id'] }}">
                                             </div>
                                             <button style="display: block; width: 100%; margin-top: 20px;" type="submit"

@@ -92,25 +92,30 @@
                                                     <div class="d-flex gap-2">
                                                         <a class="btn btn-info btn-sm"
                                                             href="{{ url('admin/currency_plan/update/' . $plan['id']) }}">
-                                                            <iconify-icon icon="solar:pen-2-broken"
-                                                                class="align-middle fs-18"></iconify-icon>
+                                                            <i class="ti ti-edit"></i>
                                                         </a>
-                                                        {{-- <a href="{{ url('admin/investments/' . $plan['id']) }}"
-                                                            class="btn btn-success"> عوائد الاستثمار </a>
-                                                        <a href="{{ url('admin/plan_report/' . $plan['id']) }}"
-                                                            class="btn btn-success"> تقرير الخطة </a> --}}
+                                                        <button type="button" class="btn btn-soft-success btn-sm"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#add_balance_{{ $plan['id'] }}">
+                                                            <i class="ti ti-plus"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-soft-danger btn-sm"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#remove_balance_{{ $plan['id'] }}">
+                                                            <i class="ti ti-minus"></i>
+                                                        </button>
                                                         <button type="button" class="btn btn-soft-danger btn-sm"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#delete_plan_{{ $plan['id'] }}">
-                                                            <iconify-icon icon="solar:trash-bin-minimalistic-2-broken"
-                                                                class="align-middle fs-18"></iconify-icon>
+                                                            <i class="ti ti-trash"></i>
                                                         </button>
-
                                                     </div>
                                                 </td>
                                             </tr>
                                             <!-- Modal -->
                                             @include('admin.CurrencyPlans._delete')
+                                            @include('admin.CurrencyPlans._addbalance')
+                                            @include('admin.CurrencyPlans._removebalance')
                                         @endforeach
                                     </tbody>
                                 </table>

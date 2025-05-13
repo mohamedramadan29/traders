@@ -82,6 +82,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('currency_plans', 'index');
             Route::match(['post','get'],'currency_plan/store','store');
             Route::match(['post','get'],'currency_plan/update/{id}','update');
+            Route::post('currency_plan/add_balance/{id}','addBalance');
+            Route::post('currency_plan/remove_balance/{id}','removeBalance');
             Route::post('currency_plan/delete/{id}', 'delete');
         });
         ################# End Currency Plans Controller #################

@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 @endsection
 @section('content')
-
     @php
         $allprofit = 0;
         $total_profit = 0;
@@ -79,16 +78,15 @@
                                 $total_profit_investment = $allprofit + $investment_earning;
                             @endphp
                             <h4 class="profit_balance" style="margin-bottom: 0px">
-                                {{ number_format($total_profit, 2) }} دولار </h4>
+                                {{ number_format($total_profit / 2, 2) }} دولار </h4>
                             <span
                                 style="color: #999999;display: block;margin-top: 10px;margin-bottom: 10px;font-size: 18px;">
-                                ( {{ number_format($allprofit, 2) }} دولار )</span>
+                                ( {{ number_format($allprofit / 2, 2) }} دولار )</span>
                             <button style="border: none;" class="stat" data-bs-toggle="modal"
                                 data-bs-target="#main_withdraw_balance"> سحب </button>
                             <a href="#" class="stat WithDrawTransactions" data-plan-id="WithDrawTransactions"> السجل
                             </a>
                             @include('front.Plans.withdraw')
-
                         </div>
                         <div class="info">
                             <h5> الرقم التعريفي : {{ Auth::user()->id }} </h5>
@@ -256,9 +254,9 @@
                                                     $currencyplan->CurrencyPlan['currency_current_price'] -
                                                 $currencyplan['total_investment'];
                                         @endphp
-                                        {{ number_format($total_profit, 2) }} دولار
+                                        {{ number_format($total_profit / 2, 2) }} دولار
                                         <span style="color: #999999;display: block;margin-top: 10px;">
-                                            ({{ number_format($allprofit, 2) }} دولار)
+                                            ({{ number_format($allprofit / 2, 2) }} دولار)
                                         </span>
                                     </h4>
                                     <div class="info d-flex">

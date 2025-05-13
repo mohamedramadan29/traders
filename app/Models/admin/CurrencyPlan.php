@@ -23,4 +23,10 @@ class CurrencyPlan extends Model
     public function CurrencyPlanSteps(){
         return $this->hasMany(CurrencyPlanStep::class , 'currency_plan_id');
     }
+    public function AddBalanceToInvestmentBlans(){
+        return $this->hasMany(AddBalanceToInvestmentBlan::class , 'plan_id')->where('type' , 'add');
+    }
+    public function RemoveBalanceToInvestmentBlans(){
+        return $this->hasMany(AddBalanceToInvestmentBlan::class , 'plan_id')->where('type' , 'remove');
+    }
 }
