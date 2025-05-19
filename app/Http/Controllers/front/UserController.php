@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\front;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\admin\Plan;
+use App\Models\front\User;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\front\UserPlan;
 use App\Http\Traits\Message_Trait;
 use App\Http\Traits\Upload_Images;
 use App\Models\admin\CurrencyPlan;
-use App\Models\admin\Plan;
-use App\Models\front\User;
-use App\Models\front\UserPlan;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use Carbon\Carbon;
+
 class UserController extends Controller
 {
     use Message_Trait;
@@ -82,7 +84,20 @@ class UserController extends Controller
     {
         if ($request->isMethod('post')) {
             try {
-                // dd($referring_user->id );
+                // تأكيد ما إذا كان التسجيل يتم باستخدام كود إحالة
+                $referral_code = $request->input('referral_code');
+                //dd($referral_code);
+                $referring_user = null;
+                if ($referral_code) {
+                    // ابحث عن المستخدم الذي يملك كود الإحالة
+                    $referring_user = User::where('referral_code', $referral_code)->first();
+                }
+                $new_user_referral_code = Str::random(10);
+                ### check if the new user referral code is already used
+                $check_new_user_referral_code = User::where('referral_code', $new_user_referral_code)->count();
+                if($check_new_user_referral_code > 0){
+                    $new_user_referral_code = $new_user_referral_code . '-' . $check_new_user_referral_code;
+                }
                 // ابحث عن المستخدم الذي يملك كود الإحالة
                 DB::beginTransaction();
                 $data = $request->all();
@@ -117,6 +132,8 @@ class UserController extends Controller
                     'email' => $data['email'],
                     'password' => Hash::make($data['password']),
                     'account_status' => 0,
+                    'referral_code' => $new_user_referral_code,
+                    'referred_by' => $referring_user ? $referring_user->id : null,
                 ]);
                 ////////// Login User To Dashboard #################
 

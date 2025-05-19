@@ -57,7 +57,7 @@
                                     <p class="text-center"> ليس لديك حساب ؟ <a href="{{ route('user_register') }}"
                                             class="fw-bold ms-1"> حساب جديد </a></p>
                                     <div class="social_login">
-                                        <a href="{{ route('auth.google.redirect', 'google') }}" class="google">
+                                        <a href="{{ route('auth.google.redirect', ['provider' => 'google', 'referral_code' => request()->get('referral_code')]) }}" class="google">
                                             <i class="bi bi-google"></i>
                                         </a>
                                     </div>

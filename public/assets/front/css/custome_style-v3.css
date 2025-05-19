@@ -528,4 +528,55 @@ display: flex;
     opacity: 1;
     transform: rotate(45deg) scale(1);
 }
-</style>
+/******************************** Start Referal System ************/
+.referal-system-content{
+    color: #fff;
+}
+.referal-system-content h4{
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+.referral-code-section a{
+    color: #fff;
+}
+.referral-code-section .copy-button{
+    background-color: #11af59;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+.referal-system-content tr th{
+    color: #393939;
+}
+
+.referal-system-content tr td{
+    background-color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.referal-system-content .referral_stats{
+    display: flex;
+    justify-content: space-between;
+    justify-items: center;
+}
+.referal-system-content .referral_stats .stat{
+    background-color: #373A4C;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #6a6969;
+    width: 20%;
+}
+
+@media(max-width:991px){
+    .referal-system-content .referral_stats{
+        flex-wrap: wrap;
+    }
+    .referal-system-content .referral_stats .stat{
+        width: 48%;
+        margin-bottom: 10px;
+    }
+}

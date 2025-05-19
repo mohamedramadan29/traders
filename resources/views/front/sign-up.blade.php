@@ -75,7 +75,7 @@
                                                     والاحكام </label>
                                             </div>
                                         </div>
-                                        <input type="hidden" name="referral_code" value="{{ request('ref') }}">
+                                        <input type="hidden" name="referral_code" value="{{ request('referral_code') }}">
 
                                         <div class="mb-1 text-center d-grid">
                                             <button class="btn btn-soft-primary" type="submit" id="submitButton"> حساب
@@ -87,7 +87,7 @@
                                             class="fw-bold ms-1"> تسجيل
                                             دخول </a></p>
                                     <div class="social_login">
-                                        <a href="{{ route('auth.google.redirect', 'google') }}" class="google">
+                                        <a href="{{ route('auth.google.redirect', ['provider' => 'google', 'referral_code' => request()->get('referral_code')]) }}" class="google">
                                             <i class="bi bi-google"></i>
                                         </a>
                                     </div>

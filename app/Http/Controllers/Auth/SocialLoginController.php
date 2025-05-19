@@ -27,12 +27,25 @@ class SocialLoginController extends Controller
                 Auth::login($user_from_db);
                 return redirect()->route('dashboard');
             }
+            ### how can get the referral code from the url when the user login from social login
+            $referral_code = request()->get('referral_code');
+            $referring_user = null;
+            if ($referral_code) {
+                $referring_user = User::where('referral_code', $referral_code)->first();
+            }
+            $new_user_referral_code = Str::random(10);
+            $check_new_user_referral_code = User::where('referral_code', $new_user_referral_code)->count();
+            if ($check_new_user_referral_code > 0) {
+                $new_user_referral_code = $new_user_referral_code . '-' . $check_new_user_referral_code;
+            }
             $user = User::create([
                 'name' => $user_provider->name,
                 'email' => $user_provider->email,
                 'google_token' => $user_provider->token,
                 'account_status' => 1,
                 'password' => Hash::make(Str::random(8)),
+                'referral_code' => $new_user_referral_code,
+                'referred_by' => $referring_user ? $referring_user->id : null,
             ]);
             Auth::login($user);
             return redirect()->route('dashboard');

@@ -1,6 +1,7 @@
 <?php
 
 
+use Hexters\CoinPayment\CoinPayment;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\front\OksContoller;
 use App\Http\Controllers\front\UserController;
@@ -8,6 +9,7 @@ use \App\Http\Controllers\front\PlanController;
 use App\Http\Controllers\front\ChartController;
 use App\Http\Controllers\front\TermsController;
 use App\Http\Controllers\front\WalletController;
+use App\Http\Controllers\PlisoPaymentController;
 use \App\Http\Controllers\front\StorageInvestment;
 use App\Http\Controllers\front\WithDrawController;
 use \App\Http\Controllers\front\ExchangeController;
@@ -16,10 +18,9 @@ use \App\Http\Controllers\front\SalesOrderController;
 use App\Http\Controllers\front\CoinPaymentController;
 use \App\Http\Controllers\front\UserBalanceController;
 use App\Http\Controllers\front\NotificationController;
+use App\Http\Controllers\front\ReferalSystemController;
 use \App\Http\Controllers\front\StorageInvestmentController;
 use App\Http\Controllers\front\CurrencyInvestmentController;
-use App\Http\Controllers\PlisoPaymentController;
-use Hexters\CoinPayment\CoinPayment;
 
 /*
 |--------------------------------------------------------------------------
@@ -143,7 +144,10 @@ Route::group(['prefix' => 'user'], function () {
         // Route::get('/payment/checkstatus/{id}', 'checkPaymentStatus')->name('payment.checkstatus');
     });
     ############### Pliso Controller ##################
-
+    ############### Referral System ##################
+    Route::controller(ReferalSystemController::class)->group(function () {
+        Route::get('/referral_system', 'index');
+    });
 
     // Route::get('pliso/create-invoice', [PlisoPaymentController::class, 'createInvoice'])->name('pliso.payment.create');
 
@@ -165,8 +169,6 @@ Route::controller(TermsController::class)->group(function () {
 });
 Route::get('auth/{provider}/redirect', [SocialLoginController::class, 'redirect'])->name('auth.google.redirect');
 Route::get('auth/{provider}/callback', [SocialLoginController::class, 'callback'])->name('auth.google.callback');
-
-
 Route::get('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])
     ->name('notifications.markAllAsRead');
 include 'admin.php';
