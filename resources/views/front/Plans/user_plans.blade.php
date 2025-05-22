@@ -21,6 +21,14 @@
                 )
                     ->where('user_id', Auth::id())
                     ->sum('amount');
+                ##### Get All Edit Balance Withdraw
+                $TotalEditBalanceWithdraw = App\Models\front\WithDrawCurrencyPlan::where(
+                    'currency_plan',
+                    $currencyplan->CurrencyPlan['id'],
+                )
+                    ->where('user_id', Auth::id())
+                    ->where('type', 'edit_balance')
+                    ->sum('amount');
                 $total_profit_for_plan =
                     $currencyplan['currency_number'] * $currencyplan->CurrencyPlan['currency_current_price'] -
                     ($currencyplan['total_investment'] + $TotalDrawForPlan);
@@ -244,11 +252,19 @@
                                                 $currencyplan->CurrencyPlan['id'],
                                             )
                                                 ->where('user_id', Auth::id())
+                                                ->where('type', 'withdraw')
                                                 ->sum('amount');
                                             $total_profit =
                                                 $currencyplan['currency_number'] *
                                                     $currencyplan->CurrencyPlan['currency_current_price'] -
                                                 ($currencyplan['total_investment'] + $TotalDraw);
+                                            $sitecomision = App\Models\front\Sitecomssion::where(
+                                                'currency_plan_id',
+                                                $currencyplan->CurrencyPlan['id'],
+                                            )
+                                                ->where('user_id', Auth::id())
+                                                ->sum('amount');
+                                            $total_profit -= $sitecomision;
                                             $allprofit =
                                                 $currencyplan['currency_number'] *
                                                     $currencyplan->CurrencyPlan['currency_current_price'] -

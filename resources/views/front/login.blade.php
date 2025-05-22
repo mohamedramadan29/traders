@@ -12,6 +12,11 @@
                             toastify()->success(\Illuminate\Support\Facades\Session::get('Success_message'));
                         @endphp
                     @endif
+                    @if (Session::has('Error_Message'))
+                        @php
+                            toastify()->error(\Illuminate\Support\Facades\Session::get('Error_Message'));
+                        @endphp
+                    @endif
                     @if ($errors->any())
                         @foreach ($errors->all() as $error)
                             @php
@@ -57,7 +62,8 @@
                                     <p class="text-center"> ليس لديك حساب ؟ <a href="{{ route('user_register') }}"
                                             class="fw-bold ms-1"> حساب جديد </a></p>
                                     <div class="social_login">
-                                        <a href="{{ route('auth.google.redirect', ['provider' => 'google', 'referral_code' => request()->get('referral_code')]) }}" class="google">
+                                        <a href="{{ route('auth.google.redirect', ['provider' => 'google', 'referral_code' => request()->get('referral_code')]) }}"
+                                            class="google">
                                             <i class="bi bi-google"></i>
                                         </a>
                                     </div>

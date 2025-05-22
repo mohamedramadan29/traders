@@ -44,11 +44,11 @@ class User extends Authenticatable
     }
 
     public function CurrencyInvestments(){
-        return $this->hasMany(CurrencyPlanInvestment::class,'user_id');
+        return $this->hasMany(CurrencyPlanInvestment::class,'user_id')->where('currency_plan','!=',null)->get();
     }
-    public function CurrencyPlans(){
-        return $this->hasMany(CurrencyPlanInvestment::class,'user_id')->where('currency_plan','!=',null);
-    }
+    // public function CurrencyPlans(){
+    //     return $this->hasMany(CurrencyPlanInvestment::class,'user_id')->where('currency_plan','!=',null);
+    // }
 
     /**
      * The attributes that should be hidden for serialization.

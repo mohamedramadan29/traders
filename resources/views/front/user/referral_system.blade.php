@@ -66,27 +66,26 @@
                                         style="background-color: #2A3040; padding: 20px; border-radius: 10px;">
                                         <h4> نظام الاحالات </h4>
                                         <p> رابط الاحالة الخاص بك </p>
-                                        @if(Auth::user()->referral_code)
-                                        <div class="referral-code-section">
-                                            <a href="{{ url('user/register?referral_code=' . Auth::user()->referral_code) }}"
-                                                id="referralLink">
-                                                {{ url('user/register?referral_code=' . Auth::user()->referral_code) }}
-                                            </a>
-                                            <button class="btn btn-primary btn-sm copy-button"
-                                                onclick="copyToClipboard('#referralLink')">
-                                                <i class="bx bx-copy"></i>
-                                            </button>
-                                        </div>
+                                        @if (Auth::user()->referral_code)
+                                            <div class="referral-code-section">
+                                                <a href="{{ url('user/register?referral_code=' . Auth::user()->referral_code) }}"
+                                                    id="referralLink">
+                                                    {{ url('user/register?referral_code=' . Auth::user()->referral_code) }}
+                                                </a>
+                                                <button class="btn btn-primary btn-sm copy-button"
+                                                    onclick="copyToClipboard('#referralLink')">
+                                                    <i class="bx bx-copy"></i>
+                                                </button>
+                                            </div>
                                         @else
-                                        <p>لا يوجد رابط احالة من فضلك تواصل مع الادارة</p>
+                                            <p>لا يوجد رابط احالة من فضلك تواصل مع الادارة</p>
                                         @endif
-
-
                                         @if ($referrals->count() > 0)
                                             @php
                                                 $alldeposit = 0;
                                                 $allinvestment = 0;
                                                 $allyouprofit = 0;
+                                                $allprofit = 0;
                                             @endphp
                                             @foreach ($referrals as $referral)
                                                 @php
@@ -100,22 +99,6 @@
                                                 @if ($referral->CurrencyInvestments()->count() > 0)
                                                     @foreach ($referral->CurrencyInvestments() as $currencyplan)
                                                         @php
-                                                            ############ Get All WithDraw In this Plan
-                                                            $TotalDrawForPlan = App\Models\front\WithDrawCurrencyPlan::where(
-                                                                'currency_plan',
-                                                                $currencyplan->CurrencyPlan['id'],
-                                                            )
-                                                                ->where('user_id', Auth::id())
-                                                                ->sum('amount');
-                                                            $total_profit_for_plan =
-                                                                $currencyplan['currency_number'] *
-                                                                    $currencyplan->CurrencyPlan[
-                                                                        'currency_current_price'
-                                                                    ] -
-                                                                ($currencyplan['total_investment'] + $TotalDrawForPlan);
-                                                            $total_profit += $total_profit_for_plan;
-                                                        @endphp
-                                                        @php
                                                             $allprofitforplan =
                                                                 $currencyplan['currency_number'] *
                                                                     $currencyplan->CurrencyPlan[
@@ -123,9 +106,9 @@
                                                                     ] -
                                                                 $currencyplan['total_investment'];
                                                             $allprofit += $allprofitforplan;
+                                                            $allyouprofit += ($allprofitforplan * 0.05) / 2;
                                                         @endphp
                                                     @endforeach
-                                                    $allyouprofit += $allprofit * 0.05 / 2;
                                                 @endif
                                             @endforeach
                                             <br>
@@ -146,9 +129,14 @@
                                                     </h4>
                                                 </div>
                                                 <div class="stat">
+                                                    <p> إجمالي ارباح الاعضاء </p>
+                                                    <h4> {{ number_format($allprofit / 2, 2) }}
+                                                    </h4>
+                                                </div>
+                                                <div class="stat">
                                                     <p> إجمالي الربح </p>
                                                     <h4>
-                                                        {{ number_format($allyouprofit, 2) }}
+                                                        {{ number_format($allyouprofit , 2) }}
                                                     </h4>
                                                 </div>
                                             </div>
@@ -186,28 +174,16 @@
                                                                 <td> {{ number_format($referral->dollar_balance, 2) }}
                                                                 </td>
                                                                 <td> {{ number_format($referral->Transactions()->sum('price_amount'), 2) }}
+                                                                    دولار
                                                                 </td>
                                                                 <td> {{ number_format($referral->CurrencyInvestments()->sum('total_investment'), 2) }}
+                                                                    دولار
                                                                 </td>
                                                                 @if ($referral->CurrencyInvestments()->count() > 0)
+                                                                    @php
+                                                                        $allprofit = 0;
+                                                                    @endphp
                                                                     @foreach ($referral->CurrencyInvestments() as $currencyplan)
-                                                                        @php
-                                                                            ############ Get All WithDraw In this Plan
-                                                                            $TotalDrawForPlan = App\Models\front\WithDrawCurrencyPlan::where(
-                                                                                'currency_plan',
-                                                                                $currencyplan->CurrencyPlan['id'],
-                                                                            )
-                                                                                ->where('user_id', Auth::id())
-                                                                                ->sum('amount');
-                                                                            $total_profit_for_plan =
-                                                                                $currencyplan['currency_number'] *
-                                                                                    $currencyplan->CurrencyPlan[
-                                                                                        'currency_current_price'
-                                                                                    ] -
-                                                                                ($currencyplan['total_investment'] +
-                                                                                    $TotalDrawForPlan);
-                                                                            $total_profit += $total_profit_for_plan;
-                                                                        @endphp
                                                                         @php
                                                                             $allprofitforplan =
                                                                                 $currencyplan['currency_number'] *
@@ -216,13 +192,14 @@
                                                                                     ] -
                                                                                 $currencyplan['total_investment'];
                                                                             $allprofit += $allprofitforplan;
+
                                                                         @endphp
                                                                     @endforeach
                                                                 @endif
 
-                                                                <td> {{ number_format($total_profit / 2, 2) }} دولار
+                                                                <td> {{ number_format($allprofit / 2, 2) }} دولار
                                                                 </td>
-                                                                <td> {{ number_format(($total_profit * 0.05) / 2, 2) }}
+                                                                <td> {{ number_format(($allprofit * 0.05) / 2, 2) }}
                                                                     دولار </td>
                                                                 <td style="color: #10AE59"> 5% </td>
                                                                 <td> {{ $referral->created_at->format('Y-m-d') }} </td>

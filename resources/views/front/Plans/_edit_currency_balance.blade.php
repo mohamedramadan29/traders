@@ -53,12 +53,12 @@
                         @csrf
                         <div class="modal-body">
                             <p> مجموع الاستثمارت المتاح في الخطة <span style="color:#11af59">{{ number_format($currencyplan['total_investment'], 2) }} دولار </span></p>
-                            <p> المبلغ المتاح للسحب <span style="color:#11af59">{{ number_format($allprofit / 2, 2) }} دولار </span></p>
+                            <p> المبلغ المتاح للسحب <span style="color:#11af59">{{ number_format($allprofit / 2 - $TotalEditBalanceWithdraw, 2) }}دولار </span></p>
 
                             <div class="exchange_third_section">
                                 <div class="form-group">
                                     <div class="input_data">
-                                        <input style="width: 90%" type="number" max="{{ $allprofit / 2 }}" name="amount"
+                                        <input style="width: 90%" type="number" max="{{ number_format($allprofit / 2 - $TotalEditBalanceWithdraw, 2) }}" name="amount"
                                             step="0.01" placeholder="الحد الادني 0.01">
                                         <input type="hidden" name="currency_plan_id"
                                             value="{{ $currencyplan->CurrencyPlan['id'] }}">

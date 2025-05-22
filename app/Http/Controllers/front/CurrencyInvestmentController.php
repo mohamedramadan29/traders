@@ -134,21 +134,38 @@ class CurrencyInvestmentController extends Controller
             ############ Get All WithDraw In this Plan
             $TotalDraw = WithDrawCurrencyPlan::where('currency_plan', $currencyPlan['id'])->where('user_id', Auth::id())->sum('amount');
             //dd($TotalDraw);
-            $total_profit =
-                ($currencyInvestments['currency_number'] * $currencyPlan['currency_current_price']) - ($currencyInvestments['total_investment'] + $TotalDraw);
+            // $total_profit =
+            //     ($currencyInvestments['currency_number'] * $currencyPlan['currency_current_price']) - ($currencyInvestments['total_investment'] + $TotalDraw);
             //dd($total_profit);
+            ######### Calculate Total Profit
+            $total_profit = ($currencyInvestments['currency_number'] * $currencyPlan['currency_current_price']) - ($currencyInvestments['total_investment'] + $TotalDraw);
+            $sitecomision = Sitecomssion::where(
+                'currency_plan_id',
+                $currencyPlan['id'],
+            )
+                ->where('user_id', Auth::id())
+                ->sum('amount');
+            $total_profit -= $sitecomision;
+
+            if ($total_profit <= 0) {
+                return $this->Error_message('لا توجد أرباح متاحة للسحب');
+            }
             DB::beginTransaction();
             $total_profit_for_user = $total_profit / 2;
             ######### Transfer Total Profit To User Dollar Balance
             //dd($total_profit);
             $user->dollar_balance = $user->dollar_balance + $total_profit_for_user;
             $user->save();
+            ########### Update Currency Plan #########
+            $currencyPlan->current_investments = $currencyPlan->current_investments - $total_profit;
+            $currencyPlan->save();
             ########### Add WithDraw Statment To Withdraw Table
             $withdraw = new WithDrawCurrencyPlan();
             $withdraw->currency_plan = $currencyPlan['id'];
             $withdraw->user_id = Auth::id();
             $withdraw->amount = $total_profit_for_user;
             $withdraw->status = 1;
+            $withdraw->type = 'withdraw';
             $withdraw->save();
             ################# Add haif Profit To Site Commission Plan
             $total_profit_for_site = $total_profit / 2;
@@ -185,20 +202,31 @@ class CurrencyInvestmentController extends Controller
             $all_profit =
                 ($currencyInvestments['currency_number'] * $currencyPlan['currency_current_price']) - ($currencyInvestments['total_investment']);
             $all_profit_for_user = $all_profit / 2;
-            if ($amount > $all_profit_for_user) {
-                return redirect()->back()->withErrors(['الارباح المتاحة للسحب هي ' . $all_profit_for_user]);
+            ##### Get All Edit Balance Withdraw
+            $TotalEditBalanceWithdraw = WithDrawCurrencyPlan::where('currency_plan', $currencyPlan['id'])->where('user_id', Auth::id())->where('type', 'edit_balance')->sum('amount');
+            if ($amount > $all_profit_for_user - $TotalEditBalanceWithdraw) {
+                return redirect()->back()->withErrors(['الارباح المتاحة للسحب هي ' . $all_profit_for_user - $TotalEditBalanceWithdraw]);
             }
             DB::beginTransaction();
-            $amount = 100;
             ###### Update User Balance
             $user->dollar_balance = $user->dollar_balance + $amount;
             $user->save();
             ########### Decreease User InvestMent In This Plan ###########
-             ########### حساب عدد الوحدات ال هتتخصم كمان من العميل  ############
+            ########### حساب عدد الوحدات ال هتتخصم كمان من العميل  ############
             $userCurrencyNumber = $amount / $currencyPlan->currency_current_price;
             $currencyInvestments->total_investment = $currencyInvestments['total_investment'] - $amount;
             $currencyInvestments->currency_number = $currencyInvestments['currency_number'] - $userCurrencyNumber;
             $currencyInvestments->save();
+            ########### Update Currency Plan #########
+            $currencyPlan->current_investments = $currencyPlan->current_investments - $amount;
+            $currencyPlan->save();
+            ########### Add WithDraw To wWithDraw Currency Plan And Make Type Is Edit Balance
+            $withdraw = new WithDrawCurrencyPlan();
+            $withdraw->currency_plan = $currencyPlan['id'];
+            $withdraw->user_id = Auth::id();
+            $withdraw->amount = $amount;
+            $withdraw->type = 'edit_balance';
+            $withdraw->save();
             DB::commit();
             return $this->success_message('تم سحب الاستثمار بنجاح');
         } catch (Exception $e) {
