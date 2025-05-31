@@ -50,9 +50,7 @@
                                         data-bs-target="#pills-home" type="button" role="tab"
                                         aria-controls="pills-home" aria-selected="true"> الصفحة الرئيسية </button>
                                 </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" href="{{ url('user/referral_system') }}"> نظام الاحالات  </a>
-                                </li>
+                                
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-profile" type="button" role="tab"

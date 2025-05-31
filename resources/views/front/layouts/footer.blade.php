@@ -26,6 +26,12 @@
                 {{-- <img src="{{ asset('assets/front/images/4.png') }}" alt=""> --}}
             </a>
         </div>
+        <div>
+            <a href="{{ url('user/referral_system') }}" class="{{ Request::is('user/referral_system') ? 'active_link' : '' }}">
+                <i class="bi bi-link"></i>
+                {{-- <img src="{{ asset('assets/front/images/4.png') }}" alt=""> --}}
+            </a>
+        </div>
         <!-- ############# Last Updated -->
         {{-- <div>
             <a href="{{ url('user/wallet') }}" class="{{ Request::is('user/wallet') ? 'active_link' : '' }}">

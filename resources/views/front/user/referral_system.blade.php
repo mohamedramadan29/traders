@@ -13,52 +13,8 @@
         <div class="container-xxl">
             <div class="row">
                 <div class="col-xl-12">
-                    <div class="profile_page">
-                        <div class="profile_main_section">
-                            <div class="logo_section">
-                                <form id="updateProfileImageForm" action="{{ url('user/update_profile_image') }}"
-                                    method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    @if (empty(Auth::user()->image))
-                                        <img id="userImage" src="{{ asset('assets/front/uploads/user2.png') }}">
-                                    @else
-                                        <img id="userImage" src="{{ asset('assets/uploads/users/' . Auth::user()->image) }}"
-                                            alt="">
-                                    @endif
-                                    <label for="profileImageInput" style="cursor: pointer;">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </label>
-                                    <input type="file" id="profileImageInput" accept="image/*" name="image"
-                                        style="display: none;">
-                                </form>
-
-                            </div>
-
-
-                            <div class="email">
-                                <p> {{ Auth::user()->email }} </p>
-                            </div>
-                        </div>
-                        <hr>
+                    <div class="profile_page"> 
                         <div class="profile_tabs">
-                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" href="{{ url('user/profile') }}"> الصفحة الرئيسية </a>
-
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" href="{{ url('user/referral_system') }}"> نظام الاحالات </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" href="{{ url('user/profile') }}"> تعديل البيانات </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" href="{{ url('user/profile') }}"> اعدادات الامان </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" href="{{ url('user/profile') }}"> الاشعارات </a>
-                                </li>
-                            </ul>
                             <div class="tab-content" id="pills-tabContent">
                                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                                     aria-labelledby="pills-home-tab" tabindex="0">
