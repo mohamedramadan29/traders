@@ -21,6 +21,7 @@ use App\Http\Controllers\front\NotificationController;
 use App\Http\Controllers\front\ReferalSystemController;
 use \App\Http\Controllers\front\StorageInvestmentController;
 use App\Http\Controllers\front\CurrencyInvestmentController;
+use App\Http\Controllers\front\ReferalWithDrawController;
 
 /*
 |--------------------------------------------------------------------------
@@ -148,6 +149,15 @@ Route::group(['prefix' => 'user'], function () {
     Route::controller(ReferalSystemController::class)->group(function () {
         Route::get('/referral_system', 'index');
     });
+    ################ Start Referal WithDrawController #################
+
+    Route::controller(ReferalWithDrawController::class)->group(function(){
+
+        Route::post('/referal/withdraw','ReferalWithdraw')->name('Referal.withdraw');
+    });
+
+
+    ############### End Referal WithDrawController ###################
 
     // Route::get('pliso/create-invoice', [PlisoPaymentController::class, 'createInvoice'])->name('pliso.payment.create');
 

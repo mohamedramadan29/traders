@@ -11,6 +11,8 @@ class ReferalSystemController extends Controller
     {
         $user = auth()->user();
         $referrals = $user->referrals;
-        return view('front.user.referral_system', compact('referrals'));
+        $oldsum = $user->ReferalWithdraws->sum('amount');
+
+        return view('front.user.referral_system', compact('referrals','oldsum'));
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models\front;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Models\admin\CurrencyPlanInvestment;
+use App\Models\front\ReferalWithdraw;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -45,6 +46,10 @@ class User extends Authenticatable
 
     public function CurrencyInvestments(){
         return $this->hasMany(CurrencyPlanInvestment::class,'user_id')->where('currency_plan','!=',null)->get();
+    }
+
+    public function ReferalWithdraws(){
+        return $this->hasMany(ReferalWithdraw::class,'user_id');
     }
     // public function CurrencyPlans(){
     //     return $this->hasMany(CurrencyPlanInvestment::class,'user_id')->where('currency_plan','!=',null);
